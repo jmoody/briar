@@ -7,7 +7,7 @@ elements like tables and pickers.
 
 Add this line to your application's Gemfile:
 
-    gem 'pickle'
+    gem 'briar'
 
 And then execute:
 
@@ -15,7 +15,7 @@ And then execute:
 
 Or install it yourself as:
 
-    $ gem install pickle
+    $ gem install briar
 
 ## Usage
 

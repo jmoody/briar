@@ -1,15 +1,15 @@
 # -*- encoding: utf-8 -*-
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'pickle/version'
+require 'briar/version'
 
 Gem::Specification.new do |gem|
-  gem.name          = "pickle"
-  gem.version       = Pickle::VERSION
+  gem.name          = "briar"
+  gem.version       = Briar::VERSION
   gem.authors       = ["Joshua Moody"]
   gem.email         = ["joshuajmoody@gmail.com"]
   gem.description   = 'extends calabash-ios steps'
-  gem.summary       = "pickle-#{gem.version}"
+  gem.summary       = "briar-#{gem.version}"
   gem.homepage      = ""
 
   gem.add_runtime_dependency 'calabash-cucumber'
