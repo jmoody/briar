@@ -8,9 +8,34 @@ Gem::Specification.new do |gem|
   gem.version       = Pickle::VERSION
   gem.authors       = ["Joshua Moody"]
   gem.email         = ["joshuajmoody@gmail.com"]
-  gem.description   = %q{TODO: Write a gem description}
-  gem.summary       = %q{TODO: Write a gem summary}
+  gem.description   = 'extends calabash-ios steps'
+  gem.summary       = "pickle-#{gem.version}"
   gem.homepage      = ""
+
+  gem.add_runtime_dependency 'calabash-cucumber'
+  gem.add_runtime_dependency 'builder'    
+  gem.add_runtime_dependency 'bundler'
+  gem.add_runtime_dependency 'CFPropertyList'
+  gem.add_runtime_dependency 'cucumber'
+  gem.add_runtime_dependency 'diff-lcs'
+  gem.add_runtime_dependency 'geocoder'
+  gem.add_runtime_dependency 'gherkin'
+  gem.add_runtime_dependency 'json'
+  gem.add_runtime_dependency 'location-one'
+  gem.add_runtime_dependency 'net-http-persistent'
+  gem.add_runtime_dependency 'rack'
+  gem.add_runtime_dependency 'rack-protection'
+  gem.add_runtime_dependency 'rake'
+  gem.add_runtime_dependency 'rubygems-bundler'
+  gem.add_runtime_dependency 'sim_launcher'
+  gem.add_runtime_dependency 'sinatra'
+  gem.add_runtime_dependency 'slowhandcuke'
+  gem.add_runtime_dependency 'tilt'
+  gem.add_runtime_dependency 'syntax'
+
+  gem.add_development_dependency 'rspec'
+  gem.add_development_dependency 'rvm'
+
 
   gem.files         = `git ls-files`.split($/)
   gem.executables   = gem.files.grep(%r{^bin/}).map{ |f| File.basename(f) }
