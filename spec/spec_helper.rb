@@ -5,7 +5,7 @@ require 'rubygems'
 #require 'bundler'
 #Bundler.setup
 
-require 'pickle'
+require 'briar/briar'
 require 'cucumber'
 
 RSpec.configure do |c|

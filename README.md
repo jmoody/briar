@@ -1,4 +1,4 @@
-# Pickle
+# Briar
 
 extends calabash-ios steps to provide steps for controlling complex ui
 elements like tables and pickers.

@@ -1,6 +1,6 @@
 require 'json'
 
-module Pickle
+module Briar
   GESTALT_IPHONE = "iPhone"
   GESTALT_IPAD = "iPad"
   GESTALT_IPHONE5 = "Retina 4-inch"

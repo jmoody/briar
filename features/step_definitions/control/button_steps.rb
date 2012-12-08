@@ -1,33 +1,4 @@
-def button_exists? (name)
-  res = query("button marked:'#{name}'", :alpha)
-  if res.empty?
-    false
-  else
-    res.first.to_i != 0
-  end
-end
-
-def should_see_button (name)
-  unless button_exists? name
-    screenshot_and_raise "i did not see a button with marked #{name}"
-  end
-end
-
-def should_not_see_button (button_id)
-  screenshot_and_raise "i should not see button marked '#{button_id}'" if button_exists?(button_id)
-end
-
-def button_is_enabled (name)
-  enabled = query("button marked:'#{name}' isEnabled:1", :accessibilityIdentifier).first
-  enabled.eql? name
-end
-
-def should_see_button_with_title(name, title)
-  should_see_button name
-  if query("button marked:'#{title}' child label", :text).empty?
-    screenshot_and_raise "i do not see a button marked #{name} with title #{title}"
-  end
-end
+include Briar::Control::Button
 
 Then /^I should see button "([^\"]*)" is enabled$/ do |name|
   should_see_button name
@@ -43,16 +14,9 @@ Then /^I should see button "([^\"]*)" is disabled$/ do |name|
   end
 end
 
-def touch_button (name)
-  should_see_button name
-  touch("button marked:'#{name}'")
-  step_pause
-end
-
 Then /^I touch "([^"]*)" button$/ do |name|
   touch_button name
 end
-
 
 When /^I touch the "([^"]*)" button, then I should see the "([^"]*)" view$/ do |button_id, view_id|
   touch_transition("button marked:'#{button_id}'",

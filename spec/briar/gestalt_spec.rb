@@ -1,6 +1,6 @@
 require_relative './../spec_helper'
 
-module Pickle
+module Briar
   SIM__IPHONE_5__IOS_6_JSON = "{\"outcome\":\"SUCCESS\",\"app_name\":\"Rise Up CAL\",\"simulator_device\":\"iPhone\",\"iOS_version\":\"6.0\",\"app_version\":\"1.0\",\"system\":\"x86_64\", \"app_id\":\"org.recoverywarrriors.RiseUp-cal\",\"version\":\"0.9.126\", \"simulator\":\"iPhone Simulator 358.4, iPhone OS 6.0 (iPhone (Retina 4-inch)\/10A403)\"}"
   DEVICE__IPHONE_4__IOS_6_JSON = "{\"outcome\":\"SUCCESS\",\"app_name\":\"Rise Up CAL\",\"iOS_version\":\"6.0.1\",\"app_version\":\"1.0\",\"system\":\"iPhone4,1\",\"app_id\":\"org.recoverywarrriors.RiseUp-cal\",\"version\":\"0.9.125\"}"
   DEVICE__IPHONE_5__IOS_6_JSON = "{\"outcome\":\"SUCCESS\",\"app_name\":\"Rise Up CAL\",\"iOS_version\":\"6.0.1\",\"app_version\":\"1.0\",\"system\":\"iPhone5,0\",\"app_id\":\"org.recoverywarrriors.RiseUp-cal\",\"version\":\"0.9.125\"}"

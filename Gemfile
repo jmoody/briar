@@ -1,4 +1,4 @@
 source 'https://rubygems.org'
 
-# Specify your gem's dependencies in pickle.gemspec
+# Specify your gem's dependencies in briar.gemspec
 gemspec

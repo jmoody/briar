@@ -1,4 +1,4 @@
-
+include Briar::Core
 
 Then /^I touch the "([^"]*)" button on the action sheet$/ do |button_title|
   wait_for_animation
