@@ -4,7 +4,6 @@ require "briar/version"
 require "briar/gestalt"
 require "briar/briar_core"
 
-
 require "briar/alerts_and_sheets/alert_view"
 
 require "briar/bars/tabbar"
@@ -29,6 +28,7 @@ require "briar/table"
 require "briar/text_field"
 require "briar/text_view"
 
+require File.join(File.dirname(__FILE__), '..','features','step_definitions', "briar_core_steps")
 
 require File.join(File.dirname(__FILE__), '..','features','step_definitions',"alerts_and_sheets", "action_sheet_steps")
 require File.join(File.dirname(__FILE__), '..','features','step_definitions',"alerts_and_sheets", "alert_view_steps")

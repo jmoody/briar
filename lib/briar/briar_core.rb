@@ -48,15 +48,6 @@ module Briar
       end
     end
 
-    Then /^I should (see|not see) (?:the|) "([^\"]*)" view$/ do |visibility, view_id|
-      if visibility.eql? "see"
-        should_see_view_after_animation view_id
-      else
-        should_not_see_view_after_animation view_id
-      end
-    end
-
-
     def touch_view_named(view_id)
       touch("view marked:'#{view_id}'")
     end
