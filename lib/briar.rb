@@ -19,6 +19,9 @@ require "briar/picker/picker_shared"
 require "briar/picker/picker"
 require "briar/picker/date_picker"
 
+require "briar/email"
+require "briar/image_view"
+require "briar/keyboard"
 
 
 require File.join(File.dirname(__FILE__), '..','features','step_definitions',"alerts_and_sheets", "action_sheet_steps")
@@ -35,6 +38,12 @@ require File.join(File.dirname(__FILE__), '..','features','step_definitions',"co
 
 require File.join(File.dirname(__FILE__), '..','features','step_definitions',"picker", "picker_steps")
 require File.join(File.dirname(__FILE__), '..','features','step_definitions',"picker", "date_picker_steps")
+
+
+require File.join(File.dirname(__FILE__), '..','features','step_definitions',"email_steps")
+require File.join(File.dirname(__FILE__), '..','features','step_definitions',"image_view_steps")
+require File.join(File.dirname(__FILE__), '..','features','step_definitions',"keyboard_steps")
+
 
 
 

@@ -1,14 +1,5 @@
-def email_body_contains_text (text)
-  actual_tokens = query("view:'MFComposeTextContentView'", :text).first.split("\n")
-  actual_tokens.include?(text)
-end
-
-#
-#Then /^I should see email body that contains "([^"]*)"$/ do |text|
-#  unless email_body_contains_text text
-#    screenshot_and_raise "i did not see an email body (MFComposeTextContentView) containing '#{text}'"
-#  end
-#end
+include Briar::Email
+include Briar::Core
 
 Then /^I should see email body that contains "([^"]*)"$/ do |text|
   wait_for_animation
@@ -20,23 +11,6 @@ Then /^I should see email body that contains "([^"]*)"$/ do |text|
   else
     puts "cannot test for email body iOS 6 simulator or device"
     true
-  end
-end
-
-def is_ios5_mail_view ()
-  access_ids = query("view", :accessibilityIdentifier)
-  access_ids.member?("toField") || access_ids.member?("subjectField")
-end
-
-def is_ios6_mail_view()
-  access_ids = query("view", :accessibilityIdentifier)
-  access_ids.member?("RemoteViewBridge")
-end
-
-def should_see_mail_view
-  wait_for_animation
-  unless is_ios5_mail_view || is_ios6_mail_view
-    screenshot_and_raise "expected to see email view"
   end
 end
 
