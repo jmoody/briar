@@ -1,15 +1,12 @@
-def exists? (expected_mark)
-  (element_exists("view marked:'#{expected_mark}'") or
-        element_exists("view text:'#{expected_mark}'"))
-end
-
+include Briar::ScrollView
+include Briar::Core
 
 Then /^I scroll (left|right|up|down) until I see "([^\"]*)" limit (\d+)$/ do |dir, name, limit|
   unless exists?(name)
     count = 0
     begin
       scroll("scrollView index:0", dir)
-      sleep(STEP_PAUSE)
+      step_pause
       count = count + 1
     end while ((not exists?(name)) and count < limit.to_i)
   end
