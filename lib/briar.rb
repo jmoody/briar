@@ -25,6 +25,7 @@ require "briar/keyboard"
 require "briar/label"
 require "briar/scroll_view"
 
+require "briar/table"
 require "briar/text_field"
 require "briar/text_view"
 
@@ -51,6 +52,7 @@ require File.join(File.dirname(__FILE__), '..','features','step_definitions',"ke
 require File.join(File.dirname(__FILE__), '..','features','step_definitions',"label_steps")
 require File.join(File.dirname(__FILE__), '..','features','step_definitions',"scroll_view_steps")
 
+require File.join(File.dirname(__FILE__), '..','features','step_definitions',"table_steps")
 require File.join(File.dirname(__FILE__), '..','features','step_definitions',"text_field_steps")
 require File.join(File.dirname(__FILE__), '..','features','step_definitions',"text_view_steps")
 
