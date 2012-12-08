@@ -51,6 +51,10 @@ When /^I touch the "([^"]*)" navbar button, then I should see the "([^"]*)" view
   end
 end
 
+Then /^I go back after waiting$/ do
+  go_back_after_waiting
+end
+
 Then /^I go back and wait for "([^\"]*)"$/ do |view|
   go_back_and_wait_for_view view
 end
