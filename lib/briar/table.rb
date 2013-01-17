@@ -83,6 +83,19 @@ module Briar
       end
     end
 
+    def should_see_row_with_image (row_id, image_id, table_id = nil)
+      should_see_row row_id, table_id
+      query_base = query_str_row_in_table row_id, table_id
+      query_str = "#{query_base} child tableViewCellContentView child imageView marked:'#{image_id}'"
+      if query(query_str).empty?
+        if table_id == nil
+          screenshot_and_raise "expected to see row '#{row_id}' with image view '#{image_id}'"
+        else
+          screenshot_and_raise "expected to see row '#{row_id}' with image view '#{image_id}' in table '#{table_id}'"
+        end
+      end
+    end
+
 
     def scroll_until_i_see_row (dir, row_id, limit)
       unless row_exists? row_id
@@ -209,7 +222,6 @@ module Briar
         screenshot_and_raise "i should not see reorder button on row #{row_name}"
       end
     end
-
 
   end
 end

@@ -11,6 +11,11 @@ Given /^that the tabbar is visible$/ do
   should_see_tabbar
 end
 
+
+Then /^I should not see the tabbar$/ do
+  screenshot_and_raise "should not be able to see tabbar" if tabbar_visible?
+end
+
 Then /I touch (?:the) "([^"]*)" tab$/ do |name|
   touch_tabbar_item name
 end

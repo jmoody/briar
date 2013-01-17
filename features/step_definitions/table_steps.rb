@@ -10,7 +10,7 @@ Then /^I scroll (left|right|up|down) until I see the "([^\"]*)" row limit (\d+)$
 end
 
 
-Then /^I touch (?:the) "([^"]*)" row and wait for (?:the) "([^"]*)" (?:view) to appear$/ do |row_id, view_id|
+Then /^I touch (?:the) "([^"]*)" row and wait for (?:the) "([^"]*)" view to appear$/ do |row_id, view_id|
   # problem
   wait_for_animation
   touch_row_and_wait_to_see row_id, view_id
@@ -143,7 +143,7 @@ Then /^I should see a switch for "([^"]*)" in the "([^"]*)" row that is in the "
 end
 
 Then /^I should see a detail disclosure chevron in the "([^"]*)" row$/ do |row_id|
-    should_see_row row_id
+  should_see_row row_id
   # gray disclosure chevron is accessory type 1
   res = query("tableViewCell marked:'#{row_id}'", :accessoryType).first
   unless res == 1

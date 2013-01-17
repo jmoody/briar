@@ -1,5 +1,5 @@
 require 'date'
-require 'calabash-cucumber/calabash_steps'
+require 'calabash-cucumber'
 
 module Briar
   module Picker

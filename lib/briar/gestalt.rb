@@ -62,7 +62,6 @@ module Briar
     end
 
   end
-
 end
 
 #{"outcome":"SUCCESS","app_name":"Rise Up CAL","iOS_version":"5.1.1","app_version":"1.0","system":"iPad1,1","app_id":"org.recoverywarrriors.RiseUp-cal","version":"0.9.125"}=> true
