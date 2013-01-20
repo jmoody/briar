@@ -15,7 +15,6 @@ Then /^I use the keyboard to enter "([^"]*)"$/ do |text|
   @text_entered_by_keyboard = keyboard_enter_text text
 end
 
-
 When /^I touch the done button the keyboard disappears$/ do
   done
   should_not_see_keyboard

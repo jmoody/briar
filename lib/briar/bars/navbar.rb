@@ -32,7 +32,7 @@ module Briar
     def should_see_navbar_button (name)
       idx = index_of_navbar_button name
       if idx.nil?
-        screenshot_and_raise "there should be a navbar button named #{name}"
+        screenshot_and_raise "there should be a navbar button named '#{name}'"
       end
     end
 

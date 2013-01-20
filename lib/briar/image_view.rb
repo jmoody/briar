@@ -3,11 +3,12 @@ require 'calabash-cucumber'
 module Briar
   module ImageView
     def image_view_exists? name
-      alpha = query("imageView marked:'#{name}'", :alpha).first
-      if alpha.nil?
-        false
-      else
-        alpha.to_i != 0
+      query_str = "imageView marked:'#{name}'"
+      exists = !query(query_str).empty?
+      if exists
+        alpha = query(query_str, :alpha).first.to_i
+        hidden = query(query_str, :isHidden).first.to_i
+        alpha > 0 and hidden == 0
       end
     end
 

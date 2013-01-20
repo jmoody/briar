@@ -191,7 +191,6 @@ Then /^I should see that the "([^"]*)" row has the date and time I just entered 
   unless (actual_text.eql? @date_picker_date_time_12h) or (actual_text.eql? @date_picker_date_time_24h)
     screenshot_and_raise "expected to see '#{@date_picker_date_time_12h}' or '#{@date_picker_date_time_24h}' in '#{label_id}' but found '#{actual_text}'"
   end
-
 end
 
 Then /^I change the minute interval on the picker to (1|5|10|30) minutes?$/ do |target_interval|
