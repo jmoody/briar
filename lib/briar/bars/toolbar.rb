@@ -2,6 +2,18 @@ require 'calabash-cucumber'
 
 module Briar
   module Bars
+    def toolbar_exists? (id)
+      !query("toolbar marked:'#{id}'").empty?
+    end
+
+    def should_see_toolbar (id)
+      screenshot_and_raise "expected to see toolbar with id '#{id}'" unless toolbar_exists? id
+    end
+
+    def should_not_see_toolbar (id)
+      screenshot_and_raise "did not expect to see toolbar with id '#{id}'" if toolbar_exists? id
+    end
+
     def toolbar_button_exists? (name_or_id)
       # look for text button
       text_button_arr = query("toolbar child toolbarTextButton child button child buttonLabel", :text)

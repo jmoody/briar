@@ -2,11 +2,11 @@ include Briar::Bars
 
 # navigation back item, distinct from left bar button item
 Then /^I should see navbar back button$/ do
-  navbar_should_have_back_button
+  should_see_navbar_back_button
 end
 
 Then /^I should see a back button in the navbar$/ do
-  navbar_should_have_back_button
+  should_see_navbar_back_button
 end
 
 # navigation back item, distinct from left bar button item

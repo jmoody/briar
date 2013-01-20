@@ -10,13 +10,13 @@ module Briar
       !query("navigationItemButtonView").empty?
     end
 
-    def navbar_should_have_back_button
+    def should_see_navbar_back_button
       unless navbar_has_back_button?
         screenshot_and_raise "there is no navigation bar back button"
       end
     end
 
-    def navbar_should_not_have_back_button
+    def should_not_see_navbar_back_button
       if navbar_has_back_button?
         screenshot_and_raise "i should not see navigation bar back button"
       end
