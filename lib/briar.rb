@@ -1,7 +1,6 @@
 $:.unshift File.dirname(__FILE__)
 
 
-
 DEVICE_ENDPOINT = (ENV['DEVICE_ENDPOINT'] || "http://localhost:37265")
 AI = :accessibilityIdentifier
 
@@ -62,6 +61,12 @@ require File.join(File.dirname(__FILE__), '..','features','step_definitions',"sc
 require File.join(File.dirname(__FILE__), '..','features','step_definitions',"table_steps")
 require File.join(File.dirname(__FILE__), '..','features','step_definitions',"text_field_steps")
 require File.join(File.dirname(__FILE__), '..','features','step_definitions',"text_view_steps")
+
+def gestalt ()
+  uri = URI("#{DEVICE_ENDPOINT}/version")
+  res = Net::HTTP.get(uri)
+  Briar::Gestalt.new(res)
+end
 
 
 
