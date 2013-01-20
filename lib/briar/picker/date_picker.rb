@@ -256,6 +256,7 @@ to use the automatic mode, include this category in your CALABASH target
         #else
         #  screenshot_and_raise "could not figure out which way to rotate the day column to trigger an event"
         #end
+
       end
 
 # apple docs
@@ -359,10 +360,10 @@ to use the automatic mode, include this category in your CALABASH target
 # de - nach/vor
       def picker_period
         screenshot_and_raise "picker is not in 12h mode" if picker_is_in_24h_locale
-        res_ios5 = query(PICKER_VIEW_CLASS_IOS5, :_amPmValue)[0]
-        res_ios6 = query(PICKER_VIEW_CLASS_IOS6, :_amPmValue)[0]
-        period =  res_ios5 != nil ? res_ios5.to_i : res_ios6.to_i
-        period == 0 ? PICKER_AM : PICKER_PM
+        date = picker_date_time
+        date_str = date.strftime(PICKER_12H_TIME_FMT)
+        tokens = date_str.split(" ")
+        tokens.last
       end
 
       def picker_period_is_am?

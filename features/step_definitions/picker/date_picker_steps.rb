@@ -61,8 +61,8 @@ Then /^I change the time on the picker to "([^"]*)"$/ do |target_time|
     unless date_time_strings_are_equivalent(@date_picker_date_time_12h, @date_picker_date_time_24h)
       screenshot_and_raise "ERROR: changing the picker resulted in two different dates: 12H => '#{@date_picker_date_time_12h}' 24H => '#{@date_picker_date_time_24h}'"
     end
-
   end
+
   unless target_time.eql? @date_picker_time_12h or target_time.eql? @date_picker_time_24h
     screenshot_and_raise "tried to change the time to '#{target_time}' but found '#{@date_picker_time_12h}' or '#{@date_picker_time_24h}'"
   end
@@ -206,3 +206,11 @@ Then /^I change the time on the picker to (\d+) minutes? from now$/ do |target_m
   macro %Q|I change the time on the picker to "#{time_str}"|
   sleep(PICKER_STEP_PAUSE)
 end
+
+Then /^I change the time on the picker to (\d+) minutes? before now$/ do |target_minute|
+  past = Time.new - (60 * target_minute.to_i)
+  time_str = past.strftime(PICKER_12H_TIME_FMT).squeeze(" ").strip
+  macro %Q|I change the time on the picker to "#{time_str}"|
+  sleep(PICKER_STEP_PAUSE)
+end
+

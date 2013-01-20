@@ -47,7 +47,7 @@ When /^I touch the "([^"]*)" navbar button, then I should see the "([^"]*)" view
                      {:timeout=>TOUCH_TRANSITION_TIMEOUT,
                       :retry_frequency=>TOUCH_TRANSITION_RETRY_FREQ})
   else
-    screenshot_and_raise "could not find navbar item #{button_name}"
+    screenshot_and_raise "could not find navbar item '#{button_name}'"
   end
 end
 
