@@ -21,12 +21,13 @@ module Briar
 
     def picker_scroll_down_on_column(column)
       new_row = previous_index_for_column column
-      scroll_to_row("pickerTableView index:#{column}", new_row)
+      #scroll_to_row("pickerTableView index:#{column}", new_row)
+      query("pickerTableView index:'#{column}'", [{selectRow:new_row}, {animated:1}, {notify:1}])
     end
 
     def picker_scroll_up_on_column(column)
       new_row = picker_next_index_for_column column
-      scroll_to_row("pickerTableView index:#{column}", new_row)
+      query("pickerTableView index:'#{column}'", [{selectRow:new_row}, {animated:1}, {notify:1}])
     end
   end
 end

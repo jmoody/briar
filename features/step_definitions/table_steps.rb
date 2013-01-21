@@ -179,3 +179,8 @@ When /^I touch the "([^"]*)" text field in the "([^"]*)" row the keyboard appear
   wait_for_animation
   should_see_keyboard
 end
+
+
+Then /^I should see that the "([^"]*)" row has image "([^"]*)"$/ do |row_id, image_id|
+  should_see_row_with_image row_id, image_id
+end

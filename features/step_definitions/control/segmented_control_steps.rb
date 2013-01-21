@@ -55,3 +55,19 @@ Then /^I should see segment "([^"]*)" in segmented control "([^"]*)" (is|is not)
     screenshot_and_raise "could not find control named #{control_name}"
   end
 end
+
+Then /^I should see the segment I touched (is|is not) selected and the "([^"]*)" should be set correctly$/ do |selectedness, label_id|
+  @associated_label = label_id
+  wait_for_animation
+  macro %Q|I should see segment "#{@segment_name}" in segmented control "#{@control_name}" #{selectedness} selected|
+  macro %Q|I should see label "#{label_id}" with text "#{@segment_name}"|
+end
+
+Then /^I touch the segment again$/ do
+  macro %Q|I touch segment "#{@segment_name}" in segmented control "#{@control_name}"|
+end
+
+Then /^I should see the segment is not selected and the detail label is cleared$/ do
+  macro %Q|I should see segment "#{@segment_name}" in segmented control "#{@control_name}" is not selected|
+  macro %Q|I should see label "#{@associated_label}" with text ""|
+end
