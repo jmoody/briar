@@ -71,3 +71,15 @@ Then /^I should see the segment is not selected and the detail label is cleared$
   macro %Q|I should see segment "#{@segment_name}" in segmented control "#{@control_name}" is not selected|
   macro %Q|I should see label "#{@associated_label}" with text ""|
 end
+
+Then /^I should see the segment I touched (is|is not) selected and the "([^"]*)" in the "([^"]*)" row should be set correctly$/ do |selectedness, label_id, row_id|
+  @associated_label = label_id
+  @associated_row = row_id
+  macro %Q|I should see segment "#{@segment_name}" in segmented control "#{@control_name}" #{selectedness} selected|
+  should_see_row_with_label_with_text @associated_row, @associated_label, "#{@segment_name}"
+end
+
+Then /^I should see the segment is not selected and the label in the row is cleared$/ do
+  macro %Q|I should see segment "#{@segment_name}" in segmented control "#{@control_name}" is not selected|
+  should_see_row_with_label_with_text @associated_row, @associated_label, ""
+end
