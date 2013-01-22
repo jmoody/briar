@@ -69,7 +69,7 @@ module Briar
       return true if (arr.length == 1) and (arr.first.eql? text)
       # iOS 6
       if arr.length > 1
-        puts "iOS 6 can have duplicate subviews"
+        pending "iOS 6 can have duplicate subviews"
         arr.member?(text)
       end
     end
@@ -116,13 +116,13 @@ module Briar
       offset = 0
       query = query_str_row_in_table row_id, table_id
       if tabbar_visible?
-        puts "tabbar visible"
+        #puts "tabbar visible"
         cells = query(query_str_rows_in_table, :accessibilityIdentifier)
-        puts "cells = #{cells} is #{row_id} last? ==> #{cells.last.eql?(row_id)}"
+        #puts "cells = #{cells} is #{row_id} last? ==> #{cells.last.eql?(row_id)}"
         if cells.last.eql?(row_id)
           row_h = query(query, :frame).first["Height"].to_i
           offset = -1 * (row_h/3)
-          puts "offset = #{offset}"
+          #puts "offset = #{offset}"
         end
       end
       {:x => 0, :y => offset}
@@ -132,7 +132,7 @@ module Briar
       should_see_row row_id
       offset = touch_row_offset_hash row_id, table_id
       query_str = query_str_row_in_table(row_id, table_id)
-      puts "touch(\"#{query_str}\", :offset => #{offset})"
+      #puts "touch(\"#{query_str}\", :offset => #{offset})"
       touch(query_str, :offset => offset)
       step_pause
     end
