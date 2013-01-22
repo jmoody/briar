@@ -62,17 +62,27 @@ module Briar
       end
     end
 
-    def row_with_label_and_text_exists? (row_id, label_id, text)
-      should_see_row row_id
-      arr = query("tableViewCell marked:'#{row_id}' child tableViewCellContentView child label marked:'#{label_id}'", :text)
-      # iOS 4 and 5
-      return true if (arr.length == 1) and (arr.first.eql? text)
-      # iOS 6
-      if arr.length > 1
-        pending "iOS 6 can have duplicate subviews"
-        arr.member?(text)
-      end
+    def query_str_for_label_and_text_exists (row_id, label_id, text, table_id = nil)
+      table_id == nil ?
+            "tableViewCell marked:'#{row_id}' isHidden:0 descendant label marked:'#{label_id}'" :
+            "tableView marked:'#{table_id}' child tableViewCell marked:'#{row_id}' isHidden:0 descendant label marked:'#{label_id}'"
+
     end
+
+    def row_with_label_and_text_exists? (row_id, label_id, text, table_id = nil)
+      should_see_row row_id
+      #arr = query("tableViewCell marked:'#{row_id}' isHidden:0 descendant label marked:'#{label_id}'", :text)
+      arr = query(query_str_for_label_and_text_exists(row_id, label_id, table_id),  :text)
+      ## iOS 4 and 5
+
+      (arr.length == 1) and (arr.first.eql? text)
+      ## iOS 6
+      #if arr.length > 1
+      #
+      #  pending "iOS 6 can have duplicate subviews"
+      #  arr.member?(text)
+    end
+
 
 
     def should_see_row_with_label_with_text (row_id, label_id, text)
