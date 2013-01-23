@@ -2,12 +2,38 @@ require 'calabash-cucumber'
 
 module Briar
   module Email
-    def email_body_contains_text (text)
+    def email_body_first_line_is? (text)
       if gestalt.is_ios6?
-        warn "WARN:  cannot test for email body text on iOS 6 - see https://groups.google.com/d/topic/calabash-ios/Ff3XFsjp-B0/discussion"
+        puts "WARN:  cannot test for email body text on iOS 6 - see https://groups.google.com/d/topic/calabash-ios/Ff3XFsjp-B0/discussion"
       else
         actual_tokens = query("view:'MFComposeTextContentView'", :text).first.split("\n")
         actual_tokens.include?(text)
+      end
+    end
+
+    def email_subject_is? (text)
+      if gestalt.is_ios6?
+        puts "WARN:  cannot test for email subject text on iOS 6 - see https://groups.google.com/d/topic/calabash-ios/Ff3XFsjp-B0/discussion"
+      else
+        actual = query("view marked:'subjectField'", :text)
+        actual.length == 1 && actual.first.eql?(text)
+      end
+    end
+
+    def email_subject_has_text_like? (text)
+      if gestalt.is_ios6?
+        puts "WARN:  cannot test for email subject text on iOS 6 - see https://groups.google.com/d/topic/calabash-ios/Ff3XFsjp-B0/discussion"
+      else
+        !query("view marked:'subjectField' {text LIKE '*#{text}*'}").empty?
+      end
+    end
+
+    def email_to_field_is? (text)
+      if gestalt.is_ios6?
+        puts "WARN: iOS6 detected - cannot test for email 'to' field on iOS simulator or devices"
+      else
+        actual = query("view marked:'toField'", :text)
+        actual.length == 1 && actual.first.eql?(text)
       end
     end
 
