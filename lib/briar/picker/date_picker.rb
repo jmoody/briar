@@ -129,8 +129,8 @@ to use the automatic mode, include this category in your CALABASH target
 # we will send to setDateWithString:animated:
 #
 # ex. 2012_11_18_16_45
-      PICKER__RUBY___SET_PICKER_DATE__DATE_AND_TIME_FMT = '%Y_%m_%d_%H_%M'
-      PICKER__OBJC___SET_PICKER_DATE__DATE_AND_TIME_FMT = 'yyyy_MM_dd_HH_mm'
+      PICKER__RUBY___SET_PICKER_DATE__DATE_AND_TIME_FMT = '%Y_%m_%d_%H_%M_%z'
+      PICKER__OBJC___SET_PICKER_DATE__DATE_AND_TIME_FMT = 'yyyy_MM_dd_HH_mm_Z'
 
 # iOS 5
       PICKER_VIEW_CLASS_IOS5 = "datePickerView"
@@ -240,6 +240,9 @@ to use the automatic mode, include this category in your CALABASH target
         #picker_max_date = picker_maximum_date_time
         #picker_min_date = picker_minimum_date_time
         #target_date = DateTime.strptime(date_time_str, PICKER__RUBY___SET_PICKER_DATE__DATE_AND_TIME_FMT)
+
+        #column_one_index = picker_current_index_for_column 0
+        #query("pickerTableView index:0", [{selectRow:column_one_index}, {animated:1}, {notify:1}])
 
         picker_scroll_down_on_column 0
         sleep(PICKER_STEP_PAUSE)
