@@ -163,7 +163,7 @@ end
 
 # requires a time or date change.  picker does not need to be visible
 Then /^I should see that the "([^"]*)" row has the time I just entered in the "([^"]*)" label$/ do |row_id, label_id|
-  arr = query("tableViewCell marked:'#{row_id}' child tableViewCellContentView child label marked:'#{label_id}'", :text)
+  arr = query("tableViewCell marked:'#{row_id}' isHidden:0 descendant label marked:'#{label_id}'", :text)
   screenshot_and_raise "could not find '#{label_id}' in the '#{row_id}' row" if arr.empty?
   actual_text = arr.first
   unless (actual_text.eql? @date_picker_time_12h) or (actual_text.eql? @date_picker_time_24h)
@@ -173,7 +173,7 @@ end
 
 # does not require a time or date change. picker needs to be visible
 Then /^I should see that the "([^"]*)" row has the same time as the picker in the "([^"]*)" label$/ do |row_id, label_id|
-  arr = query("tableViewCell marked:'#{row_id}' child tableViewCellContentView child label marked:'#{label_id}'", :text)
+  arr = query("tableViewCell marked:'#{row_id}' isHidden:0 descendant label marked:'#{label_id}'", :text)
   screenshot_and_raise "could not find '#{label_id}' in the '#{row_id}'" if arr.empty?
   time_str_12h = picker_is_in_12h_locale ? picker_time_12h_str : picker_time_for_other_locale
   time_str_24h = picker_is_in_24h_locale ? picker_time_24h_str : picker_time_for_other_locale
@@ -185,7 +185,7 @@ end
 
 # requires a time or date change.  picker does not need to be visible
 Then /^I should see that the "([^"]*)" row has the date and time I just entered in the "([^"]*)" label$/ do |row_id, label_id|
-  arr = query("tableViewCell marked:'#{row_id}' child tableViewCellContentView child label marked:'#{label_id}'", :text)
+  arr = query("tableViewCell marked:'#{row_id}' isHidden:0 descendant label marked:'#{label_id}'", :text)
   screenshot_and_raise "could not find '#{label_id}' in the '#{row_id}' row" if arr.empty?
   actual_text = arr.first
   unless (actual_text.eql? @date_picker_date_time_12h) or (actual_text.eql? @date_picker_date_time_24h)
