@@ -3,15 +3,15 @@ include Briar::Core
 
 Then /^I touch the "([^"]*)" toolbar button$/ do |name|
   should_see_toolbar_button name
-  text_button_arr = query("toolbar child toolbarTextButton child button child buttonLabel", :text)
-  has_text_button = text_button_arr.index(name) != nil
-  ## look for non_text button
-  #toolbar_button_arr = query("toolbar marked:'toolbar' child toolbarButton", :accessibilityLabel)
-  #has_toolbar_button = toolbar_button_arr.index(name) != nil
-
-  touch_str = has_text_button ?
-        "toolbarTextButton marked:'#{name}'" :
-        "toolbar child toolbarButton marked:'#{name}'"
-  touch(touch_str)
+  touch("toolbar descendant view marked:'#{name}'")
   step_pause
 end
+
+When /^I touch the "([^"]*)" toolbar button, then I should see the "([^"]*)" view$/ do |button_name, view_id|
+  should_see_toolbar_button button_name
+  touch_transition("toolbar descendant view marked:'done with info'",
+                     "view marked:'#{view_id}'",
+                     {:timeout=>TOUCH_TRANSITION_TIMEOUT,
+                      :retry_frequency=>TOUCH_TRANSITION_RETRY_FREQ})
+end
+

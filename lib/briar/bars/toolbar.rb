@@ -15,14 +15,15 @@ module Briar
     end
 
     def toolbar_button_exists? (name_or_id)
-      # look for text button
-      text_button_arr = query("toolbar child toolbarTextButton child button child buttonLabel", :text)
-      has_text_button = text_button_arr.index(name_or_id) != nil
-      # look for non_text button
-      toolbar_button_arr = query("toolbar child toolbarButton", :accessibilityLabel)
-      has_toolbar_button = toolbar_button_arr.index(name_or_id) != nil
-
-      has_text_button or has_toolbar_button
+      query("toolbar descendant view marked:#{name_or_id}")
+      ## look for text button
+      #text_button_arr = query("toolbar child toolbarTextButton child button child buttonLabel", :text)
+      #has_text_button = text_button_arr.index(name_or_id) != nil
+      ## look for non_text button
+      #toolbar_button_arr = query("toolbar child toolbarButton", :accessibilityLabel)
+      #has_toolbar_button = toolbar_button_arr.index(name_or_id) != nil
+      #
+      #has_text_button or has_toolbar_button
     end
 
     def should_see_toolbar_button (name_or_id)
