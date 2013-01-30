@@ -189,7 +189,7 @@ module Briar
 
     def should_see_delete_confirmation_in_row(row_name)
       if query("tableViewCell marked:'#{row_name}' child tableViewCellDeleteConfirmationControl").empty?
-        screenshot_and_raise "should see a delete confirmation button on row #{row_name}"
+        screenshot_and_raise "should see a delete confirmation button on row '#{row_name}'"
       end
     end
 

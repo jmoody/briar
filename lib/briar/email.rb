@@ -38,8 +38,9 @@ module Briar
     end
 
     def is_ios5_mail_view ()
-      access_ids = query("view", :accessibilityIdentifier)
-      access_ids.member?("toField") || access_ids.member?("subjectField")
+      query("view:'MFMailComposeRecipientView'").count == 3
+      #access_ids = query("view", :accessibilityIdentifier)
+      #access_ids.member?("toField") || access_ids.member?("subjectField")
     end
 
     def is_ios6_mail_view()
