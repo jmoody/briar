@@ -3,6 +3,11 @@
 extends calabash-ios steps to provide steps for controlling complex ui
 elements like tables and pickers.
 
+not ready for prime time yet - use at your own risk
+
+
+=== IGNORE BELOW THIS LINE ===
+
 ## Installation
 
 Add this line to your application's Gemfile:
