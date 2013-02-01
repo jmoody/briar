@@ -8,13 +8,12 @@ not ready for prime time yet - use at your own risk
 * http://en.wikipedia.org/wiki/Smoking_pipe_(tobacco)#Calabash
 * http://en.wikipedia.org/wiki/Smoking_pipe_(tobacco)#Briar
 
-=== IGNORE BELOW THIS LINE ===
+## Installation - NOT TESTED
 
-## Installation
-
-Add this line to your application's Gemfile:
+Add this line to your features/Gemfile:
 
     gem 'briar'
+    gem 'briar', :github => 'jmoody/briar', :branch => 'master'
 
 And then execute:
 
@@ -24,6 +23,10 @@ Or install it yourself as:
 
     $ gem install briar
 
+In your features/support/env.rb:
+
+    require 'briar'
+   
 ## Usage
 
 TODO: Write usage instructions here
