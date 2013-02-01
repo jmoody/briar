@@ -3,6 +3,13 @@
 extends calabash-ios steps to provide steps for controlling complex ui
 elements like tables and pickers.
 
+not ready for prime time yet - use at your own risk
+
+* http://en.wikipedia.org/wiki/Smoking_pipe_(tobacco)#Calabash
+* http://en.wikipedia.org/wiki/Smoking_pipe_(tobacco)#Briar
+
+=== IGNORE BELOW THIS LINE ===
+
 ## Installation
 
 Add this line to your application's Gemfile:
