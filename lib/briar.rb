@@ -1,6 +1,5 @@
 $:.unshift File.dirname(__FILE__)
 
-
 DEVICE_ENDPOINT = (ENV['DEVICE_ENDPOINT'] || "http://localhost:37265")
 AI = :accessibilityIdentifier
 
