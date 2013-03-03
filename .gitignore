@@ -6,6 +6,7 @@
 Gemfile.lock
 InstalledFiles
 _yardoc
+vendor
 coverage
 doc/
 lib/bundler/man

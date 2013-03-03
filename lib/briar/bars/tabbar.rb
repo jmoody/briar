@@ -3,7 +3,7 @@ require 'calabash-cucumber'
 module Briar
   module Bars
     def tabbar_visible?
-      element_exists("view marked:'tabbar'")
+      element_exists("tabBar")
     end
 
     def should_see_tabbar
@@ -21,6 +21,7 @@ module Briar
 
     def touch_tabbar_item(name)
       idx = index_of_tabbar_item name
+      puts "idx = '#{idx}'"
       if idx
         touch "tabBarButton index:#{idx}"
         step_pause

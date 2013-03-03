@@ -10,7 +10,7 @@ Gem::Specification.new do |gem|
   gem.email         = ["joshuajmoody@gmail.com"]
   gem.description   = 'extends calabash-ios steps'
   gem.summary       = "briar-#{gem.version}"
-  gem.homepage      = ""
+  gem.homepage      = "https://github.com/jmoody/briar"
 
   gem.add_runtime_dependency 'calabash-cucumber'
   gem.add_runtime_dependency 'builder'    
@@ -25,7 +25,7 @@ Gem::Specification.new do |gem|
   gem.add_runtime_dependency 'net-http-persistent'
   gem.add_runtime_dependency 'rack'
   gem.add_runtime_dependency 'rack-protection'
-  gem.add_runtime_dependency 'rake'
+  gem.add_runtime_dependency 'rake', '10.0.3'
   gem.add_runtime_dependency 'rubygems-bundler'
   gem.add_runtime_dependency 'sim_launcher'
   gem.add_runtime_dependency 'sinatra'
