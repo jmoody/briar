@@ -1,31 +1,22 @@
 # Briar
 
 extends calabash-ios steps to provide steps for controlling complex ui
-elements like tables and pickers.
+elements like tables and pickers. 
 
-not ready for prime time yet - use at your own risk
+## Why briar? 
 
 * http://en.wikipedia.org/wiki/Smoking_pipe_(tobacco)#Calabash
 * http://en.wikipedia.org/wiki/Smoking_pipe_(tobacco)#Briar
 
-## Installation - NOT TESTED
+## Installation 
 
-Add this line to your features/Gemfile:
+if you haven't already, configure your xcode project to use calabash-ios: https://github.com/calabash/calabash-ios. 
+if you have no features, be sure to run ```calabash-gen``` as per the instructions.  
 
-    gem 'briar'
-    gem 'briar', :github => 'jmoody/briar', :branch => 'master'
-
-And then execute:
-
-    $ bundle
-
-Or install it yourself as:
-
-    $ gem install briar
-
-In your features/support/env.rb:
-
-    require 'briar'
+1. clone this repository
+2. in the resulting directory, run ```rake gem``` to build and install the briar gem
+4. add ```gem 'briar'``` to your features/Gemfile
+5. run ```bundle``` in your features directory
    
 ## Usage
 
