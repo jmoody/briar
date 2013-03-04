@@ -10,13 +10,7 @@ elements like tables and pickers.
 
 ## Installation 
 
-if you haven't already, configure your xcode project to use calabash-ios: https://github.com/calabash/calabash-ios. 
-if you have no features, be sure to run ```calabash-gen``` as per the instructions.  
-
-1. clone this repository
-2. in the resulting directory, run ```rake gem``` to build and install the briar gem
-4. add ```gem 'briar'``` to your features/Gemfile
-5. run ```bundle``` in your features directory
+not ready for release
    
 ## Usage
 
