@@ -21,7 +21,6 @@ module Briar
 
     def touch_tabbar_item(name)
       idx = index_of_tabbar_item name
-      puts "idx = '#{idx}'"
       if idx
         touch "tabBarButton index:#{idx}"
         step_pause

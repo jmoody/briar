@@ -6,6 +6,8 @@ task :show_simulator do
 end
 
 task :gem do
+  sh "rm -f *.gem"
+  sh "gem uninstall briar --install-dir=`pwd`"
   sh "gem build briar.gemspec"
   sh "gem install briar-#{Briar::VERSION}.gem"
 end
