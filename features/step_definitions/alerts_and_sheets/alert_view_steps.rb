@@ -1,4 +1,4 @@
-include Briar::Alerts_and_Sheets
+#include Briar::Alerts_and_Sheets
 
 Then /^I should see alert with "([^"]*)" button$/ do |button_id|
   should_see_alert_button button_id

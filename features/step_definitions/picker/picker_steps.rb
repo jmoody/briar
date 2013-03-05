@@ -1,4 +1,4 @@
-include Briar::Picker
+#include Briar::Picker
 
 # may only work on circular pickers - does _not_ work on non-circular pickers
 # because the visible titles do _not_ follow the selected index

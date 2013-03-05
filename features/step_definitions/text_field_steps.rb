@@ -1,4 +1,4 @@
-include Briar::TextField
+#include Briar::TextField
 
 Then /^I should see the "([^"]*)" text field$/ do |name|
   should_see_text_field name

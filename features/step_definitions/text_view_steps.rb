@@ -1,4 +1,4 @@
-include Briar::TextView
+#include Briar::TextView
 
 Then /^I clear text view named "([^\"]*)"$/ do |name|
   res = query("textView marked:'#{name}'")

@@ -1,4 +1,4 @@
-include Briar::Bars
+#include Briar::Bars
 
 # navigation back item, distinct from left bar button item
 Then /^I should see navbar back button$/ do

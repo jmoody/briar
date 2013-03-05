@@ -1,4 +1,4 @@
-include Briar::Core
+#include Briar::Core
 
 Then /^I should (see|not see) (?:the|) "([^\"]*)" view$/ do |visibility, view_id|
   if visibility.eql? "see"

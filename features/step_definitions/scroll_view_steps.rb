@@ -1,5 +1,5 @@
-include Briar::ScrollView
-include Briar::Core
+#include Briar::ScrollView
+#include Briar::Core
 
 Then /^I scroll (left|right|up|down) until I see "([^\"]*)" limit (\d+)$/ do |dir, name, limit|
   unless exists?(name)

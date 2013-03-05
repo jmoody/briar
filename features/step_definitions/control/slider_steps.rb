@@ -1,4 +1,4 @@
-include Briar::Control::Slider
+#include Briar::Control::Slider
 
 When /^I change the "([^"]*)" slider to (\d+)$/ do |slider_id, value|
   change_slider_value_to slider_id, value

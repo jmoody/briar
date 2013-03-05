@@ -1,4 +1,4 @@
-include Briar::Control::Segmented_Control
+#include Briar::Control::Segmented_Control
 
 Then /^I should see segmented control "([^"]*)" with titles "([^"]*)"$/ do |control_name, titles|
   @control_name = control_name

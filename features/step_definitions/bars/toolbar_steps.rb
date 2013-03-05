@@ -1,5 +1,5 @@
-include Briar::Bars
-include Briar::Core
+#include Briar::Bars
+#include Briar::Core
 
 Then /^I touch the "([^"]*)" toolbar button$/ do |name|
   should_see_toolbar_button name

@@ -21,6 +21,7 @@ Gem::Specification.new do |gem|
   gem.add_runtime_dependency 'geocoder'
   gem.add_runtime_dependency 'gherkin'
   gem.add_runtime_dependency 'json'
+  gem.add_runtime_dependency 'multi_json'
   gem.add_runtime_dependency 'location-one'
   gem.add_runtime_dependency 'net-http-persistent'
   gem.add_runtime_dependency 'rack'

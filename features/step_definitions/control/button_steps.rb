@@ -1,4 +1,4 @@
-include Briar::Control::Button
+#include Briar::Control::Button
 
 Then /^I should see button "([^\"]*)" is enabled$/ do |name|
   should_see_button name

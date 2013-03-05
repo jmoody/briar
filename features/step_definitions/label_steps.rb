@@ -1,4 +1,4 @@
-include Briar::Label
+#include Briar::Label
 
 Then /^I should (see|not see) "([^"]*)" in label "([^"]*)"$/ do |visibility, text, name|
   if visibility.eql? "see"

@@ -1,5 +1,5 @@
-include Briar::Table
-include Briar::Core
+#include Briar::Table
+#include Briar::Core
 
 Then /^I should see (?:the|an?) "([^"]*)" row$/ do |name|
   should_see_row name

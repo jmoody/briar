@@ -1,4 +1,4 @@
-include Briar::Keyboard
+#include Briar::Keyboard
 
 Then /^I should see the keyboard$/ do
   should_see_keyboard

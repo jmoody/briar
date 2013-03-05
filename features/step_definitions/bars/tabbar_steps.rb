@@ -1,4 +1,4 @@
-include Briar::Bars
+#include Briar::Bars
 
 Then /^I should see tabbar button "([^"]*)" at index (\d+)$/ do |name, index|
   unless tabbar_item_is_at_index(name, index)

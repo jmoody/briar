@@ -1,5 +1,5 @@
-include Briar::Email
-include Briar::Core
+#include Briar::Email
+#include Briar::Core
 
 Then /^I should see email body that contains "([^"]*)"$/ do |text|
   wait_for_animation
