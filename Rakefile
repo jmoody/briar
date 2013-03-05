@@ -6,7 +6,7 @@ task :show_simulator do
 end
 
 task :gem do
-  sh "rm -f briar-#{Briar::VERSION}.gem"
+  sh "rm -f *.gem"
   sh "gem build briar.gemspec --verbose"
   sh "gem install briar-#{Briar::VERSION}.gem"
 end

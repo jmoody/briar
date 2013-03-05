@@ -24,5 +24,3 @@ require File.join(File.dirname(__FILE__), '..', '..','features','step_definition
 
 require File.join(File.dirname(__FILE__), '..', '..','features','step_definitions',"table_steps")
 require File.join(File.dirname(__FILE__), '..', '..','features','step_definitions',"text_field_steps")
-
-
