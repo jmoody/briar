@@ -17,6 +17,7 @@ Gem::Specification.new do |gem|
 
   gem.add_development_dependency 'rspec'
   gem.add_development_dependency 'rvm'
+  gem.add_development_dependency 'lesspainful'
 
 
   gem.files         = `git ls-files`.split($/)
