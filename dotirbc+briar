@@ -1,5 +1,5 @@
+# append to your .irbrc to have briar in the irb
 require "briar"
-
 include Briar::Bars
 include Briar::Alerts_and_Sheets
 include Briar::Control::Button
