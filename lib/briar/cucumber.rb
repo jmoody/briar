@@ -1,29 +1,4 @@
-require 'briar/gestalt'
-require 'briar/briar_core'
-
-require 'briar/alerts_and_sheets/alert_view'
-
-require 'briar/bars/tabbar'
-require 'briar/bars/navbar'
-require 'briar/bars/toolbar'
-
-require 'briar/control/button'
-require 'briar/control/segmented_control'
-require 'briar/control/slider'
-
-require 'briar/picker/picker_shared'
-require 'briar/picker/picker'
-require 'briar/picker/date_picker'
-
-require 'briar/email'
-require 'briar/image_view'
-require 'briar/keyboard'
-require 'briar/label'
-require 'briar/scroll_view'
-
-require 'briar/table'
-require 'briar/text_field'
-require 'briar/text_view'
+require 'briar'
 
 World(Briar)
 World(Briar::Core)
