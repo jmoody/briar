@@ -1,11 +1,11 @@
 
 Given /^that the tabbar is visible$/ do
-  pending 'deprecated 0.0.5 - use i should see the tabbar'
+  pending "deprecated 0.0.5 - use 'Then I should see the tabbar'"
   should_see_tabbar
 end
 
 Then /^the tabbar is visible$/ do
-  pending 'deprecated 0.0.5 - use i should see the tabbar'
+  pending "deprecated 0.0.5 - use 'Then I should see the tabbar'"
   macro 'that the tabbar is visible'
 end
 
