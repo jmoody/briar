@@ -1,17 +1,17 @@
 # -*- encoding: utf-8 -*-
-$:.push File.expand_path("../lib", __FILE__)
+$:.push File.expand_path('../lib', __FILE__)
 #lib = File.expand_path('../lib', __FILE__)
 #$LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require 'briar/version'
 
 Gem::Specification.new do |gem|
-  gem.name          = "briar"
+  gem.name          = 'briar'
   gem.version       = Briar::VERSION
-  gem.authors       = ["Joshua Moody"]
-  gem.email         = ["joshuajmoody@gmail.com"]
+  gem.authors       = ['Joshua Moody']
+  gem.email         = ['joshuajmoody@gmail.com']
   gem.description   = 'extends calabash-ios steps'
   gem.summary       = "briar-#{gem.version}"
-  gem.homepage      = "https://github.com/jmoody/briar"
+  gem.homepage      = 'https://github.com/jmoody/briar'
 
   gem.add_runtime_dependency 'calabash-cucumber'
 
@@ -23,5 +23,5 @@ Gem::Specification.new do |gem|
   gem.files         = `git ls-files`.split($/)
   gem.executables   = gem.files.grep(%r{^bin/}).map{ |f| File.basename(f) }
   gem.test_files    = gem.files.grep(%r{^(test|spec|features)/})
-  gem.require_paths = ["lib"]
+  gem.require_paths = ['lib']
 end

@@ -40,7 +40,6 @@ module Briar
         touch("button marked:'#{name}'")
         step_pause
       end
-
     end
   end
 end

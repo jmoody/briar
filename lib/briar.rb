@@ -2,6 +2,8 @@
 
 DEVICE_ENDPOINT = (ENV['DEVICE_ENDPOINT'] || 'http://localhost:37265')
 AI = :accessibilityIdentifier
+TOUCH_TRANSITION_TIMEOUT = 30.0
+TOUCH_TRANSITION_RETRY_FREQ = 0.5
 
 require 'briar/version'
 require 'briar/gestalt'
