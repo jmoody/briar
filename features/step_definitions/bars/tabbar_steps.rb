@@ -10,7 +10,8 @@ Then /^the tabbar is visible$/ do
 end
 
 Then /^I should (not see|see) the tabbar$/ do |visibility|
-  visibility.eql? 'see' ? should_see_tabbar : should_not_see_tabbar
+  #noinspection RubyQuotedStringsInspection
+  visibility.eql? "see" ? should_see_tabbar : should_not_see_tabbar
 end
 
 Then /^I should see tabbar button "([^"]*)" at index (\d+)$/ do |name, index|

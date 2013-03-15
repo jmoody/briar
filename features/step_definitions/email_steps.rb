@@ -1,10 +1,13 @@
-#include Briar::Email
-#include Briar::Core
 
+#noinspection RubyUnusedLocalVariable
 Then /^I should see email body that contains "([^"]*)"$/ do |text|
+  pending 'deprecated 0.0.6 - use I should see email view with body that contains'
+end
+
+Then /^I should see email view with body that contains "([^"]*)"$/ do |text|
   wait_for_animation
-  unless email_body_first_line_is? text
-    screenshot_and_raise "i did not see an email body (MFComposeTextContentView) containing '#{text}'"
+  unless email_body_contains? text
+    screenshot_and_raise "expected to see email body containing '#{text} but found '#{email_body}'"
   end
 end
 
@@ -19,26 +22,31 @@ Then /^I should see email view with "([^"]*)" in the subject$/ do |text|
   wait_for_animation
   should_see_mail_view
   unless email_subject_is? text
-    screenshot_and_raise "expected to see '#{text}' in 'subjectField' but found '#{actual.first}'"
+    screenshot_and_raise "expected to see '#{text}' in the email subject but found '#{email_subject}'"
   end
 end
 
-Then /^I should see email view with to field set to "([^"]*)"$/ do |text|
+Then /^I should see email view with recipients "([^"]*)"$/ do |comma_sep_addrs|
   should_see_mail_view
   wait_for_animation
-
-  unless email_to_field_is? text
-    screenshot_and_raise "expected to see '#{text}' in the 'toField' but found '#{actual.first}'"
+  addrs = comma_sep_addrs.split(/, ?/)
+  addrs.each do |expected|
+    unless email_to_contains? expected.strip
+      screenshot_and_raise "expected to see '#{expected}' in the email 'to' field but found '#{email_to}'"
+    end
   end
+end
+
+#noinspection RubyUnusedLocalVariable
+Then /^I should see email view with to field set to "([^"]*)"$/ do |text|
+  pending 'deprecated 0.0.5 - use I should see email with recipients'
 end
 
 Then /^I should see email view with text like "([^"]*)" in the subject$/ do |text|
   should_see_mail_view
   wait_for_animation
-
   unless email_subject_has_text_like? text
-    actual = query("view marked:'subjectField'", :text)
-    screenshot_and_raise "expected to see '#{text}' in 'subjectField' but found '#{actual.first}'"
+    screenshot_and_raise "expected to see '#{text}' in the email subject but found '#{email_subject}'"
   end
 end
 
@@ -54,6 +62,6 @@ When /^I cancel email editing I should see the "([^"]*)" view$/ do |view_id|
     touch_transition("button marked:'Delete Draft'",
                      "view marked:'#{view_id}'",
                      {:timeout=>TOUCH_TRANSITION_TIMEOUT,
-                      :retry_frequency=>TOUCH_TRANSsITION_RETRY_FREQ})
+                      :retry_frequency=>TOUCH_TRANSITION_RETRY_FREQ})
   end
 end
