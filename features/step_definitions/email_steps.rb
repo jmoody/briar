@@ -28,7 +28,7 @@ Then /^I should see email view with to field set to "([^"]*)"$/ do |text|
   wait_for_animation
 
   unless email_to_field_is? text
-    screenshot_and_raise "expected to see '#{text}' in 'subjectField' but found '#{actual.first}'"
+    screenshot_and_raise "expected to see '#{text}' in the 'toField' but found '#{actual.first}'"
   end
 end
 
@@ -47,9 +47,9 @@ When /^I cancel email editing I should see the "([^"]*)" view$/ do |view_id|
   wait_for_animation
 
   if gestalt.is_ios6?
-    puts "WARN: iOS6 detected - navbar cancel button is not visible on iOS 6"
+    puts 'WARN: iOS6 detected - navbar cancel button is not visible on iOS 6'
   else
-    touch_navbar_item "Cancel"
+    touch_navbar_item 'Cancel'
     wait_for_animation
     touch_transition("button marked:'Delete Draft'",
                      "view marked:'#{view_id}'",
