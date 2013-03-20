@@ -3,6 +3,12 @@
 extends calabash-ios steps to provide steps for controlling complex ui
 elements like tables and pickers. 
 
+to see briar in action, have a look at
+https://github.com/jmoody/briar-ios-example
+
+i will try my best to follow http://semver.org/ when naming the
+versions.
+
 ## Why briar? 
 
 * http://en.wikipedia.org/wiki/Smoking_pipe_(tobacco)#Calabash
