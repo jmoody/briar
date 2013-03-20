@@ -20,7 +20,13 @@ module Briar
 
     def should_see_view (view_id)
       unless view_exists? view_id
-        screenshot_and_raise "no view found with id #{view_id}"
+        screenshot_and_raise "should see view with id '#{view_id}'"
+      end
+    end
+
+    def should_not_see_view (view_id)
+      if view_exists? view_id
+        screenshot_and_raise "should not see view with id '#{view_id}'"
       end
     end
 
@@ -37,14 +43,14 @@ module Briar
     def should_not_see_view_after_animation (view_id)
       wait_for_animation
       if view_exists? view_id
-        screenshot_and_raise "did not expect to see view '#{view_id}'"
+        screenshot_and_raise "should not see view with id '#{view_id}'"
       end
     end
 
     def should_see_view_with_text (text)
       res = view_exists_with_text? text
       unless res
-        screenshot_and_raise "No view found with text #{text}"
+        screenshot_and_raise "should see view with text '#{text}'"
       end
     end
 
