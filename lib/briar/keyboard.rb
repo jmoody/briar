@@ -1,4 +1,4 @@
-require "calabash-cucumber"
+require 'calabash-cucumber'
 
 module Briar
   module Keyboard
@@ -15,37 +15,37 @@ module Briar
 
 
     def should_see_keyboard
-      res = element_exists("keyboardAutomatic")
+      res = element_exists('keyboardAutomatic')
       unless res
-        screenshot_and_raise "Expected keyboard to be visible."
+        screenshot_and_raise 'Expected keyboard to be visible.'
       end
     end
 
     def should_not_see_keyboard
-      res = element_exists("keyboardAutomatic")
+      res = element_exists('keyboardAutomatic')
       if res
-        screenshot_and_raise "Expected keyboard to not be visible."
+        screenshot_and_raise 'Expected keyboard to not be visible.'
       end
     end
 
     # is it possible to find what view the keyboard is responding to?
     def autocapitalization_type ()
-      if !query("textView index:0").empty?
-        query("textView index:0", :autocapitalizationType).first.to_i
-      elsif !query("textField index:0").empty?
-        query("textField index:0", :autocapitalizationType).first.to_i
+      if !query('textView index:0').empty?
+        query('textView index:0', :autocapitalizationType).first.to_i
+      elsif !query('textField index:0').empty?
+        query('textField index:0', :autocapitalizationType).first.to_i
       else
-        screenshot_and_raise "could not find a text view or text field"
+        screenshot_and_raise 'could not find a text view or text field'
       end
     end
 
     def set_autocapitalization (type)
-      if !query("textView index:0").empty?
-        query("textView index:0", [{setAutocapitalizationType:type}])
-      elsif !query("textField index:0").empty?
-        query("textField index:0", [{setAutocapitalizationType:type}])
+      if !query('textView index:0').empty?
+        query('textView index:0', [{setAutocapitalizationType:type}])
+      elsif !query('textField index:0').empty?
+        query('textField index:0', [{setAutocapitalizationType:type}])
       else
-        screenshot_and_raise "could not find a text view or text field"
+        screenshot_and_raise 'could not find a text view or text field'
       end
     end
 
@@ -54,12 +54,12 @@ module Briar
     end
 
     def set_autocorrect (type)
-      if !query("textView index:0").empty?
-        query("textView index:0", [{setAutocorrectionType:type}])
-      elsif !query("textField index:0").empty?
-        query("textField index:0", [{setAutocorrectionType:type}])
+      if !query('textView index:0').empty?
+        query('textView index:0', [{setAutocorrectionType:type}])
+      elsif !query('textField index:0').empty?
+        query('textField index:0', [{setAutocorrectionType:type}])
       else
-        screenshot_and_raise "could not find a text view or text field"
+        screenshot_and_raise 'could not find a text view or text field'
       end
     end
 
@@ -68,12 +68,12 @@ module Briar
     end
 
     def turn_spell_correct_off
-      if !query("textView index:0").empty?
-        query("textView index:0", [{setSpellCheckingType:UITextSpellCheckingTypeNo}])
-      elsif !query("textField index:0").empty?
-        query("textField index:0", [{setSpellCheckingType:UITextSpellCheckingTypeNo}])
+      if !query('textView index:0').empty?
+        query('textView index:0', [{setSpellCheckingType:UITextSpellCheckingTypeNo}])
+      elsif !query('textField index:0').empty?
+        query('textField index:0', [{setSpellCheckingType:UITextSpellCheckingTypeNo}])
       else
-        screenshot_and_raise "could not find a text view or text field"
+        screenshot_and_raise 'could not find a text view or text field'
       end
     end
 
