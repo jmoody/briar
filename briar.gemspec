@@ -13,7 +13,7 @@ Gem::Specification.new do |gem|
   gem.summary       = "briar-#{gem.version}"
   gem.homepage      = 'https://github.com/jmoody/briar'
 
-  gem.add_runtime_dependency 'calabash-cucumber'
+  gem.add_runtime_dependency 'calabash-cucumber', '0.9.135'
 
   gem.add_development_dependency 'rspec'
   gem.add_development_dependency 'rvm'

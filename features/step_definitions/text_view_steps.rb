@@ -1,5 +1,3 @@
-#include Briar::TextView
-
 Then /^I clear text view named "([^\"]*)"$/ do |name|
   res = query("textView marked:'#{name}'")
   if res
@@ -17,10 +15,6 @@ Then /^I should see the text I just entered in the "([^"]*)" text view$/ do |tex
   unless @text_entered_by_keyboard.eql? text
     screenshot_and_raise "i expected to see '#{@text_entered_by_keyboard}' in text view '#{text_view_id}' but found '#{text}'"
   end
-end
-
-Then /^I am done text editing$/ do
-  touch_navbar_item 'done text editing'
 end
 
 Then /^I should see text view "([^"]*)" with placeholder text "([^"]*)"$/ do |text_view, placeholder|

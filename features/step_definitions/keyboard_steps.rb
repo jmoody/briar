@@ -28,3 +28,7 @@ Then(/^I turn off spell checking and capitalization$/) do
   turn_autocorrect_off
   turn_spell_correct_off
 end
+
+Then /^I am done text editing$/ do
+  touch_navbar_item 'done text editing'
+end
