@@ -3,7 +3,7 @@
 Then /^I clear text view named "([^\"]*)"$/ do |name|
   res = query("textView marked:'#{name}'")
   if res
-    set_text("textView marked:'#{name}'", "")
+    set_text("textView marked:'#{name}'", '')
   end
 end
 
@@ -20,7 +20,7 @@ Then /^I should see the text I just entered in the "([^"]*)" text view$/ do |tex
 end
 
 Then /^I am done text editing$/ do
-  touch_navbar_item "done text editing"
+  touch_navbar_item 'done text editing'
 end
 
 Then /^I should see text view "([^"]*)" with placeholder text "([^"]*)"$/ do |text_view, placeholder|

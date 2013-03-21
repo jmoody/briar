@@ -40,8 +40,8 @@ end
 
 
 Then /^the (first|second) row should be "([^"]*)"$/ do |idx, row_id|
-  (idx.eql? "first") ? index = 0 : index = 1
-  res = query("tableViewCell", :accessibilityIdentifier)[index]
+  (idx.eql? 'first') ? index = 0 : index = 1
+  res = query('tableViewCell', :accessibilityIdentifier)[index]
   unless res.eql? row_id
     screenshot_and_raise "i expected the #{idx} row would be #{row_id}, but found #{res}"
   end
@@ -54,7 +54,7 @@ end
 
 
 Then /^I should be able to swipe to delete the "([^"]*)" row$/ do |row_name|
-  swipe_on_row "left", row_name
+  swipe_on_row 'left', row_name
   should_see_delete_confirmation_in_row row_name
   touch_delete_confirmation row_name
   should_not_see_row row_name
@@ -76,14 +76,14 @@ end
 Then /^I should see "([^"]*)" in row (\d+)$/ do |cell_name, row|
   # on ios 6 this is returning nil
   #res = query("tableViewCell index:#{row}", :accessibilityIdentifier).first
-  access_ids = query("tableViewCell", :accessibilityIdentifier)
+  access_ids = query('tableViewCell', :accessibilityIdentifier)
   unless access_ids.index(cell_name) == row.to_i
     screenshot_and_raise "expected to see '#{cell_name}' in row #{row} but found '#{access_ids[row.to_i]}'"
   end
 end
 
 Then /^I should see the rows in this order "([^"]*)"$/ do |row_ids|
-  tokens = row_ids.split(",")
+  tokens = row_ids.split(',')
   counter = 0
   tokens.each do |token|
     token.strip!
@@ -102,7 +102,7 @@ end
 
 Then /^I move the "([^"]*)" row (up|down) (\d+) times? using the reorder edit control$/ do |row_id, dir, n|
   should_see_row row_id
-  dir_str = (dir.eql?("up")) ? "drag_row_up" : "drag_row_down"
+  dir_str = (dir.eql?('up')) ? 'drag_row_up' : 'drag_row_down'
   n.to_i.times do (
   playback(dir_str,
            {:query => "tableViewCell marked:'#{row_id}' descendant tableViewCellReorderControl"})
@@ -111,7 +111,7 @@ Then /^I move the "([^"]*)" row (up|down) (\d+) times? using the reorder edit co
 end
 
 Then /^I should (see|not see) (?:the|an?) "([^"]*)" table$/ do |visibility, table_id|
-  if visibility.eql?("see")
+  if visibility.eql?('see')
     should_see_table table_id
   else
     should_not_see_table table_id
@@ -136,9 +136,9 @@ Then /^I should see a switch for "([^"]*)" in the "([^"]*)" row that is in the "
   unless res
     screenshot_and_raise "expected to find a switch marked '#{switch_id}' in row '#{row_id}'"
   end
-  expected = (on_off.eql? "on") ? 1 : 0
+  expected = (on_off.eql? 'on') ? 1 : 0
   unless res.to_i == expected
-    screenshot_and_raise "expected to find a switch marked '#{switch_id}' in row '#{row_id}' that is '#{on_off}' but found it was '#{res ? "on" : "off"}'"
+    screenshot_and_raise "expected to find a switch marked '#{switch_id}' in row '#{row_id}' that is '#{on_off}' but found it was '#{res ? 'on' : 'off'}'"
   end
 end
 
