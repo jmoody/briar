@@ -8,41 +8,9 @@ Then /^I change the time on the picker to "([^"]*)"$/ do |target_time|
     date_str_to_send = date_str_to_send_to_picker_from_time_str target_time
     set_picker_date_with_date_time_str (date_str_to_send)
   else
-    tokens = target_time.split(/[: ]/)
-    screenshot_and_raise "could not parse '#{target_time}' into a valid time" if tokens.count > 3 or tokens.count < 1
-    time_in_24h_locale = tokens.count == 2
-    hour_token = tokens[0].to_i
-    period_token = tokens[2]
-    if time_in_24h_locale
-      screenshot_and_raise "'#{hour_token}' is not on (0, 23)" unless (0..23).member?(hour_token)
-      period_token = hour_token > 11 ? PICKER_PM : PICKER_AM
-    else
-      screenshot_and_raise "'#{hour_token}' is not on (1, 12)" unless (0..12).member?(hour_token)
-      am_pm_token = tokens[2]
-      screenshot_and_raise "'#{am_pm_token}' is not a recognized period (AM or PM)" unless (am_pm_token.eql? PICKER_AM or am_pm_token.eql? PICKER_PM)
-      hour_token = 0 if hour_token == 12 and am_pm_token.eql? PICKER_AM
-      hour_token = hour_token + 12 if hour_token < 12 and am_pm_token.eql? PICKER_PM
-    end
-
-    minute_token = tokens[1].to_i
-    screenshot_and_raise "'#{minute_token}'is not on (0, 59)" unless (0..59).member?(minute_token)
-
-    # rollback the date by 1 to avoid maxi date problems
-    # decided this was not a good idea because sometimes the rollback step below
-    # would not fire
-    # picker_scroll_down_on_column 0 if picker_is_in_date_and_time_mode
-
-    picker_scroll_to_hour hour_token
-    picker_scroll_to_minute minute_token
-
-    picker_scroll_to_period period_token if picker_is_in_12h_locale
-
-    # rollback the change we made above
-    # decided this was not a good idea
-    # sometimes this does not fire so you can end up with inconsistent dates
-    # see the test below
-    # picker_scroll_up_on_column 0 if picker_is_in_date_and_time_mode
+    screenshot_and_raise 'this version of briar requires a category on UIDatePicker.  Sorry!'
   end
+
 
   @date_picker_time_12h = picker_is_in_12h_locale ? picker_time_12h_str : picker_time_for_other_locale
   @date_picker_time_24h = picker_is_in_24h_locale ? picker_time_24h_str : picker_time_for_other_locale
@@ -73,31 +41,7 @@ Then /^I change the date on the picker to "([^"]*)"$/ do |target_date|
     date_str_to_send = date_str_to_send_to_picker_from_date_str target_date
     set_picker_date_with_date_time_str (date_str_to_send)
   else
-    unless picker_weekday_month_day_is(target_date)
-      # figure out which way to turn the picker
-      # target = Date.parse(target_date)
-      dir = (Date.parse(target_date) < Date.today) ? 'down' : 'up'
-      limit = 60
-      count = 0
-      begin
-        dir.eql?('down') ? picker_scroll_down_on_column(0) : picker_scroll_up_on_column(0)
-        sleep(PICKER_STEP_PAUSE)
-        count = count + 1
-      end while ((not picker_weekday_month_day_is(target_date)) and count < limit)
-    end
-    unless picker_weekday_month_day_is(target_date)
-      screenshot_and_raise "scrolled '#{limit}' and could not change date to #{target_date}"
-    end
-
-    @date_picker_date_time_12h = picker_is_in_12h_locale ? picker_date_and_time_str_12h : picker_date_and_time_str_for_other_locale
-    @date_picker_date_time_24h = picker_is_in_24h_locale ? picker_date_and_time_str_24h : picker_date_and_time_str_for_other_locale
-    if picker_is_in_date_and_time_mode
-      @date_picker_time_12h = picker_is_in_12h_locale ? picker_time_12h_str : picker_time_for_other_locale
-      @date_picker_time_24h = picker_is_in_24h_locale ? picker_time_24h_str : picker_time_for_other_locale
-      unless time_strings_are_equivalent(@date_picker_time_12h, @date_picker_time_24h)
-        screenshot_and_raise "ERROR: changing the picker resulted in two different times: 12H => '#{@date_picker_time_12h}' 24H => '#{@date_picker_time_24h}'"
-      end
-    end
+    screenshot_and_raise 'this version of briar requires a category on UIDatePicker.  Sorry!'
   end
 end
 
@@ -214,3 +158,70 @@ Then /^I change the time on the picker to (\d+) minutes? before now$/ do |target
   sleep(PICKER_STEP_PAUSE)
 end
 
+# DEAD SEA
+
+# old non_category date picking
+#tokens = target_time.split(/[: ]/)
+#screenshot_and_raise "could not parse '#{target_time}' into a valid time" if tokens.count > 3 or tokens.count < 1
+#time_in_24h_locale = tokens.count == 2
+#hour_token = tokens[0].to_i
+#period_token = tokens[2]
+#if time_in_24h_locale
+#  screenshot_and_raise "'#{hour_token}' is not on (0, 23)" unless (0..23).member?(hour_token)
+#  period_token = hour_token > 11 ? PICKER_PM : PICKER_AM
+#else
+#  screenshot_and_raise "'#{hour_token}' is not on (1, 12)" unless (0..12).member?(hour_token)
+#  am_pm_token = tokens[2]
+#  screenshot_and_raise "'#{am_pm_token}' is not a recognized period (AM or PM)" unless (am_pm_token.eql? PICKER_AM or am_pm_token.eql? PICKER_PM)
+#  hour_token = 0 if hour_token == 12 and am_pm_token.eql? PICKER_AM
+#  hour_token = hour_token + 12 if hour_token < 12 and am_pm_token.eql? PICKER_PM
+#end
+#
+#minute_token = tokens[1].to_i
+#screenshot_and_raise "'#{minute_token}'is not on (0, 59)" unless (0..59).member?(minute_token)
+#
+## rollback the date by 1 to avoid maxi date problems
+## decided this was not a good idea because sometimes the rollback step below
+## would not fire
+## picker_scroll_down_on_column 0 if picker_is_in_date_and_time_mode
+#
+#picker_scroll_to_hour hour_token
+#picker_scroll_to_minute minute_token
+#
+#picker_scroll_to_period period_token if picker_is_in_12h_locale
+#
+## rollback the change we made above
+## decided this was not a good idea
+## sometimes this does not fire so you can end up with inconsistent dates
+## see the test below
+## picker_scroll_up_on_column 0 if picker_is_in_date_and_time_mode
+
+
+##
+
+#unless picker_weekday_month_day_is(target_date)
+#  # figure out which way to turn the picker
+#  # target = Date.parse(target_date)
+#  dir = (Date.parse(target_date) < Date.today) ? 'down' : 'up'
+#  limit = 60
+#  count = 0
+#  begin
+#    dir.eql?('down') ? picker_scroll_down_on_column(0) : picker_scroll_up_on_column(0)
+#    sleep(PICKER_STEP_PAUSE)
+#    count = count + 1
+#  end while ((not picker_weekday_month_day_is(target_date)) and count < limit)
+#end
+#unless picker_weekday_month_day_is(target_date)
+#  screenshot_and_raise "scrolled '#{limit}' and could not change date to #{target_date}"
+#end
+#
+#@date_picker_date_time_12h = picker_is_in_12h_locale ? picker_date_and_time_str_12h : picker_date_and_time_str_for_other_locale
+#@date_picker_date_time_24h = picker_is_in_24h_locale ? picker_date_and_time_str_24h : picker_date_and_time_str_for_other_locale
+#if picker_is_in_date_and_time_mode
+#  @date_picker_time_12h = picker_is_in_12h_locale ? picker_time_12h_str : picker_time_for_other_locale
+#  @date_picker_time_24h = picker_is_in_24h_locale ? picker_time_24h_str : picker_time_for_other_locale
+#  unless time_strings_are_equivalent(@date_picker_time_12h, @date_picker_time_24h)
+#    screenshot_and_raise "ERROR: changing the picker resulted in two different times: 12H => '#{@date_picker_time_12h}' 24H => '#{@date_picker_time_24h}'"
+#  end
+#end
+#end

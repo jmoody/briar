@@ -28,8 +28,11 @@ PICKER_ISO8601_DATE_TIME_FMT = '%Y-%m-%d %H:%M'
 # we will send to setDateWithString:animated:
 #
 # ex. 2012_11_18_16_45
-PICKER__RUBY___SET_PICKER_DATE__DATE_AND_TIME_FMT = '%Y_%m_%d_%H_%M_%z'
-PICKER__OBJC___SET_PICKER_DATE__DATE_AND_TIME_FMT = 'yyyy_MM_dd_HH_mm_Z'
+#PICKER__RUBY___SET_PICKER_DATE__DATE_AND_TIME_FMT = '%Y_%m_%d_%H_%M_%z'
+#PICKER__OBJC___SET_PICKER_DATE__DATE_AND_TIME_FMT = 'yyyy_MM_dd_HH_mm_Z'
+PICKER__RUBY___SET_PICKER_DATE__DATE_AND_TIME_FMT = '%Y_%m_%d_%H_%M'
+PICKER__OBJC___SET_PICKER_DATE__DATE_AND_TIME_FMT = 'yyyy_MM_dd_HH_mm'
+
 
 # iOS 5
 PICKER_VIEW_CLASS_IOS5 = 'datePickerView'
@@ -249,7 +252,9 @@ to use the automatic mode, include this category in your CALABASH target
         time_str = picker_date_time.strftime(time_fmt).squeeze(' ').strip
         date_time_str = "#{date_str} #{time_str}"
         date_time_fmt = "#{date_fmt} #{time_fmt}"
+
         date_time = DateTime.strptime(date_time_str, date_time_fmt)
+
         date_time.strftime(PICKER__RUBY___SET_PICKER_DATE__DATE_AND_TIME_FMT).squeeze(' ').strip
       end
 
@@ -261,6 +266,7 @@ to use the automatic mode, include this category in your CALABASH target
         res = query('datePicker', [{setDateWithString:date_time_str},
                                    {format:"#{PICKER__OBJC___SET_PICKER_DATE__DATE_AND_TIME_FMT}"},
                                    {animated:animated.to_i}])
+
         screenshot_and_raise 'could not find a date picker to query' if res.empty?
         if res.first.to_i == 0
           screenshot_and_raise "could not set the picker date with '#{date_time_str}' and '#{PICKER__RUBY___SET_PICKER_DATE__DATE_AND_TIME_FMT}'"
@@ -272,17 +278,19 @@ to use the automatic mode, include this category in your CALABASH target
         # the query does not create a UIControlEventValueChanged event, so we have to
         # to a touch event
 
+        # not true :(
         # if the picker is in time mode, then we dont need to worry about min/max
+
         # if the picker is date or date time mode, i think the first column is
         # always scrollable up _and_ it sends an event even if the date is beyond
         # the maximum date
-
+        #
         #picker_max_date = picker_maximum_date_time
         #picker_min_date = picker_minimum_date_time
         #target_date = DateTime.strptime(date_time_str, PICKER__RUBY___SET_PICKER_DATE__DATE_AND_TIME_FMT)
-
+        #
         #column_one_index = picker_current_index_for_column 0
-        #query("pickerTableView index:0", [{selectRow:column_one_index}, {animated:1}, {notify:1}])
+        #query('pickerTableView index:0', [{selectRow:column_one_index}, {animated:1}, {notify:1}])
 
         picker_scroll_down_on_column 0
         sleep(PICKER_STEP_PAUSE)

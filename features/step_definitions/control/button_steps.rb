@@ -21,7 +21,7 @@ Then /^I should see (?:the|a) "([^"]*)" button has title "([^"]*)"$/ do |button_
   should_see_button_with_title button_id, title
 end
 
-Then /^I should (not)? see (?:the|a) "([^"]*)" button$/ do |visibility, button_id|
+Then /^I should (not)? see (?:the|an?) "([^"]*)" button$/ do |visibility, button_id|
   visibility ? should_not_see_button(button_id) : should_see_button(button_id)
 end
 
