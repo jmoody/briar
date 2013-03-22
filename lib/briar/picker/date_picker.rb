@@ -1,6 +1,46 @@
 require 'date'
 require 'calabash-cucumber'
 
+# 0.2 is too fast because the picker does not pause at the date long enough for
+# the date to change.  0.3 seems to work, but 0.4 is best i think.
+PICKER_STEP_PAUSE = 0.4.to_f
+PICKER_AM = 'AM'
+PICKER_PM = 'PM'
+
+# most locales and situations prefer _not_ to have leading zeros on hours in 24h
+# see usage below to find out when and if the zeros are stripped
+PICKER_24H_TIME_FMT = '%H:%M'
+PICKER_12H_TIME_FMT = '%l:%M %p'
+PICKER_ISO8601_TIME_FMT = '%H:%M'
+
+PICKER_REMOVE_LEADING_ZERO_REGEX = /\A^0/
+
+# 24h locales - Fri 16 Nov - 24h locales
+PICKER_24H_DATE_FMT = '%a %e %b'
+# common format for US Fri Nov 16
+PICKER_12H_DATE_FMT = '%a %b %e'
+
+# our canonical format for testing if two dates are the same
+PICKER_ISO8601_DATE_FMT = '%Y-%m-%d'
+PICKER_ISO8601_DATE_TIME_FMT = '%Y-%m-%d %H:%M'
+
+# when we are using the date picker category, this is the format of the string
+# we will send to setDateWithString:animated:
+#
+# ex. 2012_11_18_16_45
+PICKER__RUBY___SET_PICKER_DATE__DATE_AND_TIME_FMT = '%Y_%m_%d_%H_%M_%z'
+PICKER__OBJC___SET_PICKER_DATE__DATE_AND_TIME_FMT = 'yyyy_MM_dd_HH_mm_Z'
+
+# iOS 5
+PICKER_VIEW_CLASS_IOS5 = 'datePickerView'
+PICKER_VIEW_CLASS_IOS6 = "view:'_UIDatePickerView'"
+
+UIDatePickerModeTime = 0
+UIDatePickerModeDate = 1
+UIDatePickerModeDateAndTime = 2
+UIDatePickerModeCountDownTimer = 3
+
+
 module Briar
   module Picker
     module Date
@@ -102,39 +142,39 @@ to use the automatic mode, include this category in your CALABASH target
 
 =end
 
-# 0.2 is too fast because the picker does not pause at the date long enough for
-# the date to change.  0.3 seems to work, but 0.4 is best i think.
-      PICKER_STEP_PAUSE = 0.4.to_f
-      PICKER_AM = "AM"
-      PICKER_PM = "PM"
-
-# most locales and situations prefer _not_ to have leading zeros on hours in 24h
-# see usage below to find out when and if the zeros are stripped
-      PICKER_24H_TIME_FMT = '%H:%M'
-      PICKER_12H_TIME_FMT = '%l:%M %p'
-      PICKER_ISO8601_TIME_FMT = '%H:%M'
-
-      PICKER_REMOVE_LEADING_ZERO_REGEX = /\A^0/
-
-# 24h locales - Fri 16 Nov - 24h locales
-      PICKER_24H_DATE_FMT = '%a %e %b'
-# common format for US Fri Nov 16
-      PICKER_12H_DATE_FMT = '%a %b %e'
-
-# our canonical format for testing if two dates are the same
-      PICKER_ISO8601_DATE_FMT = '%Y-%m-%d'
-      PICKER_ISO8601_DATE_TIME_FMT = '%Y-%m-%d %H:%M'
-
-# when we are using the date picker category, this is the format of the string
-# we will send to setDateWithString:animated:
+## 0.2 is too fast because the picker does not pause at the date long enough for
+## the date to change.  0.3 seems to work, but 0.4 is best i think.
+#      PICKER_STEP_PAUSE = 0.4.to_f
+#      PICKER_AM = 'AM'
+#      PICKER_PM = 'PM'
 #
-# ex. 2012_11_18_16_45
-      PICKER__RUBY___SET_PICKER_DATE__DATE_AND_TIME_FMT = '%Y_%m_%d_%H_%M_%z'
-      PICKER__OBJC___SET_PICKER_DATE__DATE_AND_TIME_FMT = 'yyyy_MM_dd_HH_mm_Z'
-
-# iOS 5
-      PICKER_VIEW_CLASS_IOS5 = "datePickerView"
-      PICKER_VIEW_CLASS_IOS6 = "view:'_UIDatePickerView'"
+## most locales and situations prefer _not_ to have leading zeros on hours in 24h
+## see usage below to find out when and if the zeros are stripped
+#      PICKER_24H_TIME_FMT = '%H:%M'
+#      PICKER_12H_TIME_FMT = '%l:%M %p'
+#      PICKER_ISO8601_TIME_FMT = '%H:%M'
+#
+#      PICKER_REMOVE_LEADING_ZERO_REGEX = /\A^0/
+#
+## 24h locales - Fri 16 Nov - 24h locales
+#      PICKER_24H_DATE_FMT = '%a %e %b'
+## common format for US Fri Nov 16
+#      PICKER_12H_DATE_FMT = '%a %b %e'
+#
+## our canonical format for testing if two dates are the same
+#      PICKER_ISO8601_DATE_FMT = '%Y-%m-%d'
+#      PICKER_ISO8601_DATE_TIME_FMT = '%Y-%m-%d %H:%M'
+#
+## when we are using the date picker category, this is the format of the string
+## we will send to setDateWithString:animated:
+##
+## ex. 2012_11_18_16_45
+#      PICKER__RUBY___SET_PICKER_DATE__DATE_AND_TIME_FMT = '%Y_%m_%d_%H_%M_%z'
+#      PICKER__OBJC___SET_PICKER_DATE__DATE_AND_TIME_FMT = 'yyyy_MM_dd_HH_mm_Z'
+#
+## iOS 5
+#      PICKER_VIEW_CLASS_IOS5 = 'datePickerView'
+#      PICKER_VIEW_CLASS_IOS6 = "view:'_UIDatePickerView'"
 
 # testing for existence
       def should_see_date_picker (picker_id)
@@ -147,24 +187,24 @@ to use the automatic mode, include this category in your CALABASH target
 # getting dates from the picker
 
       def picker_date_time
-        res = query("datePicker", :date)
-        screenshot_and_raise "expected to see a date picker" if res.empty?
+        res = query('datePicker', :date)
+        screenshot_and_raise 'expected to see a date picker' if res.empty?
         DateTime.parse(res.first)
       end
 
 # appledoc ==> The property is an NSDate object or nil (the default), which
 # means no maximum date.
       def picker_maximum_date_time
-        res = query("datePicker", :maximumDate)
-        screenshot_and_raise "expected to see a date picker" if res.empty?
+        res = query('datePicker', :maximumDate)
+        screenshot_and_raise 'expected to see a date picker' if res.empty?
         res.first != nil ? DateTime.parse(res.first) : nil
       end
 
 # appledoc ==> The property is an NSDate object or nil (the default), which
 # means no minimum date.
       def picker_minimum_date_time
-        res = query("datePicker", :minimumDate)
-        screenshot_and_raise "expected to see a date picker" if res.empty?
+        res = query('datePicker', :minimumDate)
+        screenshot_and_raise 'expected to see a date picker' if res.empty?
         res.first != nil ? DateTime.parse(res.first) : nil
       end
 
@@ -173,9 +213,9 @@ to use the automatic mode, include this category in your CALABASH target
 # checking to see if the picker is visible and has the calabash category
 # additions
       def picker_has_calabash_additions
-        success_value = "1"
-        res = query("datePicker", [{hasCalabashAdditions:success_value}])
-        screenshot_and_raise "picker is not visible" if res.empty?
+        success_value = '1'
+        res = query('datePicker', [{hasCalabashAdditions:success_value}])
+        screenshot_and_raise 'picker is not visible' if res.empty?
         res.first.eql? success_value
       end
 
@@ -192,13 +232,13 @@ to use the automatic mode, include this category in your CALABASH target
         time_in_24h = date_time_or_time_str_is_in_24h time_str
         time_fmt = time_in_24h ? PICKER_24H_TIME_FMT : PICKER_12H_TIME_FMT
         date_fmt = time_in_24h ? PICKER_24H_DATE_FMT : PICKER_12H_DATE_FMT
-        date_str = picker_date_time.strftime(date_fmt).squeeze(" ").strip
+        date_str = picker_date_time.strftime(date_fmt).squeeze(' ').strip
 
         date_time_str = "#{date_str} #{time_str}"
         date_time_fmt = "#{date_fmt} #{time_fmt}"
 
         date_time = DateTime.strptime(date_time_str, date_time_fmt)
-        date_time.strftime(PICKER__RUBY___SET_PICKER_DATE__DATE_AND_TIME_FMT).squeeze(" ").strip
+        date_time.strftime(PICKER__RUBY___SET_PICKER_DATE__DATE_AND_TIME_FMT).squeeze(' ').strip
       end
 
 
@@ -206,22 +246,22 @@ to use the automatic mode, include this category in your CALABASH target
         date_in_24h = date_str_is_in_24h (date_str)
         time_fmt = date_in_24h ? PICKER_24H_TIME_FMT : PICKER_12H_TIME_FMT
         date_fmt = date_in_24h ? PICKER_24H_DATE_FMT : PICKER_12H_DATE_FMT
-        time_str = picker_date_time.strftime(time_fmt).squeeze(" ").strip
+        time_str = picker_date_time.strftime(time_fmt).squeeze(' ').strip
         date_time_str = "#{date_str} #{time_str}"
         date_time_fmt = "#{date_fmt} #{time_fmt}"
         date_time = DateTime.strptime(date_time_str, date_time_fmt)
-        date_time.strftime(PICKER__RUBY___SET_PICKER_DATE__DATE_AND_TIME_FMT).squeeze(" ").strip
+        date_time.strftime(PICKER__RUBY___SET_PICKER_DATE__DATE_AND_TIME_FMT).squeeze(' ').strip
       end
 
 
       def set_picker_date_with_date_time_str (date_time_str, animated=1)
-        query("datePicker", [{respondsToSelector:"minuteInterval"}])
+        query('datePicker', [{respondsToSelector: 'minuteInterval'}])
 
 
-        res = query("datePicker", [{setDateWithString:date_time_str},
+        res = query('datePicker', [{setDateWithString:date_time_str},
                                    {format:"#{PICKER__OBJC___SET_PICKER_DATE__DATE_AND_TIME_FMT}"},
                                    {animated:animated.to_i}])
-        screenshot_and_raise "could not find a date picker to query" if res.empty?
+        screenshot_and_raise 'could not find a date picker to query' if res.empty?
         if res.first.to_i == 0
           screenshot_and_raise "could not set the picker date with '#{date_time_str}' and '#{PICKER__RUBY___SET_PICKER_DATE__DATE_AND_TIME_FMT}'"
         end
@@ -268,10 +308,10 @@ to use the automatic mode, include this category in your CALABASH target
 # if it is not, the default value is used. The default and minimum values are 1;
 # the maximum value is 30.
       def picker_minute_interval
-        screenshot_and_raise "there is no minute in date mode" if picker_is_in_date_mode
-        screenshot_and_raise "nyi" if picker_is_in_countdown_mode
-        res = query("datePicker", :minuteInterval)
-        screenshot_and_raise "expected to see a date picker" if res.empty?
+        screenshot_and_raise 'there is no minute in date mode' if picker_is_in_date_mode
+        screenshot_and_raise 'nyi' if picker_is_in_countdown_mode
+        res = query('datePicker', :minuteInterval)
+        screenshot_and_raise 'expected to see a date picker' if res.empty?
         @picker_minute_interval = res.first
       end
 
@@ -290,21 +330,18 @@ to use the automatic mode, include this category in your CALABASH target
         end while ((minute % interval) != 0)
         time = time + (count * 60)
 
-        {:h12 => time.strftime(PICKER_12H_TIME_FMT).squeeze(" ").strip,
-         :h24 => time.strftime(PICKER_24H_TIME_FMT).squeeze(" ").strip.sub(PICKER_REMOVE_LEADING_ZERO_REGEX,""),
+        {:h12 => time.strftime(PICKER_12H_TIME_FMT).squeeze(' ').strip,
+         :h24 => time.strftime(PICKER_24H_TIME_FMT).squeeze(' ').strip.sub(PICKER_REMOVE_LEADING_ZERO_REGEX, ''),
          :time => time}
       end
 
 # picker modes
 
-      UIDatePickerModeTime = 0
-      UIDatePickerModeDate = 1
-      UIDatePickerModeDateAndTime = 2
-      UIDatePickerModeCountDownTimer = 3
+
 
       def picker_mode
-        res = query("datePicker", :datePickerMode)
-        screenshot_and_raise "expected to see a date picker" if res.empty?
+        res = query('datePicker', :datePickerMode)
+        screenshot_and_raise 'expected to see a date picker' if res.empty?
         res.first
       end
 
@@ -327,27 +364,27 @@ to use the automatic mode, include this category in your CALABASH target
 # columns for different modes
 
       def picker_column_for_hour
-        screenshot_and_raise "there is no hour column in date mode" if picker_is_in_date_mode
-        screenshot_and_raise "nyi" if picker_is_in_countdown_mode
+        screenshot_and_raise 'there is no hour column in date mode' if picker_is_in_date_mode
+        screenshot_and_raise 'nyi' if picker_is_in_countdown_mode
         picker_is_in_time_mode ? 0 : 1
       end
 
       def picker_column_for_minute
-        screenshot_and_raise "there is no minute column in date mode" if picker_is_in_date_mode
-        screenshot_and_raise "nyi" if picker_is_in_countdown_mode
+        screenshot_and_raise 'there is no minute column in date mode' if picker_is_in_date_mode
+        screenshot_and_raise 'nyi' if picker_is_in_countdown_mode
         picker_is_in_time_mode ? 1 : 2
       end
 
       def picker_column_for_period
-        screenshot_and_raise "there is no period column in date mode" if picker_is_in_date_mode
-        screenshot_and_raise "nyi" if picker_is_in_countdown_mode
+        screenshot_and_raise 'there is no period column in date mode' if picker_is_in_date_mode
+        screenshot_and_raise 'nyi' if picker_is_in_countdown_mode
         picker_is_in_time_mode ? 2 : 3
       end
 
 # 12h or 24h locale
 
       def picker_is_in_12h_locale
-        screenshot_and_raise "12h/24h mode is not applicable to this mode" if picker_is_in_date_mode or picker_is_in_countdown_mode
+        screenshot_and_raise '12h/24h mode is not applicable to this mode' if picker_is_in_date_mode or picker_is_in_countdown_mode
         column = picker_column_for_period
         !query("pickerTableView index:#{column}").empty?
       end
@@ -362,42 +399,42 @@ to use the automatic mode, include this category in your CALABASH target
 # pt (lisbon) - a.m./p.m.
 # de - nach/vor
       def picker_period
-        screenshot_and_raise "picker is not in 12h mode" if picker_is_in_24h_locale
+        screenshot_and_raise 'picker is not in 12h mode' if picker_is_in_24h_locale
         date = picker_date_time
         date_str = date.strftime(PICKER_12H_TIME_FMT)
-        tokens = date_str.split(" ")
+        tokens = date_str.split(' ')
         tokens.last
       end
 
       def picker_period_is_am?
-        picker_period.eql?("AM")
+        picker_period.eql?('AM')
       end
 
       def picker_period_is_pm?
-        picker_period.eql?("PM")
+        picker_period.eql?('PM')
       end
 
 # weekday, month, day, etc
 
       def picker_weekday
-        screenshot_and_raise "weekday is not applicable to this mode" if picker_is_in_time_mode or picker_is_in_countdown_mode
-        res = query("datePickerWeekMonthDayView", :weekdayLabel, :text)[2]
+        screenshot_and_raise 'weekday is not applicable to this mode' if picker_is_in_time_mode or picker_is_in_countdown_mode
+        res = query('datePickerWeekMonthDayView', :weekdayLabel, :text)[2]
         # need to guard against Today showing
         res == nil ? Date.today.strftime('%a') : res
       end
 
       def picker_month_day
-        screenshot_and_raise "month/day is not applicable to this mode" if picker_is_in_time_mode or picker_is_in_countdown_mode
-        res = query("datePickerWeekMonthDayView", :dateLabel, :text)[2]
-        picker_iso = picker_date_time.strftime(PICKER_ISO8601_DATE_FMT).squeeze(" ").strip
+        screenshot_and_raise 'month/day is not applicable to this mode' if picker_is_in_time_mode or picker_is_in_countdown_mode
+        res = query('datePickerWeekMonthDayView', :dateLabel, :text)[2]
+        picker_iso = picker_date_time.strftime(PICKER_ISO8601_DATE_FMT).squeeze(' ').strip
         today = Date.today
-        today_iso = today.strftime(PICKER_ISO8601_DATE_FMT).squeeze(" ").strip
+        today_iso = today.strftime(PICKER_ISO8601_DATE_FMT).squeeze(' ').strip
         fmt = picker_is_in_24h_locale ? '%e %b' : '%b %e'
         (picker_iso.eql? today_iso) ? today.strftime(fmt) : res
       end
 
       def picker_date_str
-        "#{picker_weekday} #{picker_month_day}".strip.squeeze(" ")
+        "#{picker_weekday} #{picker_month_day}".strip.squeeze(' ')
       end
 
       def picker_weekday_month_day_is (weekday_month_day)
@@ -407,7 +444,7 @@ to use the automatic mode, include this category in your CALABASH target
 # dealing with time
 
       def picker_hour_24h
-        screenshot_and_raise "hour is not applicable to this mode" if picker_is_in_countdown_mode or picker_is_in_date_mode
+        screenshot_and_raise 'hour is not applicable to this mode' if picker_is_in_countdown_mode or picker_is_in_date_mode
         #  query always returns as 24h
         res_ios5 = query(PICKER_VIEW_CLASS_IOS5, :hour).first
         res_ios6 = query(PICKER_VIEW_CLASS_IOS6, :hour).first
@@ -416,19 +453,19 @@ to use the automatic mode, include this category in your CALABASH target
       end
 
       def picker_hour_24h_str
-        screenshot_and_raise "hour is not applicable to this mode" if picker_is_in_countdown_mode or picker_is_in_date_mode
-        "%02d" % picker_hour_24h
+        screenshot_and_raise 'hour is not applicable to this mode' if picker_is_in_countdown_mode or picker_is_in_date_mode
+        '%02d' % picker_hour_24h
       end
 
       def picker_hour_12h
-        screenshot_and_raise "hour is not applicable to this mode" if picker_is_in_countdown_mode or picker_is_in_date_mode
+        screenshot_and_raise 'hour is not applicable to this mode' if picker_is_in_countdown_mode or picker_is_in_date_mode
         hour_24h = picker_hour_24h
         return 12 if hour_24h == 0
         hour_24h > 12 ? hour_24h - 12 : hour_24h
       end
 
       def picker_hour_12h_str
-        screenshot_and_raise "hour is not applicable to this mode" if picker_is_in_countdown_mode or picker_is_in_date_mode
+        screenshot_and_raise 'hour is not applicable to this mode' if picker_is_in_countdown_mode or picker_is_in_date_mode
         "#{picker_hour_12h}"
       end
 
@@ -445,7 +482,7 @@ to use the automatic mode, include this category in your CALABASH target
       end
 
       def picker_minute
-        screenshot_and_raise "hour is not applicable to this mode" if picker_is_in_countdown_mode or picker_is_in_date_mode
+        screenshot_and_raise 'hour is not applicable to this mode' if picker_is_in_countdown_mode or picker_is_in_date_mode
         res_ios5 = query(PICKER_VIEW_CLASS_IOS5, :minute).first
         res_ios6 = query(PICKER_VIEW_CLASS_IOS6, :minute).first
         return res_ios5 != nil ? res_ios5 : res_ios6
@@ -453,8 +490,8 @@ to use the automatic mode, include this category in your CALABASH target
       end
 
       def picker_minute_str
-        screenshot_and_raise "hour is not applicable to this mode" if picker_is_in_countdown_mode or picker_is_in_date_mode
-        "%02d" % picker_minute
+        screenshot_and_raise 'hour is not applicable to this mode' if picker_is_in_countdown_mode or picker_is_in_date_mode
+        '%02d' % picker_minute
         #"%02d" % query("datePickerView", :minute).first
       end
 
@@ -463,35 +500,35 @@ to use the automatic mode, include this category in your CALABASH target
       end
 
       def picker_time_24h_str
-        screenshot_and_raise "the time is not applicable for this mode" if picker_is_in_date_mode or picker_is_in_countdown_mode
-        "#{picker_hour_24h_str}:#{picker_minute_str}".strip.sub(PICKER_REMOVE_LEADING_ZERO_REGEX, "")
+        screenshot_and_raise 'the time is not applicable for this mode' if picker_is_in_date_mode or picker_is_in_countdown_mode
+        "#{picker_hour_24h_str}:#{picker_minute_str}".strip.sub(PICKER_REMOVE_LEADING_ZERO_REGEX, '')
       end
 
       def picker_time_12h_str
-        screenshot_and_raise "the time is not applicable for this mode" if picker_is_in_date_mode or picker_is_in_countdown_mode
+        screenshot_and_raise 'the time is not applicable for this mode' if picker_is_in_date_mode or picker_is_in_countdown_mode
         "#{picker_hour_12h_str}:#{picker_minute_str} #{picker_period}"
       end
 
       def picker_time_str
-        screenshot_and_raise "the time is not applicable for this mode" if picker_is_in_date_mode or picker_is_in_countdown_mode
+        screenshot_and_raise 'the time is not applicable for this mode' if picker_is_in_date_mode or picker_is_in_countdown_mode
         picker_is_in_24h_locale ? picker_time_24h_str : picker_time_12h_str
       end
 
       def picker_time_for_other_locale
         time_str = picker_is_in_24h_locale ? picker_time_24h_str : picker_time_12h_str
         fmt_str = picker_is_in_24h_locale ? PICKER_12H_TIME_FMT : PICKER_24H_TIME_FMT
-        Time.parse(time_str).strftime(fmt_str).squeeze(" ").strip.sub(PICKER_REMOVE_LEADING_ZERO_REGEX,"")
+        Time.parse(time_str).strftime(fmt_str).squeeze(' ').strip.sub(PICKER_REMOVE_LEADING_ZERO_REGEX, '')
       end
 
 # date and time
 
       def picker_date_and_time_str_24h
-        screenshot_and_raise "the time is not applicable for this mode" if picker_is_in_date_mode or picker_is_in_countdown_mode
+        screenshot_and_raise 'the time is not applicable for this mode' if picker_is_in_date_mode or picker_is_in_countdown_mode
         "#{picker_date_str} #{picker_time_24h_str}"
       end
 
       def picker_date_and_time_str_12h
-        screenshot_and_raise "the time is not applicable for this mode" if picker_is_in_date_mode or picker_is_in_countdown_mode
+        screenshot_and_raise 'the time is not applicable for this mode' if picker_is_in_date_mode or picker_is_in_countdown_mode
         "#{picker_date_str} #{picker_time_12h_str}"
       end
 
@@ -507,8 +544,8 @@ to use the automatic mode, include this category in your CALABASH target
 
       def now_times_map
         now = Time.new
-        {:h12 => now.strftime(PICKER_12H_TIME_FMT).squeeze(" ").strip,
-         :h24 => now.strftime(PICKER_24H_TIME_FMT).squeeze(" ").strip.sub(PICKER_REMOVE_LEADING_ZERO_REGEX,""),
+        {:h12 => now.strftime(PICKER_12H_TIME_FMT).squeeze(' ').strip,
+         :h24 => now.strftime(PICKER_24H_TIME_FMT).squeeze(' ').strip.sub(PICKER_REMOVE_LEADING_ZERO_REGEX, ''),
          :time => now}
       end
 
@@ -523,7 +560,7 @@ to use the automatic mode, include this category in your CALABASH target
 # scrolling picker
 
       def picker_scroll_to_hour (target_hour_int_24h_notation)
-        screenshot_and_raise "nyi" if picker_is_in_countdown_mode
+        screenshot_and_raise 'nyi' if picker_is_in_countdown_mode
         column = picker_column_for_hour
         limit = 25
         count = 0
@@ -540,7 +577,7 @@ to use the automatic mode, include this category in your CALABASH target
       end
 
       def picker_scroll_to_minute (target_minute_int)
-        screenshot_and_raise "nyi" if picker_is_in_countdown_mode
+        screenshot_and_raise 'nyi' if picker_is_in_countdown_mode
         column = picker_column_for_minute
         limit = 61
         count = 0
@@ -557,8 +594,8 @@ to use the automatic mode, include this category in your CALABASH target
       end
 
       def picker_scroll_to_period(target_period_str)
-        screenshot_and_raise "nyi" if picker_is_in_countdown_mode
-        screenshot_and_raise "period is not applicable to 24h locale" if picker_is_in_24h_locale
+        screenshot_and_raise 'nyi' if picker_is_in_countdown_mode
+        screenshot_and_raise 'period is not applicable to 24h locale' if picker_is_in_24h_locale
         column = picker_column_for_period
         limit = 3
         count = 0

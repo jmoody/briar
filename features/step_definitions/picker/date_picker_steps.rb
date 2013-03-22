@@ -3,7 +3,7 @@
 # steps
 
 Then /^I change the time on the picker to "([^"]*)"$/ do |target_time|
-  screenshot_and_raise "picker is not in date time or time mode" unless picker_is_in_time_mode or picker_is_in_date_and_time_mode
+  screenshot_and_raise 'picker is not in date time or time mode' unless picker_is_in_time_mode or picker_is_in_date_and_time_mode
   if picker_has_calabash_additions
     date_str_to_send = date_str_to_send_to_picker_from_time_str target_time
     set_picker_date_with_date_time_str (date_str_to_send)
@@ -76,11 +76,11 @@ Then /^I change the date on the picker to "([^"]*)"$/ do |target_date|
     unless picker_weekday_month_day_is(target_date)
       # figure out which way to turn the picker
       # target = Date.parse(target_date)
-      dir = (Date.parse(target_date) < Date.today) ? "down" : "up"
+      dir = (Date.parse(target_date) < Date.today) ? 'down' : 'up'
       limit = 60
       count = 0
       begin
-        dir.eql?("down") ? picker_scroll_down_on_column(0) : picker_scroll_up_on_column(0)
+        dir.eql?('down') ? picker_scroll_down_on_column(0) : picker_scroll_up_on_column(0)
         sleep(PICKER_STEP_PAUSE)
         count = count + 1
       end while ((not picker_weekday_month_day_is(target_date)) and count < limit)
@@ -111,7 +111,7 @@ Then /^I change the picker to (\d+) days? ago$/ do |days_ago|
   today = Date.today
   days_ago = today -= days_ago.to_i
   fmt = picker_is_in_24h_locale ? PICKER_24H_DATE_FMT : PICKER_12H_DATE_FMT
-  target_date = days_ago.strftime(fmt).squeeze(" ").strip
+  target_date = days_ago.strftime(fmt).squeeze(' ').strip
   macro %Q|I change the date on the picker to "#{target_date}"|
 end
 
@@ -120,7 +120,7 @@ Then /^I change the picker to (\d+) days? ago at "([^"]*)"$/ do |days_ago, targe
   today = Date.today
   days_ago = today -= days_ago.to_i
   fmt = picker_is_in_24h_locale ? PICKER_24H_DATE_FMT : PICKER_12H_DATE_FMT
-  target_date = days_ago.strftime(fmt).squeeze(" ").strip
+  target_date = days_ago.strftime(fmt).squeeze(' ').strip
   macro %Q|I change the picker date to "#{target_date}" and the time to "#{target_time}"|
 end
 
@@ -141,9 +141,9 @@ Then /^I change the picker date time to "([^"]*)"$/ do |target_time|
 end
 
 Then /^I should see that the date picker is in time mode$/ do
-  res = query("datePicker", :datePickerMode).first
+  res = query('datePicker', :datePickerMode).first
   unless res
-    screenshot_and_raise "expected to a date picker"
+    screenshot_and_raise 'expected to a date picker'
   end
   unless res == UIDatePickerModeTime
     screenshot_and_raise "expected to see picker with time mode but found mode '#{res}'"
@@ -194,22 +194,22 @@ Then /^I should see that the "([^"]*)" row has the date and time I just entered 
 end
 
 Then /^I change the minute interval on the picker to (1|5|10|30) minutes?$/ do |target_interval|
-  res = query("datePicker", [{setMinuteInterval:target_interval.to_i}])
-  screenshot_and_raise "did not find a date picker - could not set the minute interval" if res.empty?
+  res = query('datePicker', [{setMinuteInterval:target_interval.to_i}])
+  screenshot_and_raise 'did not find a date picker - could not set the minute interval' if res.empty?
   sleep(PICKER_STEP_PAUSE * 5)
   @picker_minute_interval = target_interval.to_i
 end
 
 Then /^I change the time on the picker to (\d+) minutes? from now$/ do |target_minute|
   future = Time.new + (60 * target_minute.to_i)
-  time_str = future.strftime(PICKER_12H_TIME_FMT).squeeze(" ").strip
+  time_str = future.strftime(PICKER_12H_TIME_FMT).squeeze(' ').strip
   macro %Q|I change the time on the picker to "#{time_str}"|
   sleep(PICKER_STEP_PAUSE)
 end
 
 Then /^I change the time on the picker to (\d+) minutes? before now$/ do |target_minute|
   past = Time.new - (60 * target_minute.to_i)
-  time_str = past.strftime(PICKER_12H_TIME_FMT).squeeze(" ").strip
+  time_str = past.strftime(PICKER_12H_TIME_FMT).squeeze(' ').strip
   macro %Q|I change the time on the picker to "#{time_str}"|
   sleep(PICKER_STEP_PAUSE)
 end

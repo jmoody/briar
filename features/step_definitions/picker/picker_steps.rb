@@ -12,7 +12,7 @@ end
 
 Then /^I scroll (up|down) on picker "([^"]*)"$/ do |dir, picker_name|
   should_see_picker picker_name
-  if dir.eql? "down"
+  if dir.eql? 'down'
     picker_scroll_down_on_column 0
   else
     picker_scroll_up_on_column 0
@@ -26,7 +26,7 @@ Then /^I scroll (up|down) on picker "([^"]*)" to row (\d+)$/ do |dir, picker, ro
   unless picker_current_index_for_column_is(0, target_row)
     count = 0
     begin
-      if dir.eql? "down"
+      if dir.eql? 'down'
         picker_scroll_down_on_column 0
       else
         picker_scroll_up_on_column 0
@@ -49,7 +49,7 @@ Then /^I should see picker "([^"]*)" has selected row (\d+)$/ do |picker, row|
 end
 
 Then /^I should (see|not see) picker "([^"]*)"$/ do |visibility, picker|
-  target = visibility.eql? "see"
+  target = visibility.eql? 'see'
   if target
     should_see_picker picker
   else
