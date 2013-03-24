@@ -1,4 +1,4 @@
-require "calabash-cucumber"
+#require 'calabash-cucumber'
 
 module Briar
   module Table
@@ -10,13 +10,13 @@ module Briar
 
     def query_str_rows_in_table (table_id = nil)
       table_id == nil ?
-            "tableViewCell" :
+            'tableViewCell' :
             "tableView marked:'#{table_id}' child tableViewCell"
     end
 
     def query_str_table (table_id = nil)
       table_id == nil ?
-            "tableView" :
+            'tableView' :
             "tableView marked:'#{table_id}'"
     end
 
@@ -34,11 +34,11 @@ module Briar
 
       if index == 0 or index == (all_rows.length - 1)
         # collect information about the table, row, and content offset
-        content_offset_y = query("tableView", :contentOffset).first["Y"]
-        frame = query(query_str).first["frame"]
-        cell_h = frame["height"].to_f
-        cell_y = frame["y"].to_f
-        table_h = query(query_str_table(table_id)).first["frame"]["height"]
+        content_offset_y = query('tableView', :contentOffset).first['Y']
+        frame = query(query_str).first['frame']
+        cell_h = frame['height'].to_f
+        cell_y = frame['y'].to_f
+        table_h = query(query_str_table(table_id)).first['frame']['height']
 
         # if the row is the first row and there has been no scrolling, just return true
         return true if index == 0 and content_offset_y == 0
@@ -111,7 +111,7 @@ module Briar
       unless row_exists? row_id
         count = 0
         begin
-          scroll("scrollView index:0", dir)
+          scroll('scrollView index:0', dir)
           step_pause
           count = count + 1
         end while ((not row_exists?(row_id)) and count < limit.to_i)
@@ -130,7 +130,7 @@ module Briar
         cells = query(query_str_rows_in_table, :accessibilityIdentifier)
         #puts "cells = #{cells} is #{row_id} last? ==> #{cells.last.eql?(row_id)}"
         if cells.last.eql?(row_id)
-          row_h = query(query, :frame).first["Height"].to_i
+          row_h = query(query, :frame).first['Height'].to_i
           offset = -1 * (row_h/3)
           #puts "offset = #{offset}"
         end
@@ -200,7 +200,7 @@ module Briar
 
     def edit_mode_delete_button_exists? (row_name)
       #!query("tableViewCell marked:'#{row_name}' child tableViewCellEditControl").empty?
-      !query_all("tableViewCell marked:'#{row_name}' child tableViewCellEditControl").empty?
+      !query("all tableViewCell marked:'#{row_name}' child tableViewCellEditControl").empty?
     end
 
     def should_see_edit_mode_delete_button (row_name)
@@ -218,7 +218,7 @@ module Briar
     def reorder_button_exists? (row_name)
       #TableViewCellReorderControl
       #!query("tableViewCell marked:'#{row_name}' child tableViewCellReorderControl").empty?
-      !query_all("tableViewCell marked:'#{row_name}' child tableViewCellReorderControl").empty?
+      !query("all tableViewCell marked:'#{row_name}' child tableViewCellReorderControl").empty?
     end
 
     def should_see_reorder_button (row_name)

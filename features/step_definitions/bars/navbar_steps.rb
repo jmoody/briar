@@ -12,7 +12,7 @@ end
 # navigation back item, distinct from left bar button item
 Then /^I should not see navbar back button$/ do
   if navbar_has_back_button?
-    screenshot_and_raise "there should be no navigation bar back button"
+    screenshot_and_raise 'there should be no navigation bar back button'
   end
 end
 
@@ -21,7 +21,7 @@ Then /^I touch navbar button "([^"]*)"$/ do |name|
 end
 
 Then /^I touch right navbar button$/ do
-  touch("navigationButton index:1")
+  touch('navigationButton index:1')
   step_pause
 end
 
@@ -32,7 +32,7 @@ end
 
 
 Then /^I should (not see|see) (?:the|an?) "([^"]*)" button in the navbar$/ do |visibility, name|
-  if visibility.eql? "see"
+  if visibility.eql? 'see'
     should_see_navbar_button name
   else
     should_not_see_navbar_button name
@@ -78,7 +78,7 @@ Then /^I should see a back button in the navbar with the title "([^"]*)"$/ do |t
 end
 
 When /^I go back, I should see the "([^"]*)" view$/ do |view_id|
-  touch_transition("navigationItemButtonView first",
+  touch_transition('navigationItemButtonView first',
                    "view marked:'#{view_id}'",
                    {:timeout=>TOUCH_TRANSITION_TIMEOUT,
                     :retry_frequency=>TOUCH_TRANSITION_RETRY_FREQ})
@@ -87,9 +87,9 @@ end
 Then /^I should see today's date in the navbar$/ do
   now = Time.now
   unless date_is_in_navbar(now)
-    with_leading = now.strftime("%a %b %d")
+    with_leading = now.strftime('%a %b %d')
     without_leading = now.strftime("%a %b #{date.day}")
     screenshot_and_raise "could not find #{with_leading} or #{without_leading} " +
-                               "in the date bar"
+                               'in the date bar'
   end
 end

@@ -8,7 +8,7 @@ module Briar
 
     def should_see_tabbar
       unless tabbar_visible?
-        screenshot_and_raise 'i do not see the tabbar'
+        screenshot_and_raise 'i should see the tabbar'
       end
     end
 

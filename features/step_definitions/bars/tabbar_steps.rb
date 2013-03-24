@@ -9,12 +9,14 @@ Then /^the tabbar is visible$/ do
   macro 'that the tabbar is visible'
 end
 
-Then /^I should (not see|see) the tabbar$/ do |visibility|
+
+
+Then /^I should( not)? see the (?:tabbar|tab bar)$/ do |visibility|
   #noinspection RubyQuotedStringsInspection
-  visibility.eql? "see" ? should_see_tabbar : should_not_see_tabbar
+  visibility ? should_not_see_tabbar : should_see_tabbar
 end
 
-Then /^I should see tabbar button "([^"]*)" at index (\d+)$/ do |name, index|
+Then /^I should see (?:tabbar|tab bar) button "([^"]*)" at index (\d+)$/ do |name, index|
   unless tabbar_item_is_at_index(name, index)
     screenshot_and_raise "tabbar button with name '#{name}' does not exist at index '#{index}'"
   end
