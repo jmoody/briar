@@ -62,7 +62,7 @@ module Briar
       end
     end
 
-    def query_str_for_label_and_text_exists (row_id, label_id, text, table_id = nil)
+    def query_str_for_label_and_text_exists (row_id, label_id, table_id = nil)
       table_id == nil ?
             "tableViewCell marked:'#{row_id}' isHidden:0 descendant label marked:'#{label_id}'" :
             "tableView marked:'#{table_id}' child tableViewCell marked:'#{row_id}' isHidden:0 descendant label marked:'#{label_id}'"
@@ -107,17 +107,14 @@ module Briar
     end
 
 
-    def scroll_until_i_see_row (dir, row_id, limit)
-      unless row_exists? row_id
-        count = 0
-        begin
-          scroll('scrollView index:0', dir)
-          step_pause
-          count = count + 1
-        end while ((not row_exists?(row_id)) and count < limit.to_i)
+    def scroll_until_i_see_row (dir, row_id)
+      wait_poll({:until_exists => "tableView descendant tableViewCell marked:'#{row_id}'",
+                 :timeout => 2}) do
+        scroll('tableView index:0', dir)
       end
+
       unless row_exists?(row_id)
-        screenshot_and_raise "i scrolled '#{dir}' '#{limit}' times but did not see '#{row_id}'"
+        screenshot_and_raise "i scrolled '#{dir}' but did not see '#{row_id}'"
       end
     end
 

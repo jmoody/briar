@@ -3,7 +3,7 @@ require 'calabash-cucumber'
 module Briar
   module Bars
     def tabbar_visible?
-      element_exists("tabBar")
+      element_exists('tabBar')
     end
 
     def should_see_tabbar
@@ -35,9 +35,15 @@ module Briar
       end
     end
 
-    def tabbar_item_is_at_index(name, index)
+    def should_see_tab_at_index(name, index)
       tabs = query('tabBarButton', :accessibilityLabel)
-      tabs.index(name) == index.to_i
+      unless tabs.index(name) == index.to_i
+        screenshot_and_raise "should have seen tab named '#{name}' at index '#{index}' but found these: '#{tabs}'"
+      end
+    end
+
+    def tabbar_item_is_at_index(name, index)
+      pending "deprecated 0.0.6 - use should_see_tab_at_index '#{name}', '#{index}'"
     end
   end
 end

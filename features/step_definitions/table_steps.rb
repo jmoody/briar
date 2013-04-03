@@ -5,10 +5,15 @@ Then /^I should see (?:the|an?) "([^"]*)" row$/ do |name|
   should_see_row name
 end
 
+#noinspection RubyUnusedLocalVariable
 Then /^I scroll (left|right|up|down) until I see the "([^\"]*)" row limit (\d+)$/ do |dir, row_name, limit|
-  scroll_until_i_see_row dir, row_name, limit
+  pending "deprecated 0.0.6 - use 'Then I scroll #{dir} until I see (?:the|an?) \"#{row_name}\" row"
 end
 
+
+Then /^I scroll (left|right|up|down) until I see (?:the|an?) "([^\"]*)" row$/ do |dir, row_id|
+  scroll_until_i_see_row dir, row_id
+end
 
 Then /^I touch (?:the) "([^"]*)" row and wait for (?:the) "([^"]*)" view to appear$/ do |row_id, view_id|
   # problem
