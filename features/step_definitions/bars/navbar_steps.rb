@@ -27,7 +27,7 @@ end
 
 
 Then /^I should see navbar with title "([^\"]*)"$/ do |title|
-  navbar_should_have_title title
+  should_see_navbar_with_title title
 end
 
 
@@ -64,7 +64,7 @@ Then /^I touch the "([^"]*)" navbar button$/ do |name|
 end
 
 Then /^I should see that the navbar has title "([^"]*)"$/ do |title|
-  navbar_should_have_title title
+  should_see_navbar_with_title title
 end
 
 Then /^I touch the "([^"]*)" button in the navbar$/ do |name|

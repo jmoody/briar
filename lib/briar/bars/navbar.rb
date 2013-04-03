@@ -88,17 +88,21 @@ module Briar
     end
 
 
-    def navbar_has_title (title)
+    def navbar_has_title? (title)
       wait_for_animation
       query('navigationItemView', :accessibilityLabel).include?(title)
     end
 
-    def navbar_should_have_title(title)
-      unless navbar_has_title title
+    def should_see_navbar_with_title(title)
+      unless navbar_has_title? title
         screenshot_and_raise "after waiting, i did not see navbar with title #{title}"
       end
     end
 
+
+    def navbar_should_have_title(title)
+      pending "deprecated 0.0.6 - use should_see_navbar_with_title '#{title}'"
+    end
   end
 end
 

@@ -10,9 +10,7 @@ Then /^the tabbar is visible$/ do
 end
 
 
-
 Then /^I should( not)? see the (?:tabbar|tab bar)$/ do |visibility|
-  #noinspection RubyQuotedStringsInspection
   visibility ? should_not_see_tabbar : should_see_tabbar
 end
 

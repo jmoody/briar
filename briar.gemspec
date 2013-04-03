@@ -13,12 +13,12 @@ Gem::Specification.new do |gem|
   gem.summary       = "briar-#{gem.version}"
   gem.homepage      = 'https://github.com/jmoody/briar'
 
-  gem.add_runtime_dependency 'calabash-cucumber', '0.9.136'
+  gem.add_runtime_dependency 'calabash-cucumber' #, '0.9.138'
   gem.add_runtime_dependency 'rake', '10.0.3'
-  gem.add_development_dependency 'rspec'
-  gem.add_development_dependency 'rvm'
-  gem.add_development_dependency 'lesspainful'
-
+  gem.add_runtime_dependency 'bundler'
+  gem.add_runtime_dependency 'lesspainful'
+  gem.add_runtime_dependency 'rspec'
+  #gem.add_development_dependency 'rspec'
 
   gem.files         = `git ls-files`.split($/)
   gem.executables   = gem.files.grep(%r{^bin/}).map{ |f| File.basename(f) }
