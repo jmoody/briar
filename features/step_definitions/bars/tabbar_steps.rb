@@ -15,9 +15,7 @@ Then /^I should( not)? see the (?:tabbar|tab bar)$/ do |visibility|
 end
 
 Then /^I should see (?:tabbar|tab bar) button "([^"]*)" at index (\d+)$/ do |name, index|
-  unless tabbar_item_is_at_index(name, index)
-    screenshot_and_raise "tabbar button with name '#{name}' does not exist at index '#{index}'"
-  end
+  should_see_tab_at_index name, index
 end
 
 Then /I touch (?:the) "([^"]*)" tab$/ do |name|
