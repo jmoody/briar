@@ -53,6 +53,7 @@ end
 
 Then /^I change the picker to (\d+) days? ago$/ do |days_ago|
   today = Date.today
+  #noinspection RubyUnusedLocalVariable
   days_ago = today -= days_ago.to_i
   fmt = picker_is_in_24h_locale ? PICKER_24H_DATE_FMT : PICKER_12H_DATE_FMT
   target_date = days_ago.strftime(fmt).squeeze(' ').strip
@@ -62,6 +63,7 @@ end
 
 Then /^I change the picker to (\d+) days? ago at "([^"]*)"$/ do |days_ago, target_time|
   today = Date.today
+  #noinspection RubyUnusedLocalVariable
   days_ago = today -= days_ago.to_i
   fmt = picker_is_in_24h_locale ? PICKER_24H_DATE_FMT : PICKER_12H_DATE_FMT
   target_date = days_ago.strftime(fmt).squeeze(' ').strip
@@ -80,6 +82,7 @@ Then /^the text in the "([^"]*)" label should match picker date and time$/ do |l
 end
 
 Then /^I change the picker date time to "([^"]*)"$/ do |target_time|
+  pending 'deprecated 0.0.6 - not replaced with anything'
   date_str = picker_date_str
   macro %Q|I change the picker date to "#{date_str}" and the time to "#{target_time}"|
 end

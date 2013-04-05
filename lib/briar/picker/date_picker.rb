@@ -28,8 +28,8 @@ PICKER_ISO8601_DATE_TIME_FMT = '%Y-%m-%d %H:%M'
 # we will send to setDateWithString:animated:
 #
 # ex. 2012_11_18_16_45
-#PICKER__RUBY___SET_PICKER_DATE__DATE_AND_TIME_FMT = '%Y_%m_%d_%H_%M_%z'
-#PICKER__OBJC___SET_PICKER_DATE__DATE_AND_TIME_FMT = 'yyyy_MM_dd_HH_mm_Z'
+PICKER__RUBY___SET_PICKER_DATE__DATE_AND_TIME_FMT_ZONED = '%Y_%m_%d_%H_%M_%z'
+PICKER__OBJC___SET_PICKER_DATE__DATE_AND_TIME_FMT_ZONED = 'yyyy_MM_dd_HH_mm_Z'
 PICKER__RUBY___SET_PICKER_DATE__DATE_AND_TIME_FMT = '%Y_%m_%d_%H_%M'
 PICKER__OBJC___SET_PICKER_DATE__DATE_AND_TIME_FMT = 'yyyy_MM_dd_HH_mm'
 
@@ -231,7 +231,7 @@ to use the automatic mode, include this category in your CALABASH target
         !date_str[-1, 1].scan(/^[a-zA-Z]/).empty?
       end
 
-      def date_str_to_send_to_picker_from_time_str (time_str)
+      def date_str_to_send_to_picker_from_time_str (time_str, format=PICKER__RUBY___SET_PICKER_DATE__DATE_AND_TIME_FMT)
         time_in_24h = date_time_or_time_str_is_in_24h time_str
         time_fmt = time_in_24h ? PICKER_24H_TIME_FMT : PICKER_12H_TIME_FMT
         date_fmt = time_in_24h ? PICKER_24H_DATE_FMT : PICKER_12H_DATE_FMT
@@ -241,11 +241,11 @@ to use the automatic mode, include this category in your CALABASH target
         date_time_fmt = "#{date_fmt} #{time_fmt}"
 
         date_time = DateTime.strptime(date_time_str, date_time_fmt)
-        date_time.strftime(PICKER__RUBY___SET_PICKER_DATE__DATE_AND_TIME_FMT).squeeze(' ').strip
+        date_time.strftime(format).squeeze(' ').strip
       end
 
 
-      def date_str_to_send_to_picker_from_date_str (date_str)
+      def date_str_to_send_to_picker_from_date_str (date_str, format=PICKER__RUBY___SET_PICKER_DATE__DATE_AND_TIME_FMT)
         date_in_24h = date_str_is_in_24h (date_str)
         time_fmt = date_in_24h ? PICKER_24H_TIME_FMT : PICKER_12H_TIME_FMT
         date_fmt = date_in_24h ? PICKER_24H_DATE_FMT : PICKER_12H_DATE_FMT
@@ -255,17 +255,17 @@ to use the automatic mode, include this category in your CALABASH target
 
         date_time = DateTime.strptime(date_time_str, date_time_fmt)
 
-        date_time.strftime(PICKER__RUBY___SET_PICKER_DATE__DATE_AND_TIME_FMT).squeeze(' ').strip
+        date_time.strftime(format).squeeze(' ').strip
       end
 
 
-      def set_picker_date_with_date_time_str (date_time_str, animated=1)
+      def set_picker_date_with_date_time_str (date_time_str, opts={:animated => 1,
+                                                                   :objc_format => PICKER__OBJC___SET_PICKER_DATE__DATE_AND_TIME_FMT})
         query('datePicker', [{respondsToSelector: 'minuteInterval'}])
 
-
         res = query('datePicker', [{setDateWithString:date_time_str},
-                                   {format:"#{PICKER__OBJC___SET_PICKER_DATE__DATE_AND_TIME_FMT}"},
-                                   {animated:animated.to_i}])
+                                   {format:"#{opts[:objc_format]}"},
+                                   {animated:opts[:animated]}])
 
         screenshot_and_raise 'could not find a date picker to query' if res.empty?
         if res.first.to_i == 0
