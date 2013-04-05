@@ -12,16 +12,18 @@ Gem::Specification.new do |gem|
   gem.description   = 'extends calabash-ios steps'
   gem.summary       = "briar-#{gem.version}"
   gem.homepage      = 'https://github.com/jmoody/briar'
+  gem.license       = 'MIT'
 
   gem.add_runtime_dependency 'calabash-cucumber' #, '0.9.138'
   gem.add_runtime_dependency 'rake', '10.0.3'
   gem.add_runtime_dependency 'bundler'
   gem.add_runtime_dependency 'lesspainful'
   gem.add_runtime_dependency 'rspec'
+  # rubymine is not picking up development dependencies in the gemspec
   #gem.add_development_dependency 'rspec'
 
   gem.files         = `git ls-files`.split($/)
-  gem.executables   = gem.files.grep(%r{^bin/}).map{ |f| File.basename(f) }
+  gem.executables   = 'briar'
   gem.test_files    = gem.files.grep(%r{^(test|spec|features)/})
   gem.require_paths = ['lib']
 end

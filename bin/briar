@@ -1,0 +1,44 @@
+#!/usr/bin/env ruby
+#http://tech.natemurray.com/2007/03/ruby-shell-commands.html
+require 'find'
+
+
+require File.join(File.dirname(__FILE__), 'briar_helpers')
+
+if ARGV.length == 0
+  print_usage
+  exit 0
+end
+
+cmd = ARGV.shift
+if cmd == 'help'
+  print_usage
+  exit 0
+elsif cmd == BRIAR_RM_CAL_TARGETS
+  puts 'quiting the simulator'
+  `/usr/bin/osascript -e 'tell application "iPhone Simulator" to quit'`
+  sim_dir="#{ENV['HOME']}/Library/Application Support/iPhone Simulator"
+
+ # `find "#{sim_dir}" -type d -name '*-cal.app' | sed 's#\(.*\)/.*#\1#' | xargs -I{} rm -rf {}`
+  cal_targets = []
+  Find.find(sim_dir) do |path|
+    if path =~  /.*\-cal.app/
+      puts "found '#{File.basename(path)}' in '#{File.dirname(path)}'"
+      cal_targets << File.dirname(path)
+      Find.prune
+    end
+  end
+
+  if cal_targets.empty?
+    puts "found no *-cal.app targets in '#{sim_dir}'"
+    exit 0
+  end
+
+  cal_targets.each do |path|
+    FileUtils.rm_r path
+  end
+
+else
+  print_usage
+  exit 1
+end
