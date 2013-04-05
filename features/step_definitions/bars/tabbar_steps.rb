@@ -28,3 +28,11 @@ When /^I touch the "([^"]*)" tab I should see the "([^"]*)" view$/ do |tab_label
   should_see_view_after_animation view_id
 end
 
+Then /^I should see "([^"]*)" tabs$/ do |list_of_tabs|
+  tabs = list_of_tabs.split(/,\s?/)
+  index = 0
+  tabs.each do |tab|
+    should_see_tab_at_index tab.strip! || tab, index
+    index = index + 1
+  end
+end
