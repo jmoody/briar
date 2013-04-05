@@ -18,7 +18,11 @@ versions.
 
 ## Installation 
 
-not ready for release
+getting closer to stability
+
+* there are still major problems with date picking
+* still problems running tests on lesspainful - can upload to LP but
+  still cannot get all tests to run
    
 ## Usage
 
