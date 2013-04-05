@@ -1,5 +1,3 @@
-require 'calabash-cucumber'
-
 module Briar
   module Alerts_and_Sheets
     def alert_exists? (alert_id)
