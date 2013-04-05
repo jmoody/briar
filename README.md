@@ -3,10 +3,23 @@
 extends calabash-ios steps to provide steps for controlling complex ui
 elements like tables and pickers. 
 
+briar is not trying to provide steps that will work for every project
+- it is neccessary that every project develop its own venacular.
+instead, briar provides a library [lib] of ruby methods to build
+application-specific steps from.  the steps in the features directory
+are meant to be examples of what briar can offer.
+
 https://github.com/calabash/calabash-ios.git
 
 to see briar in action, have a look at
 https://github.com/jmoody/briar-ios-example
+
+### motivation
+
+DRY: i have several ios projects that use calabash-cucumber and i
+found i was rewriting lots of steps and supporting code.  
+
+## version numbers
 
 i will try my best to follow http://semver.org/ when naming the
 versions.
