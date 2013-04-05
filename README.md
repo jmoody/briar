@@ -3,6 +3,8 @@
 extends calabash-ios steps to provide steps for controlling complex ui
 elements like tables and pickers. 
 
+https://github.com/calabash/calabash-ios.git
+
 to see briar in action, have a look at
 https://github.com/jmoody/briar-ios-example
 
