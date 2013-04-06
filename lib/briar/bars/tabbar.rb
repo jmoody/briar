@@ -26,6 +26,7 @@ module Briar
     end
 
     def touch_tabbar_item(name)
+      should_see_tabbar
       idx = index_of_tabbar_item name
       if idx
         touch "tabBarButton index:#{idx}"
@@ -36,6 +37,7 @@ module Briar
     end
 
     def should_see_tab_at_index(name, index)
+      should_see_tabbar
       tabs = query('tabBarButton', :accessibilityLabel)
       unless tabs.index(name) == index.to_i
         screenshot_and_raise "should have seen tab named '#{name}' at index '#{index}' but found these: '#{tabs}'"

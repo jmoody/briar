@@ -18,7 +18,10 @@ Gem::Specification.new do |gem|
   gem.add_runtime_dependency 'rake', '10.0.3'
   gem.add_runtime_dependency 'bundler'
   gem.add_runtime_dependency 'lesspainful'
+  gem.add_runtime_dependency 'syntax' 
   gem.add_runtime_dependency 'rspec'
+
+
   # rubymine is not picking up development dependencies in the gemspec
   #gem.add_development_dependency 'rspec'
 

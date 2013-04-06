@@ -261,7 +261,6 @@ to use the automatic mode, include this category in your CALABASH target
 
       def set_picker_date_with_date_time_str (date_time_str, opts={:animated => 1,
                                                                    :objc_format => PICKER__OBJC___SET_PICKER_DATE__DATE_AND_TIME_FMT})
-        query('datePicker', [{respondsToSelector: 'minuteInterval'}])
 
         res = query('datePicker', [{setDateWithString:date_time_str},
                                    {format:"#{opts[:objc_format]}"},

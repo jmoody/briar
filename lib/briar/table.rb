@@ -110,7 +110,7 @@ module Briar
     def scroll_until_i_see_row (dir, row_id)
       wait_poll({:until_exists => "tableView descendant tableViewCell marked:'#{row_id}'",
                  :timeout => 2}) do
-        scroll('tableView index:0', dir)
+        scroll('tableView', dir)
       end
 
       unless row_exists?(row_id)
