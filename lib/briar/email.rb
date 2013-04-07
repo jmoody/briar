@@ -56,6 +56,17 @@ module Briar
       addrs.include? address
     end
 
+    def should_see_recipients (addresses)
+      should_see_mail_view
+      wait_for_animation
+      addrs = addresses.split(/, ?/)
+      addrs.each do |expected|
+        unless email_to_contains? expected.strip
+          screenshot_and_raise "expected to see '#{expected}' in the email 'to' field but found '#{email_to}'"
+        end
+      end
+    end
+
     def is_ios5_mail_view
       query("layoutContainerView descendant view:'MFMailComposeView'").count == 1
     end
@@ -79,7 +90,7 @@ module Briar
 
     def delete_draft_and_wait_for (view_id)
       if gestalt.is_ios6?
-        screenshot_and_raise 'iOS 6 detected - method is not defined for iO6'
+        warn_about_ios6_email_view
       else
         should_see_mail_view({:wait => false})
         touch_navbar_item 'Cancel'

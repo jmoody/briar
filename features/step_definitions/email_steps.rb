@@ -6,6 +6,7 @@ end
 
 Then /^I should see email view with body that contains "([^"]*)"$/ do |text|
   if gestalt.is_ios6?
+    warn_about_ios6_email_view
     puts 'WARN: iOS6 detected - cannot test for email views on iOS simulator or devices'
   else
     wait_for_animation
@@ -24,7 +25,7 @@ Then /^I touch the "([^"]*)" row and wait to see the email view$/ do |row_id|
     touch("tableViewCell marked:'#{row_id}'")
     wait_for_animation
     if gestalt.is_ios6?
-      puts 'WARN: iOS6 detected - cannot test for email views on iOS simulator or devices'
+      warn_about_ios6_email_view
     else
       should_see_mail_view
     end
@@ -35,7 +36,7 @@ end
 
 Then /^I should see email view with "([^"]*)" in the subject$/ do |text|
   if gestalt.is_ios6?
-    puts 'WARN: iOS6 detected - cannot test for email views on iOS simulator or devices'
+    warn_about_ios6_email_view
   else
     wait_for_animation
     should_see_mail_view
@@ -47,16 +48,9 @@ end
 
 Then /^I should see email view with recipients? "([^"]*)"$/ do |comma_sep_addrs|
   if gestalt.is_ios6?
-    puts 'WARN: iOS6 detected - cannot test for email views on iOS simulator or devices'
+    warn_about_ios6_email_view
   else
-    should_see_mail_view
-    wait_for_animation
-    addrs = comma_sep_addrs.split(/, ?/)
-    addrs.each do |expected|
-      unless email_to_contains? expected.strip
-        screenshot_and_raise "expected to see '#{expected}' in the email 'to' field but found '#{email_to}'"
-      end
-    end
+    should_see_recipients comma_sep_addrs
   end
 end
 
@@ -67,7 +61,7 @@ end
 
 Then /^I should see email view with text like "([^"]*)" in the subject$/ do |text|
   if gestalt.is_ios6?
-    puts 'WARN: iOS6 detected - cannot test for email views on iOS simulator or devices'
+    warn_about_ios6_email_view
   else
     should_see_mail_view
     wait_for_animation
