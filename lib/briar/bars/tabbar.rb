@@ -19,14 +19,17 @@ module Briar
     end
 
     def index_of_tabbar_item(name)
-      if tabbar_visible?
-        tabs = query('tabBarButton', :accessibilityLabel)
-        tabs.index(name)
-      end
+      tabs = query('tabBarButton', :accessibilityLabel)
+      tabs.index(name)
     end
 
     def touch_tabbar_item(name)
       should_see_tabbar
+      wait_for(:timeout => 1.0,
+               :retry_frequency => 0.4) do
+        index_of_tabbar_item(name) != nil
+      end
+      wait_for_animation
       idx = index_of_tabbar_item name
       if idx
         touch "tabBarButton index:#{idx}"
