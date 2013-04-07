@@ -1,5 +1,3 @@
-#include Briar::Alerts_and_Sheets
-
 Then /^I should see alert with "([^"]*)" button$/ do |button_id|
   should_see_alert_button button_id
 end
@@ -9,7 +7,6 @@ Then /^I should see alert with title "([^"]*)"$/ do |title|
     screenshot_and_raise "i do not see an alert view with title '#{title}'"
   end
 end
-
 
 Then /^I should see alert with message "([^"]*)"$/ do |message|
   unless query('alertView child label', :text).include?(message)

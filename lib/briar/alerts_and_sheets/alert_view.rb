@@ -26,5 +26,9 @@ module Briar
       end
     end
 
+    def dismiss_alert_with_button (button_label)
+      touch("alertView child button marked:'#{button_label}'")
+    end
+
   end
 end
