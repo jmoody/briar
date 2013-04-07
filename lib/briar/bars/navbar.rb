@@ -66,9 +66,12 @@ module Briar
     end
 
     def touch_navbar_item(name)
+      wait_for(:timeout => 1.0,
+               :retry_frequency => 0.4) do
+        index_of_navbar_button(name) != nil
+      end
       wait_for_animation
       idx = index_of_navbar_button name
-      #puts "index of nav bar button: #{idx}"
       if idx
         touch("navigationButton index:#{idx}")
         step_pause
