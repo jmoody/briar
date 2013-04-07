@@ -84,3 +84,18 @@ When /^I cancel email editing I should see the "([^"]*)" view$/ do |view_id|
                       :retry_frequency=>TOUCH_TRANSITION_RETRY_FREQ})
   end
 end
+
+When(/^we are testing on the simulator or a device configured to send emails$/) do
+  # motivation:  the simulator can always present the compose mail dialog, but
+  #              devices with no email accounts active/configured will display
+  #              a system-level alert when MFMailComposeViewController alloc] init]
+  #              is called.
+  # todo: figure out how to deal with system-level no-email-configured alert
+  if gestalt.is_device?
+    configured_for_mail_sel = 'calabash_backdoor_configured_for_mail:'
+    res = backdoor(configured_for_mail_sel, 'ignorable')
+    unless res.eql? 'YES'
+      pending 'device is not configured to send email - we cannot proceed with email view testing'
+    end
+  end
+end
