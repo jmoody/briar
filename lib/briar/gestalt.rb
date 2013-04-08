@@ -1,24 +1,28 @@
 require 'json'
 
 module Briar
-  GESTALT_IPHONE = "iPhone"
-  GESTALT_IPAD = "iPad"
-  GESTALT_IPHONE5 = "Retina 4-inch"
-  GESTALT_SIM_SYS = "x86_64"
+  GESTALT_IPHONE = 'iPhone'
+  GESTALT_IPAD = 'iPad'
+  GESTALT_IPHONE5 = 'Retina 4-inch'
+  GESTALT_SIM_SYS = 'x86_64'
+  GESTALT_IPOD = 'iPod'
+
 
   class Gestalt
 
-    attr_accessor :device_family
-    attr_accessor :simulator_details, :ios_version
-    attr_accessor :system
+    attr_reader :device_family
+    attr_reader :simulator_details, :ios_version
+    attr_reader :system
+    attr_reader :framework_version
 
     def initialize (json)
       ht = JSON.parse json
-      simulator_device = ht["simulator_device"]
-      @system = ht["system"]
+      simulator_device = ht['simulator_device']
+      @system = ht['system']
       @device_family = @system.eql?(GESTALT_SIM_SYS) ? simulator_device : @system.split(/[\d,.]/).first
-      @simulator_details = ht["simulator"]
-      @ios_version = ht["iOS_version"]
+      @simulator_details = ht['simulator']
+      @ios_version = ht['iOS_version']
+      @framework_version = ht['version']
     end
 
     def is_simulator?
@@ -33,13 +37,17 @@ module Briar
       self.device_family.eql? GESTALT_IPHONE
     end
 
+    def is_ipod?
+      self.device_family.eql? GESTALT_IPOD
+    end
+
     def is_ipad?
       self.device_family.eql? GESTALT_IPAD
     end
 
     def is_iphone_5?
       return self.simulator_details.split(/[(),]/)[3].eql? GESTALT_IPHONE5 if self.is_simulator?
-      return self.system.split(/[\D]/).delete_if { |x| x.eql?("") }.first.eql?("5") if self.is_device?
+      return self.system.split(/[\D]/).delete_if { |x| x.eql?('') }.first.eql?('5') if self.is_device?
     end
 
     def version_hash (version_str)
@@ -54,13 +62,12 @@ module Briar
     end
 
     def is_ios6?
-      self.version_hash(self.ios_version)[:major_version].eql?("6")
+      self.version_hash(self.ios_version)[:major_version].eql?('6')
     end
 
     def is_ios5?
-      self.version_hash(self.ios_version)[:major_version].eql?("5")
+      self.version_hash(self.ios_version)[:major_version].eql?('5')
     end
-
   end
 end
 
