@@ -6,6 +6,18 @@ module Briar
       !query('navigationBar').empty?
     end
 
+    def should_see_navbar
+      unless navbar_visible?
+        screenshot_and_raise 'should see the nav bar'
+      end
+    end
+
+    def should_not_see_navbar
+      if navbar_visible?
+        screenshot_and_raise 'should not see the nav bar'
+      end
+    end
+
     def navbar_has_back_button?
           !query('navigationItemButtonView').empty?
     end

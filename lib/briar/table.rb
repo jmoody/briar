@@ -76,11 +76,6 @@ module Briar
       ## iOS 4 and 5
 
       (arr.length == 1) and (arr.first.eql? text)
-      ## iOS 6
-      #if arr.length > 1
-      #
-      #  pending "iOS 6 can have duplicate subviews"
-      #  arr.member?(text)
     end
 
 
