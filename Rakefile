@@ -11,14 +11,3 @@ end
 #rake install  # Build and install briar-0.0.7.gem into system gems.
 #rake release  # Create tag v0.0.7 and build and push briar-0.0.7.gem to Rubygems
 
-#task :gem do
-#  sh 'rm -f *.gem'
-#  sh 'gem build briar.gemspec --verbose'
-#  sh "gem install briar-#{Briar::VERSION}.gem"
-#end
-#
-#task :push do
-#  sh 'gem update'
-#  sh 'gem build briar.gemspec'
-#  sh "gem push briar-#{Briar::VERSION}.gem"
-#end
