@@ -69,13 +69,26 @@ module Briar
       end
     end
 
+    def wait_for_views(views, timeout=1.0)
+      msg = "waited for '#{timeout}' seconds but did not see '#{views}'"
+      options = {:timeout => timeout,
+                 :retry_frequency => 0.2,
+                 :post_timeout => 0.1,
+                 :timeout_message => msg}
+      wait_for(options) do
+        views.all? { |view_id| view_exists?(view_id) }
+      end
+    end
+
     def wait_for_view_to_disappear(view_id, timeout=1.0)
-      views = [view_id]
       msg = "waited for '#{timeout}' seconds for '#{view_id}' to disappear but it is still visible"
-      wait_for_elements_do_not_exist(views, {:timeout => timeout,
-                                             :retry_frequency => 0.2,
-                                             :post_timeout => 0.1,
-                                             :timeout_message => msg})
+      options = {:timeout => timeout,
+                 :retry_frequency => 0.2,
+                 :post_timeout => 0.1,
+                 :timeout_message => msg}
+      wait_for(options) do
+        not view_exists? view_id
+      end
     end
 
     def touch_and_wait_to_disappear(view_id, timeout=1.0)
