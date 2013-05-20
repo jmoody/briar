@@ -1,7 +1,9 @@
-require 'calabash-cucumber'
+
+
 
 module Briar
   module Keyboard
+    # these are not ready for prime time# the methods for setting auto correct, spell check, etc. are not ready
     UITextAutocapitalizationTypeNone = 0
     UITextAutocapitalizationTypeWords = 1
     UITextAutocapitalizationTypeSentences = 2
@@ -55,7 +57,7 @@ module Briar
 
     def set_autocorrect (type)
       if !query('textView index:0').empty?
-        query('textView index:0', [{setAutocorrectionType:type}])
+        query('textView index:0',  [{setAutocorrectionType:type}])
       elsif !query('textField index:0').empty?
         query('textField index:0', [{setAutocorrectionType:type}])
       else

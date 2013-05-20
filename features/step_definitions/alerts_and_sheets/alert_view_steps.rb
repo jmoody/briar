@@ -20,3 +20,13 @@ Then /^I should not see an alert$/ do
     screenshot_and_raise "i expected to see no alert view, but found '#{res}'"
   end
 end
+
+Then /^I see an alert with "([^\"]*)" text$/ do |message|
+  wait_poll(:until_exists => "label text:'#{message}'", :timeout => 5) do
+    result = query("label text:'#{message}'").empty?
+    if result
+      screenshot_and_raise "could not find text field with AlertView with text '#{message}'"
+    end
+    sleep(STEP_PAUSE)
+  end
+end

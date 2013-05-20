@@ -1,10 +1,8 @@
-require "calabash-cucumber"
-
 module Briar
   module Control
     module Segmented_Control
       def index_of_control_with_name (control_name)
-        controls = query("segmentedControl", :accessibilityIdentifier)
+        controls = query('segmentedControl', :accessibilityIdentifier)
         controls.index(control_name)
       end
 

@@ -64,13 +64,21 @@ module Briar
 
 
     def go_back_after_waiting
-      wait_for_animation
+      wait_for(:timeout => 1.0,
+               :retry_frequency => 0.2) do
+        not query('navigationItemButtonView first').empty?
+      end
       touch('navigationItemButtonView first')
       step_pause
     end
 
     def go_back_and_wait_for_view (view)
-      wait_for_animation
+      #wait_for_animation
+      wait_for(:timeout => 1.0,
+               :retry_frequency => 0.2) do
+        not query('navigationItemButtonView first').empty?
+      end
+      step_pause
       touch_transition('navigationItemButtonView first',
                        "view marked:'#{view}'",
                        {:timeout=>TOUCH_TRANSITION_TIMEOUT,

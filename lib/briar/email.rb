@@ -75,11 +75,17 @@ module Briar
       gestalt.is_ios6?
     end
 
-    def should_see_mail_view (opts={:wait => true})
-      wait = opts[:wait]
-      wait_for_animation if wait || wait == nil
-      unless is_ios5_mail_view || is_ios6_mail_view
-        screenshot_and_raise 'expected to see email view'
+    def should_see_mail_view (timeout=1.0)
+      if gestalt.is_ios6?
+        screenshot_and_raise 'iOS6 detected - cannot test for email viewhttps://groups.google.com/d/topic/calabash-ios/Ff3XFsjp-B0/discussion'
+      end
+
+      msg = "waited for '#{timeout}' seconds but did not see email compose view"
+      wait_for(:timeout => timeout,
+               :retry_frequency => 0.2,
+               :post_timeout => 0.1,
+               :timeout_message => msg ) do
+        is_ios5_mail_view
       end
     end
 
@@ -92,7 +98,7 @@ module Briar
       if gestalt.is_ios6?
         warn_about_ios6_email_view
       else
-        should_see_mail_view({:wait => false})
+        should_see_mail_view
         touch_navbar_item 'Cancel'
         wait_for_animation
         touch_transition("button marked:'Delete Draft'",

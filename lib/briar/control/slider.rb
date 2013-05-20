@@ -1,8 +1,8 @@
-require 'calabash-cucumber'
-
 module Briar
   module Control
     module Slider
+      # WARNING: requires a tap gesture recognizer on the slider
+      # you have been warned
       def change_slider_value_to(slider_id, value)
         target = value.to_f
         if target < 0

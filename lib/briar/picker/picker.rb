@@ -28,5 +28,15 @@ module Briar
       titles = visible_titles column
       titles[selected_idx]
     end
+
+    def scroll_picker(dir, picker_id)
+      should_see_picker picker_id
+      if dir.eql? 'down'
+        picker_scroll_down_on_column 0
+      else
+        picker_scroll_up_on_column 0
+      end
+      step_pause
+    end
   end
 end

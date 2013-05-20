@@ -10,6 +10,7 @@ require 'briar/gestalt'
 require 'briar/briar_core'
 
 require 'briar/alerts_and_sheets/alert_view'
+require 'briar/alerts_and_sheets/action_sheet'
 
 require 'briar/bars/tabbar'
 require 'briar/bars/navbar'

@@ -1,16 +1,10 @@
 
 When /^I touch (?:the|a) "([^"]*)" button, then I should see the "([^"]*)" view$/ do |button_id, view_id|
-  touch_transition("button marked:'#{button_id}'",
-                   "view marked:'#{view_id}'",
-                   {:timeout=>TOUCH_TRANSITION_TIMEOUT,
-                    :retry_frequency=>TOUCH_TRANSITION_RETRY_FREQ})
+  touch_button_and_wait_for_view button_id, view_id
 end
 
 Then /^I touch (?:the|a) "([^"]*)" button and wait for (?:the|a) "([^"]*)" view$/ do |button_id, view_id|
-  touch_transition("button marked:'#{button_id}'",
-                   "view marked:'#{view_id}'",
-                   {:timeout=>TOUCH_TRANSITION_TIMEOUT,
-                    :retry_frequency=>TOUCH_TRANSITION_RETRY_FREQ})
+  touch_button_and_wait_for_view button_id, view_id
 end
 
 Then /^I should see (?:the|a) "([^"]*)" button has title "([^"]*)"$/ do |button_id, title|

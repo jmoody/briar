@@ -40,6 +40,18 @@ module Briar
         touch("button marked:'#{name}'")
         step_pause
       end
+
+      def touch_button_and_wait_for_view (button_id, view_id)
+        touch_transition("button marked:'#{button_id}'",
+                         "view marked:'#{view_id}'",
+                         {:timeout=>TOUCH_TRANSITION_TIMEOUT,
+                          :retry_frequency=>TOUCH_TRANSITION_RETRY_FREQ})
+      end
+
+      def wait_for_button_with_title (button_id, title)
+        wait_for_view(button_id)
+        should_see_button_with_title(button_id, title)
+      end
     end
   end
 end
