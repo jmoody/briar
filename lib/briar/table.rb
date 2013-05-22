@@ -20,7 +20,19 @@ module Briar
             "tableView marked:'#{table_id}'"
     end
 
+    def table_has_calabash_additions
+      success_value = '1'
+      res = query('tableView', [{hasCalabashAdditions:success_value}])
+      screenshot_and_raise 'table is not visible' if res.empty?
+      res.first.eql? success_value
+    end
+
+    #noinspection RubyUnusedLocalVariable
     def row_exists? (row_id, table_id = nil)
+      pending "deprecated 0.0.8 - use 'row_visible?' instead"
+    end
+
+    def row_visible? (row_id, table_id = nil)
       query_str = query_str_row_in_table row_id, table_id
       exists = !query(query_str, :accessibilityIdentifier).empty?
       # if row cannot be found just return false
@@ -50,14 +62,14 @@ module Briar
     end
 
     def should_see_row (row_id, table_id = nil)
-      unless row_exists? row_id, table_id
+      unless row_visible? row_id, table_id
         screenshot_and_raise "i do not see a row named #{row_id}"
       end
     end
 
 
     def should_not_see_row(row_id)
-      if row_exists? row_id
+      if row_visible? row_id
         screenshot_and_raise "i should not have seen row named #{row_id}"
       end
     end
@@ -71,14 +83,9 @@ module Briar
 
     def row_with_label_and_text_exists? (row_id, label_id, text, table_id = nil)
       should_see_row row_id
-      #arr = query("tableViewCell marked:'#{row_id}' isHidden:0 descendant label marked:'#{label_id}'", :text)
       arr = query(query_str_for_label_and_text_exists(row_id, label_id, table_id),  :text)
-      ## iOS 4 and 5
-
       (arr.length == 1) and (arr.first.eql? text)
     end
-
-
 
     def should_see_row_with_label_with_text (row_id, label_id, text)
       should_see_row row_id
@@ -102,14 +109,24 @@ module Briar
     end
 
 
-    def scroll_until_i_see_row (dir, row_id)
-      wait_poll({:until_exists => "tableView descendant tableViewCell marked:'#{row_id}'",
-                 :timeout => 2}) do
-        scroll('tableView', dir)
-      end
+    def scroll_until_i_see_row (dir, row_id, table_id=nil)
+      if table_has_calabash_additions
+        success = '1'
+        query_str = query_str_table table_id
+        res = query(query_str, [{scrollToRowWithIdenifier:row_id,
+                             successValue:success}])
+        unless res.eql? success
+          screenshot_and_raise "should be able to scroll to row with id '#{row_id}' but the row does not exist in '#{query_str}'"
+        end
+      else
+        wait_poll({:until_exists => "tableView descendant tableViewCell marked:'#{row_id}'",
+                   :timeout => 2}) do
+          scroll('tableView', dir)
+        end
 
-      unless row_exists?(row_id)
-        screenshot_and_raise "i scrolled '#{dir}' but did not see '#{row_id}'"
+        unless row_visible?(row_id)
+          screenshot_and_raise "i scrolled '#{dir}' but did not see '#{row_id}'"
+        end
       end
     end
 
