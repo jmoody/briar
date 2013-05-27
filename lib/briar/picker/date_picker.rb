@@ -609,9 +609,9 @@ to use the automatic mode, include this category in your CALABASH target
         unless picker_period.eql? target_period_str
           begin
             if picker_period_is_am?
-              scroll_to_row("pickerTableView index:#{column}", 1)
+              briar_scroll_to_row("pickerTableView index:#{column}", 1)
             else
-              scroll_to_row("pickerTableView index:#{column}", 0)
+              briar_scroll_to_row("pickerTableView index:#{column}", 0)
             end
             sleep(PICKER_STEP_PAUSE)
             count = count + 1

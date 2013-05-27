@@ -12,7 +12,8 @@ end
 
 
 Then /^I scroll (left|right|up|down) until I see (?:the|an?) "([^\"]*)" row$/ do |dir, row_id|
-  scroll_until_i_see_row dir, row_id
+  warn "deprecated 0.0.8 - replaced with 'Then I scroll to row marked (mark)"
+  briar_scroll_to_row row_id
 end
 
 Then /^I touch (?:the) "([^"]*)" row and wait for (?:the) "([^"]*)" view to appear$/ do |row_id, view_id|
@@ -46,10 +47,7 @@ end
 
 Then /^the (first|second) row should be "([^"]*)"$/ do |idx, row_id|
   (idx.eql? 'first') ? index = 0 : index = 1
-  res = query('tableViewCell', :accessibilityIdentifier)[index]
-  unless res.eql? row_id
-    screenshot_and_raise "i expected the #{idx} row would be #{row_id}, but found #{res}"
-  end
+  should_see_row_at_index row_id, index
 end
 
 
@@ -102,7 +100,8 @@ Then /^I should see that the "([^"]*)" row has text "([^"]*)" in the "([^"]*)" l
 end
 
 Then /^I should see that the text I just entered is in the "([^"]*)" row "([^"]*)" label$/ do |row_id, label_id|
-  should_see_row_with_label_with_text row_id, label_id, @text_entered_by_keyboard
+  should_see_row_with_label_with_text row_id, label_id,
+                                      @text_entered_by_keyboard
 end
 
 Then /^I move the "([^"]*)" row (up|down) (\d+) times? using the reorder edit control$/ do |row_id, dir, n|
@@ -188,4 +187,7 @@ end
 
 Then /^I should see that the "([^"]*)" row has image "([^"]*)"$/ do |row_id, image_id|
   should_see_row_with_image row_id, image_id
+end
+Then(/^I scroll until I see the "([^"]*)" row$/) do |row_id|
+  scroll_to_row_with_mark row_id
 end

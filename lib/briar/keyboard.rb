@@ -15,6 +15,7 @@ module Briar
     UITextSpellCheckingTypeNo = 1
     UITextSpellCheckingTypeYes = 2
 
+    @text_entered_by_keyboard = ''
 
     def should_see_keyboard
       res = element_exists('keyboardAutomatic')
@@ -77,6 +78,13 @@ module Briar
       else
         screenshot_and_raise 'could not find a text view or text field'
       end
+    end
+
+
+    def clear_text(uiquery)
+      text_fields_modified = map(uiquery, :setText, '')
+      screenshot_and_raise "could not find text field #{uiquery}" if text_fields_modified.empty?
+      text_fields_modified
     end
 
     #def is_capitalize_none (cap_type)

@@ -1,7 +1,7 @@
 Then /^I clear text view named "([^\"]*)"$/ do |name|
   res = query("textView marked:'#{name}'")
   if res
-    set_text("textView marked:'#{name}'", '')
+    clear_text("textView marked:'#{name}'")
   end
 end
 
