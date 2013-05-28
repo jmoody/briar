@@ -6,7 +6,7 @@ end
 
 Then /^the tabbar is visible$/ do
   pending "deprecated 0.0.5 - use 'Then I should see the tabbar'"
-  macro 'that the tabbar is visible'
+  should_see_tabbar
 end
 
 

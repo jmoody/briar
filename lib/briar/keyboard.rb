@@ -17,18 +17,28 @@ module Briar
 
     @text_entered_by_keyboard = ''
 
-    def should_see_keyboard
-      res = element_exists('keyboardAutomatic')
-      unless res
-        screenshot_and_raise 'Expected keyboard to be visible.'
+    def should_see_keyboard (timeout=1.0)
+      msg = "waited for '#{timeout}' seconds but did not see keyboard"
+      wait_for(:timeout => timeout,
+               :retry_frequency => 0.2,
+               :post_timeout => 0.1,
+               :timeout_message => msg ) do
+        element_exists('keyboardAutomatic')
       end
     end
 
-    def should_not_see_keyboard
-      res = element_exists('keyboardAutomatic')
-      if res
-        screenshot_and_raise 'Expected keyboard to not be visible.'
+    def should_not_see_keyboard (timeout=1.0)
+      msg = "waited for '#{timeout}' seconds but keyboard did not disappear"
+      wait_for(:timeout => timeout,
+               :retry_frequency => 0.2,
+               :post_timeout => 0.1,
+               :timeout_message => msg ) do
+        element_does_not_exist 'keyboardAutomatic'
       end
+    end
+
+    def briar_keyboard_enter_text (text)
+      @text_entered_by_keyboard = keyboard_enter_text text
     end
 
     # is it possible to find what view the keyboard is responding to?
@@ -79,6 +89,7 @@ module Briar
         screenshot_and_raise 'could not find a text view or text field'
       end
     end
+
 
 
     def clear_text(uiquery)

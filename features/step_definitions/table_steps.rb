@@ -17,25 +17,21 @@ Then /^I scroll (left|right|up|down) until I see (?:the|an?) "([^\"]*)" row$/ do
 end
 
 Then /^I touch (?:the) "([^"]*)" row and wait for (?:the) "([^"]*)" view to appear$/ do |row_id, view_id|
-  # problem
-  wait_for_animation
+  wait_for_row row_id
   touch_row_and_wait_to_see row_id, view_id
 end
 
 Then /^I touch the "([^"]*)" row on the "([^"]*)" table and wait for the "([^"]*)" view to appear$/ do |row_id, table_id, view_id|
-  wait_for_animation
+  wait_for_row row_id
   touch_row_and_wait_to_see row_id, view_id, table_id
 end
-
 
 Then /^I touch (?:the) "([^"]*)" row$/ do |row_name|
   touch_row row_name
 end
 
-
-Then /^I touch the "([^"]*)" section header$/ do |header_name|
-  touch("tableView child view marked:'#{header_name}'")
-  wait_for_animation
+Then /^I touch the "([^"]*)" section header$/ do |header_id|
+  touch_section_header header_id
 end
 
 Then /^I should see the "([^"]*)" table in edit mode$/ do |table_id|
@@ -55,34 +51,22 @@ Then /^I swipe (left|right) on the "([^"]*)" row$/ do |dir, row_name|
   swipe_on_row dir, row_name
 end
 
-
-Then /^I should be able to swipe to delete the "([^"]*)" row$/ do |row_name|
-  swipe_on_row 'left', row_name
-  should_see_delete_confirmation_in_row row_name
-  touch_delete_confirmation row_name
-  should_not_see_row row_name
+Then /^I should be able to swipe to delete the "([^"]*)" row$/ do |row_id|
+  swipe_to_delete_row row_id
 end
 
-Then /^I touch the delete button on the "([^"]*)" row$/ do |row_name|
-  should_see_edit_mode_delete_button row_name
-  touch("tableViewCell marked:'#{row_name}' child tableViewCellEditControl")
-  step_pause
-  should_see_delete_confirmation_in_row row_name
+Then /^I touch the delete button on the "([^"]*)" row$/ do |row_id|
+  touch_edit_mode_delete_button row_id
 end
 
-Then /^I use the edit mode delete button to delete the "([^"]*)" row$/ do |row_name|
-  macro %Q|I touch the delete button on the "#{row_name}" row|
-  touch_delete_confirmation row_name
-  should_not_see_row row_name
+Then /^I use the edit mode delete button to delete the "([^"]*)" row$/ do |row_id|
+  delete_row_with_edit_mode_delete_button row_id
 end
 
-Then /^I should see "([^"]*)" in row (\d+)$/ do |cell_name, row|
+Then /^I should see "([^"]*)" in row (\d+)$/ do |row_id, row_index|
   # on ios 6 this is returning nil
   #res = query("tableViewCell index:#{row}", :accessibilityIdentifier).first
-  access_ids = query('tableViewCell', :accessibilityIdentifier)
-  unless access_ids.index(cell_name) == row.to_i
-    screenshot_and_raise "expected to see '#{cell_name}' in row #{row} but found '#{access_ids[row.to_i]}'"
-  end
+  should_see_row_at_index row_id, row_index
 end
 
 Then /^I should see the rows in this order "([^"]*)"$/ do |row_ids|
@@ -90,7 +74,7 @@ Then /^I should see the rows in this order "([^"]*)"$/ do |row_ids|
   counter = 0
   tokens.each do |token|
     token.strip!
-    macro %Q|I should see "#{token}" in row #{counter}|
+    should_see_row_at_index token, counter
     counter = counter + 1
   end
 end
@@ -100,8 +84,7 @@ Then /^I should see that the "([^"]*)" row has text "([^"]*)" in the "([^"]*)" l
 end
 
 Then /^I should see that the text I just entered is in the "([^"]*)" row "([^"]*)" label$/ do |row_id, label_id|
-  should_see_row_with_label_with_text row_id, label_id,
-                                      @text_entered_by_keyboard
+  should_see_row_with_label_with_text row_id, label_id, @text_entered_by_keyboard
 end
 
 Then /^I move the "([^"]*)" row (up|down) (\d+) times? using the reorder edit control$/ do |row_id, dir, n|
@@ -134,30 +117,16 @@ Then /^I touch the "([^"]*)" button in the "([^"]*)" row$/ do |button_id, row_id
 end
 
 Then /^I should see a switch for "([^"]*)" in the "([^"]*)" row that is in the "([^"]*)" position$/ do |switch_id, row_id, on_off|
-  should_see_row row_id
-  query_str = "tableViewCell marked:'#{row_id}' child tableViewCellContentView child switch marked:'#{switch_id}'"
-  res = query(query_str, :isOn).first
-  unless res
-    screenshot_and_raise "expected to find a switch marked '#{switch_id}' in row '#{row_id}'"
-  end
-  expected = (on_off.eql? 'on') ? 1 : 0
-  unless res.to_i == expected
-    screenshot_and_raise "expected to find a switch marked '#{switch_id}' in row '#{row_id}' that is '#{on_off}' but found it was '#{res ? 'on' : 'off'}'"
-  end
+  should_see_switch_in_row_with_state switch_id, row_id, (on_off.eql? 'on') ? 1 : 0
 end
 
 Then /^I should see a detail disclosure chevron in the "([^"]*)" row$/ do |row_id|
-  should_see_row row_id
-  # gray disclosure chevron is accessory type 1
-  res = query("tableViewCell marked:'#{row_id}'", :accessoryType).first
-  unless res == 1
-    screenshot_and_raise "expected to see disclosure chevron in row '#{row_id}' but found '#{res}'"
-  end
+  should_see_disclosure_chevron_in_row row_id
 end
 
+
 Then /^I touch the "([^"]*)" switch in the "([^"]*)" row$/ do |switch_id, row_id|
-  should_see_row row_id
-  touch("tableViewCell marked:'#{row_id}' child tableViewCellContentView child switch marked:'#{switch_id}'")
+  touch_switch_in_row switch_id, row_id
 end
 
 Then /^I should see "([^"]*)" in the "([^"]*)" section (footer|header)$/ do |text, section_footer_id, head_or_foot|
@@ -168,22 +137,12 @@ Then /^I should see "([^"]*)" in the "([^"]*)" section (footer|header)$/ do |tex
 end
 
 Then /^I should see a text field with text "([^"]*)" in the "([^"]*)" row$/ do |text, row_id|
-  should_see_row row_id
-  query_str = "tableViewCell marked:'#{row_id}' child tableViewCellContentView child textField"
-  res = query(query_str)
-  screenshot_and_raise "expected to see text field in '#{row_id}' row" if res.empty?
-  actual = query(query_str, :text).first
-  screenshot_and_raise "expected to find text field with '#{text}' in row '#{row_id}' but found '#{actual}'" if !text.eql? actual
+  should_see_text_field_in_row_with_text row_id, text
 end
 
 When /^I touch the "([^"]*)" text field in the "([^"]*)" row the keyboard appears$/ do |text_field_id, row_id|
-  should_see_row row_id
-  query_str = "tableViewCell marked:'#{row_id}' child tableViewCellContentView child textField marked:'#{text_field_id}'"
-  touch(query_str)
-  wait_for_animation
-  should_see_keyboard
+  touch_text_field_in_row_and_wait_for_keyboard text_field_id, row_id
 end
-
 
 Then /^I should see that the "([^"]*)" row has image "([^"]*)"$/ do |row_id, image_id|
   should_see_row_with_image row_id, image_id

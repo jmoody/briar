@@ -21,11 +21,7 @@ Then /^I should see a clear button in the text field in the "([^"]*)" row$/ do |
 end
 
 Then /^I touch the clear button in the text field in the "([^"]*)" row$/ do |row_id|
-  query_str = "tableViewCell marked:'#{row_id}' child tableViewCellContentView child textField"
-  res = query(query_str)
-  screenshot_and_raise "expected to see text field in '#{row_id}' row" if res.empty?
-  touch("#{query_str} child button")
-  step_pause
+  touch_text_field_clear_button_in_row row_id
 end
 
 Then(/^I should see "(.*?)" text field with text "(.*?)"$/) do |text_field_id, text|

@@ -32,5 +32,18 @@ module Briar
         screenshot_and_raise "could not see toolbar button with name '#{name_or_id}'"
       end
     end
+
+    def touch_toolbar_button(button_name, and_wait_for_view_id=nil)
+      should_see_toolbar_button button_name
+      if and_wait_for_view_id.nil?
+        touch("toolbar descendant view marked:'#{button_name}'")
+      else
+        touch_transition("toolbar descendant view marked:'#{button_name}'",
+                         "view marked:'#{and_wait_for_view_id}'",
+                         {:timeout=>TOUCH_TRANSITION_TIMEOUT,
+                          :retry_frequency=>TOUCH_TRANSITION_RETRY_FREQ})
+      end
+      step_pause
+    end
   end
 end

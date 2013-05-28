@@ -47,6 +47,7 @@ end
 
 
 Then /^I change the picker date to "([^"]*)" and the time to "([^"]*)"$/ do |target_date, target_time|
+
   macro %Q|I change the date on the picker to "#{target_date}"|
   macro %Q|I change the time on the picker to "#{target_time}"|
 end
@@ -110,12 +111,7 @@ end
 
 # requires a time or date change.  picker does not need to be visible
 Then /^I should see that the "([^"]*)" row has the time I just entered in the "([^"]*)" label$/ do |row_id, label_id|
-  arr = query("tableViewCell marked:'#{row_id}' isHidden:0 descendant label marked:'#{label_id}'", :text)
-  screenshot_and_raise "could not find '#{label_id}' in the '#{row_id}' row" if arr.empty?
-  actual_text = arr.first
-  unless (actual_text.eql? @date_picker_time_12h) or (actual_text.eql? @date_picker_time_24h)
-    screenshot_and_raise "expected to see '#{@date_picker_time_12h}' or '#{@date_picker_time_24h}' in '#{label_id}' but found '#{actual_text}'"
-  end
+  should_see_row_has_time_i_just_entered row_id, label_id
 end
 
 # does not require a time or date change. picker needs to be visible
@@ -141,10 +137,7 @@ Then /^I should see that the "([^"]*)" row has the date and time I just entered 
 end
 
 Then /^I change the minute interval on the picker to (1|5|10|30) minutes?$/ do |target_interval|
-  res = query('datePicker', [{setMinuteInterval:target_interval.to_i}])
-  screenshot_and_raise 'did not find a date picker - could not set the minute interval' if res.empty?
-  sleep(PICKER_STEP_PAUSE * 5)
-  @picker_minute_interval = target_interval.to_i
+  change_minute_interval_on_picker target_interval.to_i
 end
 
 Then /^I change the time on the picker to (\d+) minutes? from now$/ do |target_minute|
