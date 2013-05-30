@@ -22,6 +22,8 @@ require 'briar/control/slider'
 
 require 'briar/picker/picker_shared'
 require 'briar/picker/picker'
+require 'briar/picker/date_picker_core'
+require 'briar/picker/date_picker_manipulation'
 require 'briar/picker/date_picker'
 
 require 'briar/email'
