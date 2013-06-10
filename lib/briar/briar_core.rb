@@ -2,11 +2,9 @@ require 'calabash-cucumber'
 
 module Briar
   module Core
-    STEP_PAUSE = (ENV['STEP_PAUSE'] || 0.4).to_f
-    ANIMATION_PAUSE = (ENV['ANIMATION_PAUSE'] || 0.6).to_f
 
     def step_pause
-      sleep(STEP_PAUSE)
+      sleep(BRIAR_STEP_PAUSE)
     end
 
     def wait_for_animation
@@ -36,15 +34,12 @@ module Briar
 
 
     def should_see_view_after_animation (view_id)
-      wait_for_animation
-      should_see_view view_id
+      pending "WARN: deprecated 0.0.8 - use 'wait_for_view #{view_id}' instead"
+
     end
 
     def should_not_see_view_after_animation (view_id)
-      wait_for_animation
-      if view_exists? view_id
-        screenshot_and_raise "should not see view with id '#{view_id}'"
-      end
+      pending "WARN: deprecated 0.0.8 - use 'wait_for_view_to_disappear #{view_id}' instead"
     end
 
     def should_see_view_with_text (text)

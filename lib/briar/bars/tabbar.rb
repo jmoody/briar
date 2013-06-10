@@ -19,20 +19,23 @@ module Briar
     end
 
     def index_of_tabbar_item(name)
-      tabs = query('tabBarButton', :accessibilityLabel)
+      tabs = query('tabBarButton', AL)
       tabs.index(name)
     end
 
-    def touch_tabbar_item(name)
+    def touch_tabbar_item(name, wait_for_view_id=nil)
+      sleep(0.2)
       wait_for(:timeout => 1.0,
                :retry_frequency => 0.4) do
         index_of_tabbar_item(name) != nil
       end
-      wait_for_animation
       should_see_tabbar
       idx = index_of_tabbar_item name
       if idx
         touch "tabBarButton index:#{idx}"
+        unless wait_for_view_id.nil?
+          wait_for_view wait_for_view_id
+        end
         step_pause
       else
         screenshot_and_raise "tabbar button with name #{name} does not exist"
@@ -41,7 +44,7 @@ module Briar
 
     def should_see_tab_at_index(name, index)
       should_see_tabbar
-      tabs = query('tabBarButton', :accessibilityLabel)
+      tabs = query('tabBarButton', AL)
       unless tabs.index(name) == index.to_i
         screenshot_and_raise "should have seen tab named '#{name}' at index '#{index}' but found these: '#{tabs}'"
       end

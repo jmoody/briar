@@ -19,7 +19,7 @@ module Briar
     end
 
     def navbar_has_back_button?
-          !query('navigationItemButtonView').empty?
+      !query('navigationItemButtonView').empty?
     end
 
     def should_see_navbar_back_button
@@ -37,7 +37,7 @@ module Briar
 
     # will not work to detect left/right buttons
     def index_of_navbar_button (name)
-      titles = query('navigationButton', :accessibilityLabel)
+      titles = query('navigationButton', AL)
       titles.index(name)
     end
 
@@ -58,12 +58,13 @@ module Briar
     def date_is_in_navbar (date)
       with_leading = date.strftime('%a %b %d')
       without_leading = date.strftime("%a %b #{date.day}")
-      items = query('navigationItemView', :accessibilityLabel)
+      items = query('navigationItemView', AL)
       items.include?(with_leading) || items.include?(without_leading)
     end
 
 
     def go_back_after_waiting
+      sleep(0.2)
       wait_for(:timeout => 1.0,
                :retry_frequency => 0.2) do
         not query('navigationItemButtonView first').empty?
@@ -73,47 +74,46 @@ module Briar
     end
 
     def go_back_and_wait_for_view (view)
-      #wait_for_animation
+      sleep(0.2)
       wait_for(:timeout => 1.0,
                :retry_frequency => 0.2) do
         not query('navigationItemButtonView first').empty?
       end
-      step_pause
+
       touch_transition('navigationItemButtonView first',
                        "view marked:'#{view}'",
                        {:timeout=>TOUCH_TRANSITION_TIMEOUT,
                         :retry_frequency=>TOUCH_TRANSITION_RETRY_FREQ})
+      step_pause
     end
 
-    def touch_navbar_item(name)
+    def touch_navbar_item(item_name, wait_for_view_id=nil)
       wait_for(:timeout => 1.0,
                :retry_frequency => 0.4) do
-        index_of_navbar_button(name) != nil
+        index_of_navbar_button(item_name) != nil
       end
-      wait_for_animation
-      idx = index_of_navbar_button name
+      sleep(0.2)
+      idx = index_of_navbar_button item_name
       if idx
         touch("navigationButton index:#{idx}")
+        unless wait_for_view_id.nil?
+          wait_for_view wait_for_view_id
+        end
         step_pause
       else
-        screenshot_and_raise "could not find navbar item '#{name}'"
+        screenshot_and_raise "could not find navbar item '#{item_name}'"
       end
     end
 
 
-    def touch_navbar_item_and_wait_for_view(item, view)
-      wait_for_animation
-      idx = index_of_navbar_button item
-      touch_transition("navigationButton index:#{idx}",
-                       "view marked:'#{view}'",
-                       {:timeout=>TOUCH_TRANSITION_TIMEOUT,
-                        :retry_frequency=>TOUCH_TRANSITION_RETRY_FREQ})
+    def touch_navbar_item_and_wait_for_view(item_name, view_id)
+      touch_navbar_item item_name, view_id
     end
 
 
     def navbar_has_title? (title)
-      wait_for_animation
-      query('navigationItemView', :accessibilityLabel).include?(title)
+      sleep(0.2)
+      query('navigationItemView', AL).include?(title)
     end
 
     def should_see_navbar_with_title(title)

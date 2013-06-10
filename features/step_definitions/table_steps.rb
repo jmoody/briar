@@ -1,19 +1,21 @@
-#include Briar::Table
-#include Briar::Core
-
 Then /^I should see (?:the|an?) "([^"]*)" row$/ do |name|
   should_see_row name
 end
 
+
+Then(/^I scroll to the "([^"]*)" row$/) do |row_id|
+  briar_scroll_to_row row_id
+end
+
 #noinspection RubyUnusedLocalVariable
-Then /^I scroll (left|right|up|down) until I see the "([^\"]*)" row limit (\d+)$/ do |dir, row_name, limit|
-  pending "deprecated 0.0.6 - use 'Then I scroll #{dir} until I see (?:the|an?) \"#{row_name}\" row"
+Then /^I scroll (left|right|up|down) until I see the "([^\"]*)" row limit (\d+)$/ do |dir, row_id, limit|
+  pending "deprecated 0.0.6 - use 'Then I scroll to the \"#{row_id}\" row'"
 end
 
 
+#noinspection RubyUnusedLocalVariable
 Then /^I scroll (left|right|up|down) until I see (?:the|an?) "([^\"]*)" row$/ do |dir, row_id|
-  warn "deprecated 0.0.8 - replaced with 'Then I scroll to row marked (mark)"
-  briar_scroll_to_row row_id
+  pending "deprecated 0.0.8 - use 'Then I scroll to the \"#{row_id}\" row'"
 end
 
 Then /^I touch (?:the) "([^"]*)" row and wait for (?:the) "([^"]*)" view to appear$/ do |row_id, view_id|
@@ -65,7 +67,7 @@ end
 
 Then /^I should see "([^"]*)" in row (\d+)$/ do |row_id, row_index|
   # on ios 6 this is returning nil
-  #res = query("tableViewCell index:#{row}", :accessibilityIdentifier).first
+  #res = query("tableViewCell index:#{row}", AI).first
   should_see_row_at_index row_id, row_index
 end
 
@@ -107,7 +109,7 @@ end
 
 Then /^I should see a "([^"]*)" button in the "([^"]*)" row$/ do |button_id, row_id|
   should_see_row row_id
-  arr = query("tableViewCell marked:'#{row_id}' child tableViewCellContentView child button marked:'#{button_id}'", :accessibilityIdentifier)
+  arr = query("tableViewCell marked:'#{row_id}' child tableViewCellContentView child button marked:'#{button_id}'", AI)
   (arr.length == 1)
 end
 
@@ -123,7 +125,6 @@ end
 Then /^I should see a detail disclosure chevron in the "([^"]*)" row$/ do |row_id|
   should_see_disclosure_chevron_in_row row_id
 end
-
 
 Then /^I touch the "([^"]*)" switch in the "([^"]*)" row$/ do |switch_id, row_id|
   touch_switch_in_row switch_id, row_id
@@ -147,6 +148,4 @@ end
 Then /^I should see that the "([^"]*)" row has image "([^"]*)"$/ do |row_id, image_id|
   should_see_row_with_image row_id, image_id
 end
-Then(/^I scroll until I see the "([^"]*)" row$/) do |row_id|
-  scroll_to_row_with_mark row_id
-end
+

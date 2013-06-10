@@ -38,5 +38,5 @@ end
 
 Then /^I touch text view "([^"]*)"$/ do |text_view|
   touch("textView marked:'#{text_view}'")
-  sleep(STEP_PAUSE)
+  step_pause
 end

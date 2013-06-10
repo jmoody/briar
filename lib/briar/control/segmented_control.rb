@@ -11,7 +11,7 @@ module Briar
       end
 
       def index_of_control_with_id (control_id)
-        controls = query('segmentedControl', :accessibilityIdentifier)
+        controls = query('segmentedControl', AI)
         controls.index(control_id)
       end
 
@@ -51,7 +51,7 @@ module Briar
         idx = index_of_control_with_id control_id
         if idx
           touch("segmentedControl index:#{idx} child segment child segmentLabel marked:'#{segment_id}'")
-          wait_for_animation
+          step_pause
         else
           screenshot_and_raise "could not find segmented control with name #{control_id}"
         end

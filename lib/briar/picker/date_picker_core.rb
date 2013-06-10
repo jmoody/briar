@@ -264,8 +264,8 @@ module Briar
 
 
       def now_times_map
-        utc = Time.utc
-        now = Time.new
+        utc = Time.now.utc
+        now = Time.now
 
         {:h12 => now.strftime(BRIAR_PICKER_12H_TIME_FMT).squeeze(' ').strip,
          :h24 => now.strftime(BRIAR_PICKER_24H_TIME_FMT).squeeze(' ').strip.sub(BRIAR_REMOVE_LEADING_ZERO_REGEX, ''),

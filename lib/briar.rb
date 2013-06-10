@@ -1,9 +1,12 @@
 #$:.unshift File.dirname(__FILE__)
 
 DEVICE_ENDPOINT = (ENV['DEVICE_ENDPOINT'] || 'http://localhost:37265')
-AI = :accessibilityIdentifier
 TOUCH_TRANSITION_TIMEOUT = 30.0
 TOUCH_TRANSITION_RETRY_FREQ = 0.5
+BRIAR_STEP_PAUSE = (ENV['STEP_PAUSE'] || 0.4).to_f
+ANIMATION_PAUSE = (ENV['ANIMATION_PAUSE'] || 0.6).to_f
+AI = :accessibilityIdentifier
+AL = :accessibilityLabel
 
 require 'briar/version'
 require 'briar/gestalt'

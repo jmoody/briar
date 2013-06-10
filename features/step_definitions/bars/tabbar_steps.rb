@@ -23,9 +23,7 @@ Then /I touch (?:the) "([^"]*)" tab$/ do |name|
 end
 
 When /^I touch the "([^"]*)" tab I should see the "([^"]*)" view$/ do |tab_label, view_id|
-  should_see_tabbar
-  touch_tabbar_item tab_label
-  should_see_view_after_animation view_id
+  touch_tabbar_item tab_label, view_id
 end
 
 Then /^I should see "([^"]*)" tabs$/ do |list_of_tabs|

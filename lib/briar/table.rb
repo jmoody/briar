@@ -40,14 +40,14 @@ module Briar
 
     def row_visible? (row_id, table_id = nil)
       query_str = query_str_for_row row_id, table_id
-      !query(query_str, :accessibilityIdentifier).empty?
+      !query(query_str, AI).empty?
 
       #query_str = query_str_row_in_table row_id, table_id
-      #exists = !query(query_str, :accessibilityIdentifier).empty?
+      #exists = !query(query_str, AI).empty?
       ## if row cannot be found just return false
       #return false unless exists
       #
-      #all_rows = query(query_str_rows_in_table(table_id), :accessibilityIdentifier)
+      #all_rows = query(query_str_rows_in_table(table_id), AI)
       #index = all_rows.index(row_id)
       #
       ## problems only happen if we are dealing with the first or last index
@@ -72,7 +72,7 @@ module Briar
 
     def should_see_row (row_id, table_id = nil)
       unless row_visible? row_id, table_id
-        screenshot_and_raise "i do not see a row named #{row_id}"
+        screenshot_and_raise "i do not see a row '#{row_id}'"
       end
     end
 
@@ -186,6 +186,8 @@ module Briar
                  :animate => true,
                  :failed_message => msg}
       scroll_to_row_with_mark row_id, options
+      # you will be tempted to remove this pause - don't
+      # remove the animation instead
       step_pause
     end
 
@@ -216,7 +218,7 @@ module Briar
       query = query_str_for_row row_id, table_id
       if tabbar_visible?
         #puts "tabbar visible"
-        cells = query(query_str_for_rows, :accessibilityIdentifier)
+        cells = query(query_str_for_rows, AI)
         #puts "cells = #{cells} is #{row_id} last? ==> #{cells.last.eql?(row_id)}"
         if cells.last.eql?(row_id)
           row_h = query(query, :frame).first['Height'].to_i
@@ -246,7 +248,7 @@ module Briar
     end
 
     def table_exists? (table_name)
-      !query("tableView marked:'#{table_name}'", :accessibilityIdentifier).empty?
+      !query("tableView marked:'#{table_name}'", AI).empty?
     end
 
     def should_see_table (table_name)
@@ -330,7 +332,7 @@ module Briar
 
     def should_see_row_at_index (row_id, index, table_id=nil)
       query_str = query_str_for_rows table_id
-      res = query(query_str, :accessibilityIdentifier)[index.to_i]
+      res = query(query_str, AI)[index.to_i]
       unless res.eql? row_id
         screenshot_and_raise "i should see '#{row_id}' at #{index} in '#{query_str}', but found #{res}"
       end
@@ -412,7 +414,7 @@ module Briar
 
     def should_see_slider_in_row (slider_id, row_id, table_id)
       query_str = query_str_for_row_content row_id, table_id
-      actual_id = query("#{query_str} slider marked:'#{slider_id}'", :accessibilityIdentifier).first
+      actual_id = query("#{query_str} slider marked:'#{slider_id}'", AI).first
       unless actual_id.eql? row_id
         screenshot_and_raise "expected to see slider '#{slider_id}' in '#{row_id}' but found '#{actual_id}'"
       end

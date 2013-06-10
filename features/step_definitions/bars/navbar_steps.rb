@@ -40,15 +40,7 @@ Then /^I should (not see|see) (?:the|an?) "([^"]*)" button in the navbar$/ do |v
 end
 
 When /^I touch the "([^"]*)" navbar button, then I should see the "([^"]*)" view$/ do |button_name, view_id|
-  idx = index_of_navbar_button button_name
-  if idx
-    touch_transition("navigationButton index:#{idx}",
-                     "view marked:'#{view_id}'",
-                     {:timeout=>TOUCH_TRANSITION_TIMEOUT,
-                      :retry_frequency=>TOUCH_TRANSITION_RETRY_FREQ})
-  else
-    screenshot_and_raise "could not find navbar item '#{button_name}'"
-  end
+  touch_navbar_item_and_wait_for_view button_name, view_id
 end
 
 Then /^I go back after waiting$/ do

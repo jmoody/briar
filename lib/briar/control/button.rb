@@ -24,7 +24,7 @@ module Briar
       end
 
       def button_is_enabled (name)
-        enabled = query("button marked:'#{name}' isEnabled:1", :accessibilityIdentifier).first
+        enabled = query("button marked:'#{name}' isEnabled:1", AI).first
         enabled.eql? name
       end
 
@@ -48,8 +48,24 @@ module Briar
                           :retry_frequency=>TOUCH_TRANSITION_RETRY_FREQ})
       end
 
-      def wait_for_button_with_title (button_id, title)
-        wait_for_view(button_id)
+      def wait_for_button (button_id, timeout=1.0)
+        msg = "waited for '#{timeout}' seconds but did not see button '#{button_id}'"
+        wait_for(:timeout => timeout,
+                 :retry_frequency => 0.2,
+                 :post_timeout => 0.1,
+                 :timeout_message => msg ) do
+          button_exists? button_id
+        end
+      end
+
+      def wait_for_button_with_title (button_id, title, timeout=1.0)
+        msg = "waited for '#{timeout}' seconds but did not see button '#{button_id}' with title '#{title}'"
+        wait_for(:timeout => timeout,
+                 :retry_frequency => 0.2,
+                 :post_timeout => 0.1,
+                 :timeout_message => msg ) do
+          button_exists? button_id
+        end
         should_see_button_with_title(button_id, title)
       end
     end

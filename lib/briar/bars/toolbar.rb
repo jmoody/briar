@@ -20,7 +20,7 @@ module Briar
       #text_button_arr = query("toolbar child toolbarTextButton child button child buttonLabel", :text)
       #has_text_button = text_button_arr.index(name_or_id) != nil
       ## look for non_text button
-      #toolbar_button_arr = query("toolbar child toolbarButton", :accessibilityLabel)
+      #toolbar_button_arr = query("toolbar child toolbarButton", AL)
       #has_toolbar_button = toolbar_button_arr.index(name_or_id) != nil
       #
       #has_text_button or has_toolbar_button
