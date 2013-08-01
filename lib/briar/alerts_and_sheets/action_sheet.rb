@@ -9,7 +9,6 @@ module Briar
       end
     end
 
-
     def sheet_exists? (sheet_id)
       !query(query_str_for_sheet sheet_id).empty?
     end

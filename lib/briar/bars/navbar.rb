@@ -90,16 +90,19 @@ module Briar
     def touch_navbar_item(item_name, wait_for_view_id=nil)
       wait_for(:timeout => 1.0,
                :retry_frequency => 0.4) do
-        index_of_navbar_button(item_name) != nil
+        (index_of_navbar_button(item_name) != nil) || button_exists?(item_name)
       end
       sleep(0.2)
       idx = index_of_navbar_button item_name
+
       if idx
         touch("navigationButton index:#{idx}")
         unless wait_for_view_id.nil?
           wait_for_view wait_for_view_id
         end
         step_pause
+      elsif button_exists? item_name
+        touch_button_and_wait_for_view item_name, wait_for_view_id
       else
         screenshot_and_raise "could not find navbar item '#{item_name}'"
       end

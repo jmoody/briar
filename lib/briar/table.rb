@@ -148,7 +148,6 @@ module Briar
       end
     end
 
-
     def scroll_to_row_with_mark(row_id, options={:query => 'tableView',
                                                  :scroll_position => :middle,
                                                  :animate => true})
@@ -186,7 +185,7 @@ module Briar
                  :animate => true,
                  :failed_message => msg}
       scroll_to_row_with_mark row_id, options
-      # you will be tempted to remove this pause - don't
+      # you will be tempted to remove this pause - don't.
       # remove the animation instead
       step_pause
     end

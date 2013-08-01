@@ -30,5 +30,25 @@ module Briar
         screenshot_and_raise "i expected that i would not see '#{text}' in label named '#{name}'"
       end
     end
+
+    def wait_for_label (label_id, timeout=1.0)
+      msg = "waited for '#{timeout}' seconds but did not see label '#{label_id}'"
+      wait_for(:timeout => timeout,
+               :retry_frequency => 0.2,
+               :post_timeout => 0.1,
+               :timeout_message => msg ) do
+        label_exists? label_id
+      end
+    end
+
+    def touch_label (label_id, wait_for_view_id=nil)
+      wait_for_label label_id
+      touch("label marked:'#{label_id}'")
+      if wait_for_view_id != nil
+        wait_for_view wait_for_view_id
+      else
+        step_pause
+      end
+    end
   end
 end

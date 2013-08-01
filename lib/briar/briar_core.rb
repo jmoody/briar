@@ -53,6 +53,10 @@ module Briar
       touch("view marked:'#{view_id}'")
     end
 
+    def touch_and_wait_for_view(view_id, view_to_wait_for, timeout=1.0)
+      touch_view_named(view_id)
+      wait_for_view(view_to_wait_for, timeout)
+    end
 
     def wait_for_view (view_id, timeout=1.0)
       msg = "waited for '#{timeout}' seconds but did not see '#{view_id}'"
@@ -87,8 +91,17 @@ module Briar
     end
 
     def touch_and_wait_to_disappear(view_id, timeout=1.0)
-      touch("view marked:'#{view_id}'")
+      touch_view_named(view_id)
       wait_for_view_to_disappear view_id, timeout
+    end
+    
+    # backdoor helpers
+    # canonical backdoor command: 'calabash_backdoor_handle_command'
+    # selector key = :selector
+    # args key = :args
+    def send_backdoor_command(command, args=[])
+      json = args.empty? ? "{\":selector\" : \"#{command}\"}" : "{\":selector\" : #{command}, \":args\" : \"#{args}\"}"
+      return backdoor('calabash_backdoor_handle_command:', json)
     end
   end
 end

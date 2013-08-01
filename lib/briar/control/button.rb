@@ -48,6 +48,12 @@ module Briar
                           :retry_frequency=>TOUCH_TRANSITION_RETRY_FREQ})
       end
 
+      def touch_button_and_wait_for_view_to_disappear (button_id, view_id, timeout=1.0)
+        touch_button button_id
+        wait_for_view_to_disappear view_id, timeout
+      end
+
+
       def wait_for_button (button_id, timeout=1.0)
         msg = "waited for '#{timeout}' seconds but did not see button '#{button_id}'"
         wait_for(:timeout => timeout,
