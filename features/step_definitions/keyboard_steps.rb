@@ -30,5 +30,10 @@ Then(/^I turn off spell checking and capitalization$/) do
 end
 
 Then /^I am done text editing$/ do
-  touch_navbar_item 'done text editing'
+  idx = index_of_navbar_button 'done text editing'
+  if idx
+    touch_navbar_item 'done text editing'
+  else
+    touch_button 'done text editing'
+  end
 end
