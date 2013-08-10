@@ -48,6 +48,10 @@ Then /^the (first|second) row should be "([^"]*)"$/ do |idx, row_id|
   should_see_row_at_index row_id, index
 end
 
+Then(/^the (\d+)(?:st|nd|rd|th)? row should be "([^"]*)"$/) do |row_index, row_id|
+  idx = row_index.to_i - 1
+  should_see_row_at_index row_id, idx
+end
 
 Then /^I swipe (left|right) on the "([^"]*)" row$/ do |dir, row_name|
   swipe_on_row dir, row_name

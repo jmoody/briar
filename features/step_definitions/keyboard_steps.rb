@@ -10,7 +10,7 @@ end
 Then /^I use the keyboard to enter "([^"]*)"$/ do |text|
   wait_for_animation
   should_see_keyboard
-  @text_entered_by_keyboard = keyboard_enter_text text
+  @text_entered_by_keyboard = briar_keyboard_enter_text text
 end
 
 When /^I touch the done button the keyboard disappears$/ do

@@ -61,6 +61,10 @@ module Briar
       self.version_hash(self.ios_version)[:major_version]
     end
 
+    def is_ios7?
+      self.version_hash(self.ios_version)[:major_version].eql?('7')
+    end
+
     def is_ios6?
       self.version_hash(self.ios_version)[:major_version].eql?('6')
     end
