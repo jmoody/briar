@@ -6,8 +6,6 @@ require 'bundler'
 Bundler.setup
 require 'cucumber'
 
-#require 'briar'
-
 RSpec.configure do |c|
   c.before do
     ::Cucumber::Term::ANSIColor.coloring = true

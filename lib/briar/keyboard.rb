@@ -38,14 +38,14 @@ module Briar
     end
 
     def briar_keyboard_enter_text (text)
-      if gestalt.is_ios7?
+      if device.ios7?
         pending('keyboard playback is not available on iOS 7')
       end
       @text_entered_by_keyboard = keyboard_enter_text text
     end
 
     def briar_keyboard_set_text (text, view_id, &do_for_each_char)
-      if gestalt.is_ios7?
+      if device.ios7?
         query_str = "view marked:'#{view_id}'"
         accum = ''
         text.chars.to_a.each { |char|
@@ -56,7 +56,7 @@ module Briar
           sleep(0.05)
         }
       else
-        pending 'this is hack for iOS 7 - use briar_keyboard_enter_text'
+        pending 'this is hack for iOS 7 (playback not available yet) - use briar_keyboard_enter_text'
       end
     end
 

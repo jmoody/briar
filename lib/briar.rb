@@ -9,7 +9,6 @@ AI = :accessibilityIdentifier
 AL = :accessibilityLabel
 
 require 'briar/version'
-require 'briar/gestalt'
 require 'briar/briar_core'
 
 require 'briar/alerts_and_sheets/alert_view'
@@ -39,10 +38,31 @@ require 'briar/table'
 require 'briar/text_field'
 require 'briar/text_view'
 
+#noinspection RubyDefParenthesesInspection
+def device ()
+  url = URI.parse(ENV['DEVICE_ENDPOINT']|| 'http://localhost:37265/')
+  http = Net::HTTP.new(url.host, url.port)
+  res = http.start do |sess|
+    sess.request Net::HTTP::Get.new(ENV['CALABASH_VERSION_PATH'] || 'version')
+  end
+  status = res.code
+
+  #noinspection RubyUnusedLocalVariable
+  begin
+    http.finish if http and http.started?
+  rescue Exception => e
+    # ignored
+  end
+
+  if status=='200'
+    version_body = JSON.parse(res.body)
+    Calabash::Cucumber::Device.new(url, version_body)
+  end
+end
+
+#noinspection RubyDefParenthesesInspection
 def gestalt ()
-  uri = URI("#{DEVICE_ENDPOINT}/version")
-  res = Net::HTTP.get(uri)
-  Briar::Gestalt.new(res)
+  pending("deprecated 0.0.8: replaced with Calabash::Cucumber::Device implementation - from now on use use 'device.*'")
 end
 
 

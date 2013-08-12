@@ -12,7 +12,7 @@ module Briar
     end
 
     def email_body_contains? (text)
-      if gestalt.is_ios6?
+      if device.ios6?
         warn 'WARN: iOS6 detected - cannot test for email body text https://groups.google.com/d/topic/calabash-ios/Ff3XFsjp-B0/discussion'
       else
         !query("view:'MFComposeTextContentView' {text LIKE '*#{text}*'}").empty?
@@ -24,7 +24,7 @@ module Briar
     end
 
     def email_subject_is? (text)
-      if gestalt.is_ios6?
+      if device.ios6?
         warn 'WARN: iOS6 detected - cannot test for email subject text https://groups.google.com/d/topic/calabash-ios/Ff3XFsjp-B0/discussion'
       else
         email_subject.eql? text
@@ -32,7 +32,7 @@ module Briar
     end
 
     def email_subject_has_text_like? (text)
-      if gestalt.is_ios6?
+      if device.ios6?
         warn 'WARN: iOS6 detected - cannot test for email subject text https://groups.google.com/d/topic/calabash-ios/Ff3XFsjp-B0/discussion'
       else
         !query("view:'MFComposeSubjectView' {text LIKE '*#{text}*'}").empty?
@@ -44,7 +44,7 @@ module Briar
     end
 
     def email_to_field_is? (text)
-      if gestalt.is_ios6?
+      if device.ios6?
         warn 'WARN: iOS6 detected - cannot test for email to field https://groups.google.com/d/topic/calabash-ios/Ff3XFsjp-B0/discussion'
       else
         email_to.eql? text
@@ -72,11 +72,11 @@ module Briar
     end
 
     def is_ios6_mail_view
-      gestalt.is_ios6?
+      device.ios6?
     end
 
     def should_see_mail_view (timeout=1.0)
-      if gestalt.is_ios6?
+      if device.ios6?
         screenshot_and_raise 'iOS6 detected - cannot test for email viewhttps://groups.google.com/d/topic/calabash-ios/Ff3XFsjp-B0/discussion'
       end
 
@@ -90,12 +90,12 @@ module Briar
     end
 
     def device_can_send_email
-      return true if gestalt.is_simulator?
+      return true if device.simulator?
       backdoor('calabash_backdoor_configured_for_mail:', 'ignorable').eql? 'YES'
     end
 
     def delete_draft_and_wait_for (view_id)
-      if gestalt.is_ios6?
+      if device.ios6?
         warn_about_ios6_email_view
       else
         should_see_mail_view

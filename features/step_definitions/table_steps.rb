@@ -113,7 +113,7 @@ end
 
 Then /^I should see a "([^"]*)" button in the "([^"]*)" row$/ do |button_id, row_id|
   should_see_row row_id
-  arr = query("tableViewCell marked:'#{row_id}' child tableViewCellContentView child button marked:'#{button_id}'", AI)
+  arr = query("tableViewCell marked:'#{row_id}' descendant child tableViewCellContentView child button marked:'#{button_id}'", AI)
   (arr.length == 1)
 end
 

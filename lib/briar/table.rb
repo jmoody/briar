@@ -265,7 +265,7 @@ module Briar
     end
 
     def swipe_on_row (dir, row_id, table_id=nil)
-      if gestalt.is_ios7?
+      if device.ios7?
         pending ('swipe is not available on iOS 7')
       end
       query_str = query_str_for_row row_id, table_id
