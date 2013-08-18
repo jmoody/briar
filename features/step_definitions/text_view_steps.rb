@@ -9,10 +9,6 @@ Then /^I should not see "([^"]*)" text view$/ do |name|
   should_not_see_text_view (name)
 end
 
-def should_see_text_i_
-
-end
-
 Then /^I should see the text I just entered in the "([^"]*)" text view$/ do |text_view_id|
   should_see_text_view text_view_id
   text = query("textView marked:'#{text_view_id}'", :text).first

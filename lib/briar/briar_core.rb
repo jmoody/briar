@@ -1,5 +1,6 @@
 require 'calabash-cucumber'
 
+
 module Briar
   module Core
 
@@ -90,6 +91,7 @@ module Briar
       end
     end
 
+
     def touch_and_wait_to_disappear(view_id, timeout=1.0)
       touch_view_named(view_id)
       wait_for_view_to_disappear view_id, timeout
@@ -100,8 +102,16 @@ module Briar
     # selector key = :selector
     # args key = :args
     def send_backdoor_command(command, args=[])
-      json = args.empty? ? "{\":selector\" : \"#{command}\"}" : "{\":selector\" : #{command}, \":args\" : \"#{args}\"}"
-      return backdoor('calabash_backdoor_handle_command:', json)
+      if args.empty?
+        json = "{\":selector\" : \"#{command}\"}"
+        return backdoor('calabash_backdoor_handle_command:', json)
+      end
+
+      array = args.kind_of?(Array) ? args : [args]
+      json = "{\":selector\" : \"#{command}\", \":args\" : #{array}}"
+      backdoor('calabash_backdoor_handle_command:', json)
     end
   end
 end
+
+

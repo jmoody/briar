@@ -5,9 +5,8 @@ Then /^I should see email body that contains "([^"]*)"$/ do |text|
 end
 
 Then /^I should see email view with body that contains "([^"]*)"$/ do |text|
-  if device.ios6?
+  if !device.ios5?
     warn_about_ios6_email_view
-    puts 'WARN: iOS6 detected - cannot test for email views on iOS simulator or devices'
   else
     wait_for_animation
     unless email_body_contains? text
@@ -24,7 +23,7 @@ Then /^I touch the "([^"]*)" row and wait to see the email view$/ do |row_id|
     should_see_row row_id
     touch("tableViewCell marked:'#{row_id}'")
     wait_for_animation
-    if device.ios6?
+    if !device.ios5?
       warn_about_ios6_email_view
     else
       should_see_mail_view
@@ -35,7 +34,7 @@ Then /^I touch the "([^"]*)" row and wait to see the email view$/ do |row_id|
 end
 
 Then /^I should see email view with "([^"]*)" in the subject$/ do |text|
-  if device.ios6?
+  if !device.ios5?
     warn_about_ios6_email_view
   else
     wait_for_animation
@@ -47,7 +46,7 @@ Then /^I should see email view with "([^"]*)" in the subject$/ do |text|
 end
 
 Then /^I should see email view with recipients? "([^"]*)"$/ do |comma_sep_addrs|
-  if device.ios6?
+  if !device.ios5?
     warn_about_ios6_email_view
   else
     should_see_recipients comma_sep_addrs
@@ -60,7 +59,7 @@ Then /^I should see email view with to field set to "([^"]*)"$/ do |text|
 end
 
 Then /^I should see email view with text like "([^"]*)" in the subject$/ do |text|
-  if device.ios6?
+  if !device.ios5?
     warn_about_ios6_email_view
   else
     should_see_mail_view
@@ -72,7 +71,11 @@ Then /^I should see email view with text like "([^"]*)" in the subject$/ do |tex
 end
 
 When /^I cancel email editing I should see the "([^"]*)" view$/ do |view_id|
-  delete_draft_and_wait_for view_id
+  if device.ios5?
+    delete_draft_and_wait_for view_id
+  else
+    warn_about_ios6_email_view
+  end
 end
 
 Given(/^we are testing on the simulator or a device configured to send emails$/) do
