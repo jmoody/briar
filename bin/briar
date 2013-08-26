@@ -38,6 +38,55 @@ elsif cmd == BRIAR_RM_CAL_TARGETS
     FileUtils.rm_r path
   end
 
+elsif cmd == BRIAR_INSTALL_CALABASH_GEM
+  puts 'will install calabash-cucumber gem'
+  gem_dir = "#{ENV['HOME']}/git/calabash-ios/calabash-cucumber"
+  unless File.exists?(gem_dir)
+    puts "expected gem '#{gem_dir}' - cannot install the calabash-cucumber gem"
+    exit 1
+  end
+  system("cd #{gem_dir}; rake install")
+
+elsif cmd == BRIAR_INSTALL_CALABASH_SERVER
+  puts 'will install calabash-ios server'
+  cal_framework = 'calabash.framework'
+  unless File.exists?(cal_framework)
+    puts "expected '#{cal_framework}' to be in the local directory."
+    puts "run this command in the directory that contins '#{cal_framework}'"
+    exit 1
+  end
+  
+  gem_dir = "#{ENV['HOME']}/git/calabash-ios/calabash-cucumber"
+  unless File.exists?(gem_dir)
+    puts "expected gem '#{gem_dir}' - cannot install the calabash server"
+    exit 1
+  end
+
+  server_dir = "#{ENV['HOME']}/git/calabash-ios-server"
+  unless File.exists?(server_dir)
+    puts "expected calabash-ios server to be in dir '#{server_dir}'"
+    puts "will not be able run '#{gem_dir}/rake build_server'"
+    exit 1
+  end
+
+  version_file = File.read("#{server_dir}/calabash/Classes/FranklyServer/Routes/LPVersionRoute.h")
+  tokens = version_file.split(/define kLPCALABASHVERSION/)
+  line = tokens[1].split("\n").first
+  version = line.tr('^A-Za-z0-9.\-\_', '')
+
+  puts "building calabash server using 'rake build_server'"
+  system("cd #{gem_dir}; rake build_server")
+  puts 'remove old cal simulator targets'
+  system('briar rm-cal-targets')
+  puts 'copying new framework to ./'
+  system("cp #{gem_dir}/staticlib/#{cal_framework}.zip ./")
+  puts 'removing old framework'
+  system("rm -rf #{cal_framework}")
+  puts 'unzipping new framework'
+  system("unzip #{cal_framework}.zip")
+  puts 'cleaning up'
+  system("rm -rf #{cal_framework}.zip")
+  puts "installed new server version '#{version}'"
 else
   print_usage
   exit 1

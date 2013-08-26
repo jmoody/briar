@@ -186,7 +186,7 @@ module Briar
                  :failed_message => msg}
       scroll_to_row_with_mark row_id, options
       # you will be tempted to remove this pause - don't.
-      # remove the animation instead
+      # set :animate => false instead
       step_pause
     end
 
