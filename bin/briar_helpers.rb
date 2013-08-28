@@ -3,6 +3,8 @@ require 'briar'
 BRIAR_RM_CAL_TARGETS='rm-cal-targets'
 BRIAR_INSTALL_CALABASH_GEM='install-calabash-gem'
 BRIAR_INSTALL_CALABASH_SERVER='install-calabash-server'
+BRIAR_INSTALL_GEM='gem'
+
 def print_usage
   puts <<EOF
   briar #{Briar::VERSION}
@@ -14,6 +16,10 @@ def print_usage
     searches the ~/Library/Application Support/iPhone Simulator for *-cal.app
     targets and deletes the enclosing directory.  useful for clearing out old
     calabash targets when the framework needs to be updated.
+
+  briar #{BRIAR_INSTALL_GEM}
+    looks for ~/git/briar and runs 'rake install'. useful for developing and
+    testing the briar gem
 
   briar #{BRIAR_INSTALL_CALABASH_GEM}
     looks for ~/git/calabash-ios/calabash-cucumber directory and runs

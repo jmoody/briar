@@ -130,47 +130,6 @@ module Briar
       end
     end
 
-    #def briar_additions_scroll_to_row_with_id (row_id, table_id=nil)
-    #  warn 'this was included by mistake in the release - do not use it'
-    #  unless table_id.nil?
-    #    should_see_table row_id
-    #  end
-    #
-    #  unless table_has_calabash_additions
-    #    screenshot_and_raise "this method requires a category on UITableView that implements selector 'scrollToRowWithIdentifier:successValue' - use 'scroll_until_i_see_row' instead"
-    #  end
-    #  query_str = query_str_for_table table_id
-    #  res = query(query_str, [{scrollToToRowWithIdentifier: row_id}]).first
-    #
-    #  step_pause
-    #  unless res.eql? row_id
-    #    screenshot_and_raise "should be able to scroll to row with id '#{row_id}' but the row does not exist in '#{query_str}' - server returned '#{res}'"
-    #  end
-    #end
-
-    #def scroll_to_row_with_mark(row_id, options={:query => 'tableView',
-    #                                             :scroll_position => :middle,
-    #                                             :animate => true})
-    #  uiquery = options[:query] || 'tableView'
-    #
-    #  args = []
-    #  if options.has_key?(:scroll_position)
-    #    args << options[:scroll_position]
-    #  else
-    #    args << 'middle'
-    #  end
-    #  if options.has_key?(:animate)
-    #    args << options[:animate]
-    #  end
-    #
-    #  views_touched=map(uiquery, :scrollToRowWithMark, row_id, *args)
-    #
-    #  if views_touched.empty? or views_touched.member? '<VOID>'
-    #    msg = options[:failed_message] || "Unable to scroll: '#{uiquery}' to: #{options}"
-    #    screenshot_and_raise msg
-    #  end
-    #  views_touched
-    #end
 
     def briar_scroll_to_row (row_id, table_id=nil)
       unless table_id.nil?
@@ -241,9 +200,7 @@ module Briar
     def touch_row_and_wait_to_see(row_id, view, table_id = nil)
       should_see_row row_id, table_id
       touch_row row_id, table_id
-      wait_for_transition("view marked:'#{view}'",
-                          {:timeout => TOUCH_TRANSITION_TIMEOUT,
-                           :retry_frequency => TOUCH_TRANSITION_RETRY_FREQ})
+      wait_for_view view, 2.0
     end
 
     def table_exists? (table_name)

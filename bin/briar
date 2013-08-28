@@ -47,6 +47,15 @@ elsif cmd == BRIAR_INSTALL_CALABASH_GEM
   end
   system("cd #{gem_dir}; rake install")
 
+elsif cmd == BRIAR_INSTALL_GEM
+    puts 'will install briar gem'
+  gem_dir = "#{ENV['HOME']}/git/briar"
+  unless File.exists?(gem_dir)
+    puts "expected gem '#{gem_dir}' - cannot install the briar gem"
+    exit 1
+  end
+  system("cd #{gem_dir}; rake install")
+
 elsif cmd == BRIAR_INSTALL_CALABASH_SERVER
   puts 'will install calabash-ios server'
   cal_framework = 'calabash.framework'
