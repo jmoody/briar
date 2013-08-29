@@ -115,14 +115,14 @@ module Briar
       # pickers that use utc (reminders, alerts, etc.  do no usually have
       # min/max dates
       def ensure_can_change_picker_to_date(target_dt, picker_id=nil)
-        max_date = picker_maximum_date_time picker_id
+        max_date = maximum_date_time_from_picker picker_id
         if max_date and target_dt > max_date
           p "target: '#{target_dt}'"
           p "   max: '#{max_date}'"
           screenshot_and_raise "cannot change time to '#{target_dt}' because the picker has a maximum date of '#{max_date}'"
         end
 
-        min_date = picker_minimum_date_time picker_id
+        min_date = minimum_date_time_from_picker picker_id
         if min_date and target_dt < min_date
           p "target: '#{target_dt}'"
           p "   min: '#{min_date}'"

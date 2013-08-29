@@ -25,8 +25,16 @@ module Briar
       include Briar::Picker::DateCore
       include Briar::Picker::DateManipulation
 
-      # requires a time or date change.  picker does not need to be visible
+      def should_see_label_has_time_i_just_entered (label_id)
+        should_see_label label_id
+        query_str = "label marked:'#{label_id}'"
+        actual_text = query(query_str, :text).first
+        unless (actual_text.eql? @date_picker_time_12h) or (actual_text.eql? @date_picker_time_24h)
+          screenshot_and_raise "expected to see '#{@date_picker_time_12h}' or '#{@date_picker_time_24h}' in '#{label_id}' but found '#{actual_text}'"
+        end
+      end
 
+      # requires a time or date change.  picker does not need to be visible
       def should_see_row_has_time_i_just_entered (row_id, label_id, table_id=nil)
         query_str = query_str_for_row row_id, table_id
         arr = query("#{query_str} descendant label marked:'#{label_id}'", :text)
