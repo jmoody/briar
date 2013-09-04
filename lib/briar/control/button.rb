@@ -15,7 +15,7 @@ module Briar
 
       def should_see_button (name)
         unless button_exists? name
-          screenshot_and_raise "i did not see a button with marked #{name}"
+          screenshot_and_raise "i did not see a button with marked '#{name}'"
         end
       end
 
@@ -30,8 +30,8 @@ module Briar
 
       def should_see_button_with_title(name, title)
         should_see_button name
-        if query("button marked:'#{title}' child label", :text).empty?
-          screenshot_and_raise "i do not see a button marked #{name} with title #{title}"
+        if query("button marked:'#{name}' child label", :text).empty?
+          screenshot_and_raise "i do not see a button marked '#{name}' with title '#{title}'"
         end
       end
 
