@@ -4,6 +4,7 @@ require 'find'
 
 
 require File.join(File.dirname(__FILE__), 'briar_helpers')
+require File.join(File.dirname(__FILE__), 'briar_resign')
 
 if ARGV.length == 0
   print_usage
@@ -96,6 +97,10 @@ elsif cmd == BRIAR_INSTALL_CALABASH_SERVER
   puts 'cleaning up'
   system("rm -rf #{cal_framework}.zip")
   puts "installed new server version '#{version}'"
+
+elsif cmd == BRIAR_RESIGN_IPA
+  puts 'will resign'
+  briar_resign(ARGV)
 else
   print_usage
   exit 1

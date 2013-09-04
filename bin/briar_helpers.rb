@@ -4,6 +4,8 @@ BRIAR_RM_CAL_TARGETS='rm-cal-targets'
 BRIAR_INSTALL_CALABASH_GEM='install-calabash-gem'
 BRIAR_INSTALL_CALABASH_SERVER='install-calabash-server'
 BRIAR_INSTALL_GEM='gem'
+BRIAR_RESIGN_IPA='resign'
+
 
 def print_usage
   puts <<EOF
@@ -36,5 +38,7 @@ def print_usage
     'rake rake build_server', removes all *-cal targets from simulator, and
     replaces calabash.framework in local directory.  useful for developing and
     testing the calabash-ios-server.
+
+   briar: #{BRIAR_RESIGN_IPA} (experimental)
 EOF
 end
