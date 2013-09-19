@@ -9,7 +9,7 @@ Then /^I should (see|not see) "([^"]*)" in label "([^"]*)"$/ do |visibility, tex
 end
 
 Then /^I should (see|not see) label "([^"]*)" with text "([^"]*)"$/ do |visibility, name, text|
-  if visibility.eql? "see"
+  if visibility.eql? 'see'
     should_see_label_with_text(name, text)
   else
     should_not_see_label_with_text(name, text)

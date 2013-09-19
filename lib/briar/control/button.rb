@@ -4,8 +4,8 @@ module Briar
   module Control
     module Button
       include Briar::Core
-      def button_exists? (name)
-        res = query("button marked:'#{name}'", :alpha)
+      def button_exists? (button_id)
+        res = query("button marked:'#{button_id}'", :alpha)
         if res.empty?
           false
         else
@@ -13,10 +13,8 @@ module Briar
         end
       end
 
-      def should_see_button (name)
-        unless button_exists? name
-          screenshot_and_raise "i did not see a button with marked '#{name}'"
-        end
+      def should_see_button (button_id)
+        wait_for_button button_id
       end
 
       def should_not_see_button (button_id)
@@ -35,17 +33,16 @@ module Briar
         end
       end
 
-      def touch_button (name)
-        should_see_button name
-        touch("button marked:'#{name}'")
-        step_pause
+      def touch_button (button_id)
+        should_see_button button_id
+        touch("button marked:'#{button_id}'")
       end
 
       def touch_button_and_wait_for_view (button_id, view_id)
-        touch_transition("button marked:'#{button_id}'",
-                         "view marked:'#{view_id}'",
-                         {:timeout=>TOUCH_TRANSITION_TIMEOUT,
-                          :retry_frequency=>TOUCH_TRANSITION_RETRY_FREQ})
+        touch_button(button_id)
+        unless view_id.nil?
+          wait_for_view view_id
+        end
       end
 
       def touch_button_and_wait_for_view_to_disappear (button_id, view_id, timeout=1.0)

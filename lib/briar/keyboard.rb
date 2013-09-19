@@ -109,12 +109,14 @@ module Briar
       end
     end
 
-
-
-    def clear_text(uiquery)
-      text_fields_modified = map(uiquery, :setText, '')
-      screenshot_and_raise "could not find text field #{uiquery}" if text_fields_modified.empty?
-      text_fields_modified
+    def briar_clear_text(view_id)
+      touch("view marked:'#{view_id}'")
+      wait_for_button 'Select All'
+      step_pause
+      touch_button_and_wait_for_view 'Select All', 'Cut'
+      step_pause
+      touch_button 'Cut'
+      step_pause
     end
 
     #def is_capitalize_none (cap_type)

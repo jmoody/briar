@@ -33,6 +33,31 @@ module Briar
       element_exists("view text:'#{text}'")
     end
 
+    def should_see_view_with_frame(view_id, frame)
+      res = query("view marked:'#{view_id}'").first
+      if res.empty?
+        screenshot_and_raise "should see view with id '#{view_id}'"
+      end
+      actual = res['frame']
+      ['x', 'y', 'width', 'height'].each { |key|
+        avalue = actual[key]
+        evalue = frame[key]
+        screenshot_and_raise "#{view_id} should have '#{key}' '#{evalue}' but found '#{avalue}'"
+      }
+    end
+
+    def should_see_view_with_center(view_id, center_ht)
+      res = query("view marked:'#{view_id}'").first
+      if res.nil?
+        screenshot_and_raise "should see view with id '#{view_id}'"
+      end
+
+      actual_ht = {x:res['rect']['center_x'], y:res['rect']['center_y']}
+
+      unless actual_ht == center_ht
+        screenshot_and_raise "#{view_id} has center '#{actual_ht}' but should have center '#{center_ht}'"
+      end
+    end
 
     def should_see_view_after_animation (view_id)
       pending "WARN: deprecated 0.0.8 - use 'wait_for_view #{view_id}' instead"
@@ -51,6 +76,7 @@ module Briar
     end
 
     def touch_view_named(view_id)
+      wait_for_view view_id
       touch("view marked:'#{view_id}'")
     end
 
@@ -91,11 +117,11 @@ module Briar
       end
     end
 
-
     def touch_and_wait_to_disappear(view_id, timeout=1.0)
       touch_view_named(view_id)
       wait_for_view_to_disappear view_id, timeout
     end
+
     
     # backdoor helpers
     # canonical backdoor command: 'calabash_backdoor_handle_command'

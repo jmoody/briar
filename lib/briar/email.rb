@@ -91,7 +91,7 @@ module Briar
 
     def device_can_send_email
       return true if device.simulator?
-      backdoor('calabash_backdoor_configured_for_mail:', 'ignorable').eql? 'YES'
+      backdoor_device_configured_for_mail?
     end
 
     def delete_draft_and_wait_for (view_id)

@@ -200,7 +200,7 @@ module Briar
     def touch_row_and_wait_to_see(row_id, view, table_id = nil)
       should_see_row row_id, table_id
       touch_row row_id, table_id
-      wait_for_view view, 2.0
+      wait_for_view view, 3.0
     end
 
     def table_exists? (table_name)
@@ -222,8 +222,8 @@ module Briar
     end
 
     def swipe_on_row (dir, row_id, table_id=nil)
-      if device.ios7?
-        pending ('swipe is not available on iOS 7')
+      if device.ios7? && dir.eql?('right')
+        dir = 'left'
       end
       query_str = query_str_for_row row_id, table_id
       swipe(dir, {:query => query_str})
@@ -355,10 +355,11 @@ module Briar
     end
 
     def swipe_to_delete_row (row_id, table_id = nil)
-
       swipe_on_row 'left', row_id, table_id
+      step_pause
       should_see_delete_confirmation_in_row row_id, table_id
       touch_delete_confirmation row_id, table_id
+      step_pause
       should_not_see_row row_id, table_id
     end
 

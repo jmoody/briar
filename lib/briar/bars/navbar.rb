@@ -41,17 +41,43 @@ module Briar
       titles.index(name)
     end
 
-    def should_see_navbar_button (name)
-      idx = index_of_navbar_button name
-      if idx.nil?
-        screenshot_and_raise "there should be a navbar button named '#{name}'"
+    def should_see_navbar_button (name, is_ui_button=false)
+      if is_ui_button
+        qstr = "button marked:'#{name}' parent navigationBar"
+        timeout = 1.0
+        msg = "waited for '#{timeout}' seconds but did not see '#{name}' in navigation bar"
+        wait_for(:timeout => timeout,
+                 :retry_frequency => 0.2,
+                 :post_timeout => 0.1,
+                 :timeout_message => msg ) do
+          element_exists qstr
+        end
+      else
+        idx = index_of_navbar_button name
+        if idx.nil?
+          # check to see if it is a ui button
+          should_see_navbar_button(name, true)
+        end
       end
     end
 
-    def should_not_see_navbar_button (name)
-      idx = index_of_navbar_button name
-      unless idx.nil?
-        screenshot_and_raise "i should not see a navbar button named #{name}"
+
+    def should_not_see_navbar_button (name, is_ui_button=false)
+      if is_ui_button
+        qstr = "button marked:'#{name}' parent navigationBar"
+        timeout = 1.0
+        msg = "waited for '#{timeout}' seconds but i still see '#{name}' in navigation bar"
+        wait_for(:timeout => timeout,
+                 :retry_frequency => 0.2,
+                 :post_timeout => 0.1,
+                 :timeout_message => msg ) do
+          element_does_not_exist qstr
+        end
+      else
+        idx = index_of_navbar_button name
+        unless idx.nil?
+          screenshot_and_raise "i should not see a navbar button named #{name}"
+        end
       end
     end
 
@@ -113,15 +139,18 @@ module Briar
       touch_navbar_item item_name, view_id
     end
 
-
     def navbar_has_title? (title)
-      sleep(0.2)
       query('navigationItemView', AL).include?(title)
     end
 
     def should_see_navbar_with_title(title)
-      unless navbar_has_title? title
-        screenshot_and_raise "after waiting, i did not see navbar with title #{title}"
+      timeout = 1.0
+      msg = "waited for '#{timeout}' seconds but i did not see #{title} in navbar"
+      wait_for(:timeout => timeout,
+               :retry_frequency => 0.2,
+               :post_timeout => 0.1,
+               :timeout_message => msg ) do
+        navbar_has_title? title
       end
     end
 

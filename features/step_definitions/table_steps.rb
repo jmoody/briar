@@ -97,9 +97,9 @@ Then /^I move the "([^"]*)" row (up|down) (\d+) times? using the reorder edit co
   should_see_row row_id
   dir_str = (dir.eql?('up')) ? 'drag_row_up' : 'drag_row_down'
   n.to_i.times do (
-  playback(dir_str,
-           {:query => "tableViewCell marked:'#{row_id}' descendant tableViewCellReorderControl"})
-  step_pause)
+    playback(dir_str,
+            {:query => "tableViewCell marked:'#{row_id}' descendant tableViewCellReorderControl"})
+    step_pause)
   end
 end
 

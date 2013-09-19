@@ -1,5 +1,5 @@
 
-When /^I touch (?:the|a) "([^"]*)" button, then I should see the "([^"]*)" view$/ do |button_id, view_id|
+When /^I touch (?:the|a) "([^"]*)" button, (?:then I|I) should see (?:the|a) "([^"]*)" view$/ do |button_id, view_id|
   touch_button_and_wait_for_view button_id, view_id
 end
 
