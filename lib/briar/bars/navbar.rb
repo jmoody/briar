@@ -140,7 +140,11 @@ module Briar
     end
 
     def navbar_has_title? (title)
-      query('navigationItemView', AL).include?(title)
+      al = :accessibilityLabel
+      all_items = query('navigationItemView', al).to_set
+      button_items = query('navigationItemButtonView', al).to_set
+      diff =  all_items - button_items
+      diff.include?(title)
     end
 
     def should_see_navbar_with_title(title)

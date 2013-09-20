@@ -94,6 +94,10 @@ Then /^I should see that the text I just entered is in the "([^"]*)" row "([^"]*
 end
 
 Then /^I move the "([^"]*)" row (up|down) (\d+) times? using the reorder edit control$/ do |row_id, dir, n|
+  if device.ios7?
+    pending 'reordering on iOS 7 (more specifically playback) is not supported'
+  end
+
   should_see_row row_id
   dir_str = (dir.eql?('up')) ? 'drag_row_up' : 'drag_row_down'
   n.to_i.times do (
@@ -113,13 +117,13 @@ end
 
 Then /^I should see a "([^"]*)" button in the "([^"]*)" row$/ do |button_id, row_id|
   should_see_row row_id
-  arr = query("tableViewCell marked:'#{row_id}' descendant child tableViewCellContentView child button marked:'#{button_id}'", AI)
+  arr = query("tableViewCell marked:'#{row_id}' descendant button marked:'#{button_id}'", AI)
   (arr.length == 1)
 end
 
 Then /^I touch the "([^"]*)" button in the "([^"]*)" row$/ do |button_id, row_id|
   should_see_row row_id
-  touch("tableViewCell marked:'#{row_id}' child tableViewCellContentView child button marked:'#{button_id}'")
+  touch("tableViewCell marked:'#{row_id}' descendant button marked:'#{button_id}'")
 end
 
 Then /^I should see a switch for "([^"]*)" in the "([^"]*)" row that is in the "([^"]*)" position$/ do |switch_id, row_id, on_off|

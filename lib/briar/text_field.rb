@@ -1,4 +1,4 @@
-require "calabash-cucumber"
+require 'calabash-cucumber'
 
 module Briar
   module TextField
@@ -22,10 +22,12 @@ module Briar
 
     def button_in_text_field_is_clear? (text_field_id)
       ht = query("textField marked:'#{text_field_id}' child button child imageView", :frame).first
-      if !ht.nil?
-        ht["X"] == 0 and ht["Y"] == 0 and ht["Width"] == 19 and ht["Height"] == 19
+      return false if ht.nil?
+
+      if device.ios7?
+        ht['X'] == 2.5 and ht['Y'] == 2.5 and ht['Width'] == 14 and ht['Height'] == 14
       else
-        false
+        ht['X'] == 0 and ht['Y'] == 0 and ht['Width'] == 19 and ht['Height'] == 19
       end
     end
 
