@@ -12,6 +12,13 @@ module Briar
       sleep(ANIMATION_PAUSE)
     end
 
+    def uia_not_available
+      env('NO_LAUNCH') == '1'
+    end
+
+    def uia_available
+      not uia_not_available
+    end
 
     def view_exists? (view_id)
       !query("view marked:'#{view_id}'").empty?
@@ -94,6 +101,30 @@ module Briar
         view_exists? view_id
       end
     end
+
+
+    def wait_for_custom_view (view_class, view_id, timeout=1.0)
+      msg = "waited for '#{timeout}' seconds but did not see '#{view_id}'"
+      wait_for(:timeout => timeout,
+               :retry_frequency => 0.2,
+               :post_timeout => 0.1,
+               :timeout_message => msg ) do
+        !query("view:'#{view_class}' marked:'#{view_id}'").empty?
+      end
+    end
+
+    def touch_custom_view(view_class, view_id, timeout=1.0)
+      wait_for_custom_view view_class, view_id, timeout
+      touch("view:'#{view_class}' marked:'#{view_id}'")
+    end
+
+
+    def touch_custom_view_and_wait_for_view(view_class, view_id, view_to_wait_for, timeout=1.0)
+      wait_for_custom_view view_class, view_id, timeout
+      touch("view:'#{view_class}' marked:'#{view_id}'")
+      wait_for_view view_to_wait_for, timeout
+    end
+
 
     def wait_for_views(views, timeout=1.0)
       msg = "waited for '#{timeout}' seconds but did not see '#{views}'"

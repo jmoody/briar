@@ -222,8 +222,8 @@ module Briar
     end
 
     def swipe_on_row (dir, row_id, table_id=nil)
-      if device.ios7? && dir.eql?('right')
-        dir = 'left'
+      if device.ios7? and device.simulator?
+        pending('swiping on rows is not available on iOS 7 because of a bug in Xcode 5 simulator')
       end
       query_str = query_str_for_row row_id, table_id
       swipe(dir, {:query => query_str})
@@ -254,7 +254,6 @@ module Briar
 
     def edit_mode_delete_button_exists? (row_id, table_id=nil)
       query_str = query_str_for_row row_id, table_id
-      #!query("all tableViewCell marked:'#{row_id}' child tableViewCellEditControl").empty?
       !query("#{query_str} descendant tableViewCellEditControl").empty?
     end
 
@@ -272,8 +271,6 @@ module Briar
 
     def reorder_button_exists? (row_id, table_id=nil)
       query_str = query_str_for_row row_id, table_id
-      #!query("tableViewCell marked:'#{row_id}' child tableViewCellReorderControl").empty?
-      #!query("all tableViewCell marked:'#{row_id}' child tableViewCellReorderControl").empty?
       !query("#{query_str} descendant tableViewCellReorderControl").empty?
     end
 

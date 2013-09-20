@@ -38,27 +38,24 @@ module Briar
     end
 
     def briar_keyboard_enter_text (text)
-      if device.ios7?
-        pending('keyboard playback is not available on iOS 7')
-      end
       @text_entered_by_keyboard = keyboard_enter_text text
     end
 
-    def briar_keyboard_set_text (text, view_id, &do_for_each_char)
-      unless device.ios7?
-        warn 'this is hack for iOS 7 (playback not available yet) - use briar_keyboard_enter_text'
-      end
-
-      query_str = "view marked:'#{view_id}'"
-      accum = ''
-      text.chars.to_a.each { |char|
-        accum << char
-        query(query_str, {setText:accum})
-        do_for_each_char.call(view_id, accum)
-        @text_entered_by_keyboard = accum
-        sleep(0.05)
-      }
-    end
+    #def briar_keyboard_set_text (text, view_id, &do_for_each_char)
+    #  unless device.ios7?
+    #    warn 'this is hack for iOS 7 (playback not available yet) - use briar_keyboard_enter_text'
+    #  end
+    #
+    #  query_str = "view marked:'#{view_id}'"
+    #  accum = ''
+    #  text.chars.to_a.each { |char|
+    #    accum << char
+    #    query(query_str, {setText:accum})
+    #    do_for_each_char.call(view_id, accum)
+    #    @text_entered_by_keyboard = accum
+    #    sleep(0.05)
+    #  }
+    #end
 
     # is it possible to find what view the keyboard is responding to?
     def autocapitalization_type ()

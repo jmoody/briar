@@ -3,8 +3,8 @@ require 'calabash-cucumber'
 module Briar
   module Email
 
-    def warn_about_ios6_email_view
-      warn 'WARN: iOS6 detected - cannot test for email views on iOS simulator or devices'
+    def warn_about_no_ios5_email_view
+      warn 'WARN: iOS > 5 detected - cannot test for email views on iOS simulator or devices'
     end
 
     def email_body
@@ -12,8 +12,8 @@ module Briar
     end
 
     def email_body_contains? (text)
-      if device.ios6?
-        warn 'WARN: iOS6 detected - cannot test for email body text https://groups.google.com/d/topic/calabash-ios/Ff3XFsjp-B0/discussion'
+      unless device.ios5?
+        warn 'WARN: iOS > 5 detected - cannot test for email body text'
       else
         !query("view:'MFComposeTextContentView' {text LIKE '*#{text}*'}").empty?
       end
@@ -24,16 +24,16 @@ module Briar
     end
 
     def email_subject_is? (text)
-      if device.ios6?
-        warn 'WARN: iOS6 detected - cannot test for email subject text https://groups.google.com/d/topic/calabash-ios/Ff3XFsjp-B0/discussion'
+      unless device.ios5?
+        warn 'WARN: iOS > 5 detected - cannot test for email subject text'
       else
         email_subject.eql? text
       end
     end
 
     def email_subject_has_text_like? (text)
-      if device.ios6?
-        warn 'WARN: iOS6 detected - cannot test for email subject text https://groups.google.com/d/topic/calabash-ios/Ff3XFsjp-B0/discussion'
+      unless device.ios5?
+        warn 'WARN: iOS > 5 detected - cannot test for email subject text'
       else
         !query("view:'MFComposeSubjectView' {text LIKE '*#{text}*'}").empty?
       end
@@ -44,8 +44,8 @@ module Briar
     end
 
     def email_to_field_is? (text)
-      if device.ios6?
-        warn 'WARN: iOS6 detected - cannot test for email to field https://groups.google.com/d/topic/calabash-ios/Ff3XFsjp-B0/discussion'
+      unless device.ios5?
+        warn 'WARN: iOS > 5 detected - cannot test for email to field'
       else
         email_to.eql? text
       end
@@ -72,11 +72,11 @@ module Briar
     end
 
     def is_ios6_mail_view
-      device.ios6?
+      warn 'WARN: deprected 0.0.9'
     end
 
     def should_see_mail_view (timeout=1.0)
-      if device.ios6?
+      unless device.ios5?
         screenshot_and_raise 'iOS6 detected - cannot test for email viewhttps://groups.google.com/d/topic/calabash-ios/Ff3XFsjp-B0/discussion'
       end
 
@@ -95,8 +95,8 @@ module Briar
     end
 
     def delete_draft_and_wait_for (view_id)
-      if device.ios6?
-        warn_about_ios6_email_view
+      unless device.ios5?
+        warn_about_no_ios5_email_view
       else
         should_see_mail_view
         touch_navbar_item 'Cancel'
