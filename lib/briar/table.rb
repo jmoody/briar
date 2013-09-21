@@ -240,15 +240,23 @@ module Briar
     end
 
     def should_see_delete_confirmation_in_row(row_id, table_id=nil)
-      query_str = query_str_for_row row_id, table_id
-      if query("#{query_str} descendant tableViewCellDeleteConfirmationControl").empty?
-        screenshot_and_raise "should see a delete confirmation button on row '#{row_id}'"
+      subview = device.ios7? ? 'tableViewCellDeleteConfirmationButton' : 'tableViewCellDeleteConfirmationControl'
+      query_str = "#{query_str_for_row row_id, table_id} descendant #{subview}"
+      puts "#{query_str}"
+      timeout = 5
+      msg = "waited for '#{timeout}' seconds but did not see 'Delete' confirmation in row '#{row_id}'"
+      wait_for(:timeout => timeout,
+               :retry_frequency => 0.2,
+               :post_timeout => 0.1,
+               :timeout_message => msg ) do
+        element_exists query_str
       end
     end
 
     def touch_delete_confirmation(row_id, table_id=nil)
+      subview = device.ios7? ? 'tableViewCellDeleteConfirmationButton' : 'tableViewCellDeleteConfirmationControl'
       query_str = query_str_for_row row_id, table_id
-      touch("#{query_str} descendant tableViewCellDeleteConfirmationControl")
+      touch("#{query_str} descendant #{subview}")
       step_pause
     end
 
@@ -298,7 +306,6 @@ module Briar
     def touch_edit_mode_delete_button (row_id, table_id=nil)
       should_see_edit_mode_delete_button row_id, table_id
       touch("tableViewCell marked:'#{row_id}' descendant tableViewCellEditControl marked:'Delete '")
-      step_pause
       should_see_delete_confirmation_in_row row_id
     end
 
@@ -342,6 +349,7 @@ module Briar
     def delete_row_with_edit_mode_delete_button (row_id, table_id=nil)
       touch_edit_mode_delete_button row_id, table_id
       touch_delete_confirmation row_id, table_id
+      2.times{ step_pause }
       should_not_see_row row_id, table_id
     end
 
