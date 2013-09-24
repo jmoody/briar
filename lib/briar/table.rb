@@ -239,10 +239,13 @@ module Briar
       end
     end
 
+    def query_str_for_confirm_delete_in_row(row_id, table_id=nil)
+      mark = device.ios7? ? 'Delete' : 'Confirm Deletion'
+      "#{query_str_for_row row_id, table_id} descendant control marked:'#{mark}'"
+    end
+
     def should_see_delete_confirmation_in_row(row_id, table_id=nil)
-      subview = device.ios7? ? 'tableViewCellDeleteConfirmationButton' : 'tableViewCellDeleteConfirmationControl'
-      query_str = "#{query_str_for_row row_id, table_id} descendant #{subview}"
-      puts "#{query_str}"
+      query_str = query_str_for_confirm_delete_in_row(row_id, table_id)
       timeout = 5
       msg = "waited for '#{timeout}' seconds but did not see 'Delete' confirmation in row '#{row_id}'"
       wait_for(:timeout => timeout,
@@ -254,9 +257,8 @@ module Briar
     end
 
     def touch_delete_confirmation(row_id, table_id=nil)
-      subview = device.ios7? ? 'tableViewCellDeleteConfirmationButton' : 'tableViewCellDeleteConfirmationControl'
-      query_str = query_str_for_row row_id, table_id
-      touch("#{query_str} descendant #{subview}")
+      query_str = query_str_for_confirm_delete_in_row(row_id, table_id)
+      touch(query_str)
       step_pause
     end
 
@@ -306,6 +308,7 @@ module Briar
     def touch_edit_mode_delete_button (row_id, table_id=nil)
       should_see_edit_mode_delete_button row_id, table_id
       touch("tableViewCell marked:'#{row_id}' descendant tableViewCellEditControl marked:'Delete '")
+      # this is a wait function - so no step pause is necessary
       should_see_delete_confirmation_in_row row_id
     end
 
@@ -348,6 +351,7 @@ module Briar
 
     def delete_row_with_edit_mode_delete_button (row_id, table_id=nil)
       touch_edit_mode_delete_button row_id, table_id
+      2.times { step_pause }
       touch_delete_confirmation row_id, table_id
       2.times{ step_pause }
       should_not_see_row row_id, table_id

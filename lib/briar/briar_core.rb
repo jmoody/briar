@@ -102,6 +102,15 @@ module Briar
       end
     end
 
+    def wait_for_query(qstr, timeout=1.0)
+      msg = "waited for '#{timeout}' seconds but did not see\n '#{qstr}'"
+      wait_for(:timeout => timeout,
+               :retry_frequency => 0.2,
+               :post_timeout => 0.1,
+               :timeout_message => msg ) do
+        !query(qstr).empty?
+      end
+    end
 
     def wait_for_custom_view (view_class, view_id, timeout=1.0)
       msg = "waited for '#{timeout}' seconds but did not see '#{view_id}'"
