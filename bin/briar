@@ -11,11 +11,91 @@ if ARGV.length == 0
   exit 0
 end
 
+if ARGV.length == 2
+  arg1 = ARGV[0]
+  unless arg1 == BRIAR_CMD_INSTALL
+    print_usage
+    exit 1
+  end
+  allowed =  [BRIAR_INSTALL_GEM, BRIAR_INSTALL_CALABASH_GEM, BRIAR_INSTALL_CALABASH_SERVER]
+  arg2 = ARGV[1]
+  unless allowed.include?(arg2)
+    print_usage
+    exit 1
+  end
+
+  if arg2 == BRIAR_INSTALL_GEM
+
+    puts 'will install briar gem'
+    gem_dir = "#{ENV['HOME']}/git/briar"
+    unless File.exists?(gem_dir)
+      puts "expected gem '#{gem_dir}' - cannot install the briar gem"
+      exit 1
+    end
+    system("cd #{gem_dir}; rake install")
+    exit 0
+  elsif arg2 == BRIAR_INSTALL_CALABASH_GEM
+
+    puts 'will install calabash-cucumber gem'
+    gem_dir = "#{ENV['HOME']}/git/calabash-ios/calabash-cucumber"
+    unless File.exists?(gem_dir)
+      puts "expected gem '#{gem_dir}' - cannot install the calabash-cucumber gem"
+      exit 1
+    end
+    system("cd #{gem_dir}; rake install")
+    exit 0
+  elsif arg2 == BRIAR_INSTALL_CALABASH_SERVER
+
+    puts 'will install calabash-ios server'
+    cal_framework = 'calabash.framework'
+    unless File.exists?(cal_framework)
+      puts "expected '#{cal_framework}' to be in the local directory."
+      puts "run this command in the directory that contins '#{cal_framework}'"
+      exit 1
+    end
+
+    gem_dir = "#{ENV['HOME']}/git/calabash-ios/calabash-cucumber"
+    unless File.exists?(gem_dir)
+      puts "expected gem '#{gem_dir}' - cannot install the calabash server"
+      exit 1
+    end
+
+    server_dir = "#{ENV['HOME']}/git/calabash-ios-server"
+    unless File.exists?(server_dir)
+      puts "expected calabash-ios server to be in dir '#{server_dir}'"
+      puts "will not be able run '#{gem_dir}/rake build_server'"
+      exit 1
+    end
+
+    version_file = File.read("#{server_dir}/calabash/Classes/FranklyServer/Routes/LPVersionRoute.h")
+    tokens = version_file.split(/define kLPCALABASHVERSION/)
+    line = tokens[1].split("\n").first
+    version = line.tr('^A-Za-z0-9.\-\_', '')
+
+    puts "building calabash server using 'rake build_server'"
+    system("cd #{gem_dir}; rake build_server")
+    puts 'remove old cal simulator targets'
+    system('briar rm-cal-targets')
+    puts 'copying new framework to ./'
+    system("cp #{gem_dir}/staticlib/#{cal_framework}.zip ./")
+    puts 'removing old framework'
+    system("rm -rf #{cal_framework}")
+    puts 'unzipping new framework'
+    system("unzip #{cal_framework}.zip")
+    puts 'cleaning up'
+    system("rm -rf #{cal_framework}.zip")
+    puts "installed new server version '#{version}'"
+
+    exit 0
+  end
+  puts 'fell through install conditional'
+  exit 1
+end
+
 cmd = ARGV.shift
 if cmd == 'help'
   print_usage
   exit 0
-
 elsif cmd == BRIAR_VERSION_CMD
   puts "#{Briar::VERSION}"
 elsif cmd == BRIAR_RM_CAL_TARGETS
@@ -43,67 +123,18 @@ elsif cmd == BRIAR_RM_CAL_TARGETS
   end
 
 elsif cmd == BRIAR_INSTALL_CALABASH_GEM
-  puts 'will install calabash-cucumber gem'
-  gem_dir = "#{ENV['HOME']}/git/calabash-ios/calabash-cucumber"
-  unless File.exists?(gem_dir)
-    puts "expected gem '#{gem_dir}' - cannot install the calabash-cucumber gem"
-    exit 1
-  end
-  system("cd #{gem_dir}; rake install")
-
-elsif cmd == BRIAR_INSTALL_GEM
-    puts 'will install briar gem'
-  gem_dir = "#{ENV['HOME']}/git/briar"
-  unless File.exists?(gem_dir)
-    puts "expected gem '#{gem_dir}' - cannot install the briar gem"
-    exit 1
-  end
-  system("cd #{gem_dir}; rake install")
-
+  puts "use 'briar install calabash-gem'"
+  exit 1
+elsif cmsd == BRIAR_INSTALL_GEM
+  puts "use 'briar install gem'"
+  exit 1
 elsif cmd == BRIAR_INSTALL_CALABASH_SERVER
-  puts 'will install calabash-ios server'
-  cal_framework = 'calabash.framework'
-  unless File.exists?(cal_framework)
-    puts "expected '#{cal_framework}' to be in the local directory."
-    puts "run this command in the directory that contins '#{cal_framework}'"
-    exit 1
-  end
-  
-  gem_dir = "#{ENV['HOME']}/git/calabash-ios/calabash-cucumber"
-  unless File.exists?(gem_dir)
-    puts "expected gem '#{gem_dir}' - cannot install the calabash server"
-    exit 1
-  end
-
-  server_dir = "#{ENV['HOME']}/git/calabash-ios-server"
-  unless File.exists?(server_dir)
-    puts "expected calabash-ios server to be in dir '#{server_dir}'"
-    puts "will not be able run '#{gem_dir}/rake build_server'"
-    exit 1
-  end
-
-  version_file = File.read("#{server_dir}/calabash/Classes/FranklyServer/Routes/LPVersionRoute.h")
-  tokens = version_file.split(/define kLPCALABASHVERSION/)
-  line = tokens[1].split("\n").first
-  version = line.tr('^A-Za-z0-9.\-\_', '')
-
-  puts "building calabash server using 'rake build_server'"
-  system("cd #{gem_dir}; rake build_server")
-  puts 'remove old cal simulator targets'
-  system('briar rm-cal-targets')
-  puts 'copying new framework to ./'
-  system("cp #{gem_dir}/staticlib/#{cal_framework}.zip ./")
-  puts 'removing old framework'
-  system("rm -rf #{cal_framework}")
-  puts 'unzipping new framework'
-  system("unzip #{cal_framework}.zip")
-  puts 'cleaning up'
-  system("rm -rf #{cal_framework}.zip")
-  puts "installed new server version '#{version}'"
-
+  puts "use 'briar install calabash-server'"
+  exit 1
 elsif cmd == BRIAR_RESIGN_IPA
   puts 'will resign'
   briar_resign(ARGV)
+  exit 0
 else
   print_usage
   exit 1
