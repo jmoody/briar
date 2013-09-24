@@ -5,11 +5,15 @@ BRIAR_INSTALL_CALABASH_GEM='install-calabash-gem'
 BRIAR_INSTALL_CALABASH_SERVER='install-calabash-server'
 BRIAR_INSTALL_GEM='gem'
 BRIAR_RESIGN_IPA='resign'
+BRIAR_VERSION_CMD='version'
 
 
 def print_usage
   puts <<EOF
   briar #{Briar::VERSION}
+
+  briar #{BRIAR_VERSION_CMD}
+    print the current briar version
 
   briar #{BRIAR_RM_CAL_TARGETS}
     WARN: this is a destructive operation!

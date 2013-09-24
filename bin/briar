@@ -15,6 +15,9 @@ cmd = ARGV.shift
 if cmd == 'help'
   print_usage
   exit 0
+
+elsif cmd == BRIAR_VERSION_CMD
+  puts "#{Briar::VERSION}"
 elsif cmd == BRIAR_RM_CAL_TARGETS
   puts 'quiting the simulator'
   `/usr/bin/osascript -e 'tell application "iPhone Simulator" to quit'`
