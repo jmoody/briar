@@ -15,9 +15,8 @@ Gem::Specification.new do |gem|
   gem.license       = 'MIT'
 
   #gem.add_runtime_dependency 'calabash-cucumber'
-  gem.add_runtime_dependency 'calabash-cucumber', '0.9.157'
-  gem.add_runtime_dependency 'rake', '10.1.0'
-  gem.add_runtime_dependency 'lesspainful'
+  gem.add_runtime_dependency 'calabash-cucumber', '0.9.158'
+  gem.add_runtime_dependency 'rake'
   gem.add_runtime_dependency 'syntax' 
   gem.add_runtime_dependency 'rspec'
 
