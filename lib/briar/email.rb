@@ -3,6 +3,15 @@ require 'calabash-cucumber'
 module Briar
   module Email
 
+    def email_testable?
+      return true if device.ios5?
+      uia_available?
+    end
+
+    def email_not_testable?
+      not email_testable?()
+    end
+
     def warn_about_no_ios5_email_view
       warn 'WARN: iOS > 5 detected - cannot test for email views on iOS simulator or devices'
     end
@@ -12,10 +21,10 @@ module Briar
     end
 
     def email_body_contains? (text)
-      unless device.ios5?
-        warn 'WARN: iOS > 5 detected - cannot test for email body text'
-      else
+      if device.ios5?
         !query("view:'MFComposeTextContentView' {text LIKE '*#{text}*'}").empty?
+      else
+        warn 'WARN: iOS > 5 detected - cannot test for email body text'
       end
     end
 
@@ -24,18 +33,18 @@ module Briar
     end
 
     def email_subject_is? (text)
-      unless device.ios5?
-        warn 'WARN: iOS > 5 detected - cannot test for email subject text'
-      else
+      if device.ios5?
         email_subject.eql? text
+      else
+        warn 'WARN: iOS > 5 detected - cannot test for email subject text'
       end
     end
 
     def email_subject_has_text_like? (text)
-      unless device.ios5?
-        warn 'WARN: iOS > 5 detected - cannot test for email subject text'
-      else
+      if device.ios5?
         !query("view:'MFComposeSubjectView' {text LIKE '*#{text}*'}").empty?
+      else
+        warn 'WARN: iOS > 5 detected - cannot test for email subject text'
       end
     end
 
@@ -44,10 +53,10 @@ module Briar
     end
 
     def email_to_field_is? (text)
-      unless device.ios5?
-        warn 'WARN: iOS > 5 detected - cannot test for email to field'
-      else
+      if device.ios5?
         email_to.eql? text
+      else
+        warn 'WARN: iOS > 5 detected - cannot test for email to field'
       end
     end
 
@@ -75,17 +84,23 @@ module Briar
       warn 'WARN: deprected 0.0.9'
     end
 
-    def should_see_mail_view (timeout=1.0)
-      unless device.ios5?
-        screenshot_and_raise 'iOS6 detected - cannot test for email viewhttps://groups.google.com/d/topic/calabash-ios/Ff3XFsjp-B0/discussion'
+    def should_see_mail_view (timeout=BRIAR_WAIT_TIMEOUT)
+      if email_not_testable?
+        warn_about_no_ios5_email_view
+        return
       end
 
       msg = "waited for '#{timeout}' seconds but did not see email compose view"
+      dev = device()
       wait_for(:timeout => timeout,
                :retry_frequency => 0.2,
                :post_timeout => 0.1,
                :timeout_message => msg ) do
-        is_ios5_mail_view
+        if dev.ios5?
+          is_ios5_mail_view
+        else
+          view_exists? 'compose email'
+        end
       end
     end
 
@@ -95,17 +110,32 @@ module Briar
     end
 
     def delete_draft_and_wait_for (view_id)
-      unless device.ios5?
+      if email_not_testable?
         warn_about_no_ios5_email_view
-      else
-        should_see_mail_view
-        touch_navbar_item 'Cancel'
-        wait_for_animation
-        touch_transition("button marked:'Delete Draft'",
-                         "view marked:'#{view_id}'",
-                         {:timeout=>TOUCH_TRANSITION_TIMEOUT,
-                          :retry_frequency=>TOUCH_TRANSITION_RETRY_FREQ})
+        return
       end
+
+      should_see_mail_view
+
+      if device.ios5?
+        touch_navbar_item_and_wait_for_view 'Cancel', 'Delete Draft'
+        step_pause
+        touch_sheet_button_and_wait_for_view 'Delete Draft', view_id
+      else
+        uia_tap_mark 'Cancel'
+        timeout = BRIAR_WAIT_TIMEOUT
+        msg = "waited for '#{timeout}' seconds but did not see dismiss email action sheet"
+        wait_for(:timeout => timeout,
+                 :retry_frequency => 0.2,
+                 :post_timeout => 0.1,
+                 :timeout_message => msg ) do
+          view_exists? 'Delete Draft'
+        end
+        step_pause
+        touch("view marked:'Delete Draft'")
+        wait_for_view_to_disappear 'compose email'
+      end
+      step_pause
     end
   end
 end

@@ -17,7 +17,7 @@ module Briar
 
     @text_entered_by_keyboard = ''
 
-    def should_see_keyboard (timeout=1.0)
+    def should_see_keyboard (timeout=BRIAR_WAIT_TIMEOUT)
       msg = "waited for '#{timeout}' seconds but did not see keyboard"
       wait_for(:timeout => timeout,
                :retry_frequency => 0.2,
@@ -27,7 +27,7 @@ module Briar
       end
     end
 
-    def should_not_see_keyboard (timeout=1.0)
+    def should_not_see_keyboard (timeout=BRIAR_WAIT_TIMEOUT)
       msg = "waited for '#{timeout}' seconds but keyboard did not disappear"
       wait_for(:timeout => timeout,
                :retry_frequency => 0.2,

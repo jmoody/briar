@@ -48,7 +48,11 @@ module Briar
     end
 
     def touch_alert_button(button_title)
-      touch("alertView child button marked:'#{button_title}'")
+      if device.ios7?
+        touch("view marked:'#{button_title}'")
+      else
+        touch("alertView child button marked:'#{button_title}'")
+      end
       step_pause
     end
   end

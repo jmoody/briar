@@ -87,12 +87,12 @@ module Briar
       touch("view marked:'#{view_id}'")
     end
 
-    def touch_and_wait_for_view(view_id, view_to_wait_for, timeout=1.0)
+    def touch_and_wait_for_view(view_id, view_to_wait_for, timeout=BRIAR_WAIT_TIMEOUT)
       touch_view_named(view_id)
       wait_for_view(view_to_wait_for, timeout)
     end
 
-    def wait_for_view (view_id, timeout=1.0)
+    def wait_for_view (view_id, timeout=BRIAR_WAIT_TIMEOUT)
       msg = "waited for '#{timeout}' seconds but did not see '#{view_id}'"
       wait_for(:timeout => timeout,
                :retry_frequency => 0.2,
@@ -102,7 +102,7 @@ module Briar
       end
     end
 
-    def wait_for_query(qstr, timeout=1.0)
+    def wait_for_query(qstr, timeout=BRIAR_WAIT_TIMEOUT)
       msg = "waited for '#{timeout}' seconds but did not see\n '#{qstr}'"
       wait_for(:timeout => timeout,
                :retry_frequency => 0.2,
@@ -112,7 +112,7 @@ module Briar
       end
     end
 
-    def wait_for_custom_view (view_class, view_id, timeout=1.0)
+    def wait_for_custom_view (view_class, view_id, timeout=BRIAR_WAIT_TIMEOUT)
       msg = "waited for '#{timeout}' seconds but did not see '#{view_id}'"
       wait_for(:timeout => timeout,
                :retry_frequency => 0.2,
@@ -122,20 +122,20 @@ module Briar
       end
     end
 
-    def touch_custom_view(view_class, view_id, timeout=1.0)
+    def touch_custom_view(view_class, view_id, timeout=BRIAR_WAIT_TIMEOUT)
       wait_for_custom_view view_class, view_id, timeout
       touch("view:'#{view_class}' marked:'#{view_id}'")
     end
 
 
-    def touch_custom_view_and_wait_for_view(view_class, view_id, view_to_wait_for, timeout=1.0)
+    def touch_custom_view_and_wait_for_view(view_class, view_id, view_to_wait_for, timeout=BRIAR_WAIT_TIMEOUT)
       wait_for_custom_view view_class, view_id, timeout
       touch("view:'#{view_class}' marked:'#{view_id}'")
       wait_for_view view_to_wait_for, timeout
     end
 
 
-    def wait_for_views(views, timeout=1.0)
+    def wait_for_views(views, timeout=BRIAR_WAIT_TIMEOUT)
       msg = "waited for '#{timeout}' seconds but did not see '#{views}'"
       options = {:timeout => timeout,
                  :retry_frequency => 0.2,
@@ -146,7 +146,7 @@ module Briar
       end
     end
 
-    def wait_for_view_to_disappear(view_id, timeout=1.0)
+    def wait_for_view_to_disappear(view_id, timeout=BRIAR_WAIT_TIMEOUT)
       msg = "waited for '#{timeout}' seconds for '#{view_id}' to disappear but it is still visible"
       options = {:timeout => timeout,
                  :retry_frequency => 0.2,
@@ -157,7 +157,7 @@ module Briar
       end
     end
 
-    def touch_and_wait_to_disappear(view_id, timeout=1.0)
+    def touch_and_wait_to_disappear(view_id, timeout=BRIAR_WAIT_TIMEOUT)
       touch_view_named(view_id)
       wait_for_view_to_disappear view_id, timeout
     end

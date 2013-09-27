@@ -45,13 +45,13 @@ module Briar
         end
       end
 
-      def touch_button_and_wait_for_view_to_disappear (button_id, view_id, timeout=1.0)
+      def touch_button_and_wait_for_view_to_disappear (button_id, view_id, timeout=BRIAR_WAIT_TIMEOUT)
         touch_button button_id
         wait_for_view_to_disappear view_id, timeout
       end
 
 
-      def wait_for_button (button_id, timeout=1.0)
+      def wait_for_button (button_id, timeout=BRIAR_WAIT_TIMEOUT)
         msg = "waited for '#{timeout}' seconds but did not see button '#{button_id}'"
         wait_for(:timeout => timeout,
                  :retry_frequency => 0.2,
@@ -61,7 +61,7 @@ module Briar
         end
       end
 
-      def wait_for_button_with_title (button_id, title, timeout=1.0)
+      def wait_for_button_with_title (button_id, title, timeout=BRIAR_WAIT_TIMEOUT)
         msg = "waited for '#{timeout}' seconds but did not see button '#{button_id}' with title '#{title}'"
         wait_for(:timeout => timeout,
                  :retry_frequency => 0.2,

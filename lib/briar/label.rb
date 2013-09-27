@@ -29,7 +29,7 @@ module Briar
       end
     end
 
-    def wait_for_label (label_id, timeout=1.0)
+    def wait_for_label (label_id, timeout=BRIAR_WAIT_TIMEOUT)
       msg = "waited for '#{timeout}' seconds but did not see label '#{label_id}'"
       wait_for(:timeout => timeout,
                :retry_frequency => 0.2,

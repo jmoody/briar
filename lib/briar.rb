@@ -4,8 +4,11 @@ DEVICE_ENDPOINT = (ENV['DEVICE_ENDPOINT'] || 'http://localhost:37265')
 TOUCH_TRANSITION_TIMEOUT = 30.0
 TOUCH_TRANSITION_RETRY_FREQ = 0.5
 BRIAR_STEP_PAUSE = (ENV['STEP_PAUSE'] || 0.5).to_f
+BRIAR_WAIT_TIMEOUT = (ENV['WAIT_TIMEOUT'] || 2.0).to_f
 ANIMATION_PAUSE = (ENV['ANIMATION_PAUSE'] || 0.6).to_f
+#noinspection RubyConstantNamingConvention
 AI = :accessibilityIdentifier
+#noinspection RubyConstantNamingConvention
 AL = :accessibilityLabel
 
 require 'briar/version'
@@ -58,6 +61,12 @@ def device ()
     version_body = JSON.parse(res.body)
     Calabash::Cucumber::Device.new(url, version_body)
   end
+end
+
+def uia_available?
+  launcher = Calabash::Cucumber::Launcher.launcher
+  return false if launcher.nil?
+  launcher.active?
 end
 
 #noinspection RubyDefParenthesesInspection
