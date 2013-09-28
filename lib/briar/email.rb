@@ -13,7 +13,7 @@ module Briar
     end
 
     def warn_about_no_ios5_email_view
-      warn 'WARN: iOS > 5 detected - cannot test for email views on iOS simulator or devices'
+      warn 'WARN: iOS > 5 detected - cannot test for email views on iOS simulator or devices unless we use UIAutomation'
     end
 
     def email_body
@@ -115,24 +115,47 @@ module Briar
         return
       end
 
+      # does a wait for iOS > 5 + uia available
       should_see_mail_view
+
+      device = device()
 
       if device.ios5?
         touch_navbar_item_and_wait_for_view 'Cancel', 'Delete Draft'
         step_pause
         touch_sheet_button_and_wait_for_view 'Delete Draft', view_id
       else
-        uia_tap_mark 'Cancel'
-        timeout = BRIAR_WAIT_TIMEOUT
-        msg = "waited for '#{timeout}' seconds but did not see dismiss email action sheet"
+        sbo = status_bar_orientation.to_sym
+
+        if sbo.eql?(:left) or sbo.eql?(:right)
+          pending "iOS > 5 detected AND orientation '#{sbo}' - there is a bug in UIAutomation that prohibits touching the cancel button"
+        end
+
+        # might also occur on devices, but i don't know
+        if sbo.eql?(:up) and device.ipad? and device.simulator?
+          pending "iOS > 5 detected AND orientation '#{sbo}' AND simulator - there is a bug in UIAutomation prohibits touching the cancel button"
+        end
+
+        timeout = BRIAR_WAIT_TIMEOUT * 2
+        msg = "waited for '#{timeout}' seconds but did not see cancel button"
         wait_for(:timeout => timeout,
-                 :retry_frequency => 0.2,
+                 :retry_frequency => 1.1,
                  :post_timeout => 0.1,
                  :timeout_message => msg ) do
-          view_exists? 'Delete Draft'
+          uia_element_exists?(:view, marked:'Cancel')
         end
-        step_pause
-        touch("view marked:'Delete Draft'")
+
+        uia_tap_mark('Cancel')
+        msg = "waited for '#{timeout}' seconds but did not see dismiss email action sheet"
+        wait_for(:timeout => timeout,
+                 :retry_frequency => 1.1,
+                 :post_timeout => 0.1,
+                 :timeout_message => msg ) do
+          uia_element_exists?(:view, marked:'Delete Draft')
+        end
+
+        uia_tap_mark('Delete Draft')
+
         wait_for_view_to_disappear 'compose email'
       end
       step_pause
