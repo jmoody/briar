@@ -20,6 +20,7 @@ end
 
 Then /^I touch (?:the) "([^"]*)" row and wait for (?:the) "([^"]*)" view to appear$/ do |row_id, view_id|
   wait_for_row row_id
+  step_pause
   touch_row_and_wait_to_see row_id, view_id
 end
 
@@ -155,5 +156,20 @@ end
 
 Then /^I should see that the "([^"]*)" row has image "([^"]*)"$/ do |row_id, image_id|
   should_see_row_with_image row_id, image_id
+end
+
+
+Then(/^I should see that the "([^"]*)" row has no text in the "([^"]*)" label$/) do |row_id, label_id|
+  wait_for_row row_id
+  qstr = "#{query_str_for_row_content row_id} label marked:'#{label_id}'"
+  res = query(qstr, :text)
+  if res.empty?
+    screenshot_and_raise "expected to see row '#{row_id}' with label '#{label_id}'"
+  end
+
+  text = res.first
+  unless text.nil? or text.eql?('')
+    screenshot_and_raise "expected to see no text in row '#{row_id}' in label '#{label_id}' but found '#{text}'"
+  end
 end
 

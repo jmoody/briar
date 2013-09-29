@@ -23,8 +23,13 @@ module Briar
     end
 
     def should_see_navbar_back_button
-      unless navbar_has_back_button?
-        screenshot_and_raise 'there is no navigation bar back button'
+      timeout = BRIAR_WAIT_TIMEOUT * 2.0
+      msg = "waited for '#{timeout}' seconds but did not see navbar back button"
+      wait_for(:timeout => timeout,
+               :retry_frequency => 0.2,
+               :post_timeout => 0.1,
+               :timeout_message => msg ) do
+        navbar_has_back_button?
       end
     end
 
@@ -44,7 +49,7 @@ module Briar
     def should_see_navbar_button (name, is_ui_button=false)
       if is_ui_button
         qstr = "button marked:'#{name}' parent navigationBar"
-        timeout = 1.0
+        timeout = BRIAR_WAIT_TIMEOUT
         msg = "waited for '#{timeout}' seconds but did not see '#{name}' in navigation bar"
         wait_for(:timeout => timeout,
                  :retry_frequency => 0.2,

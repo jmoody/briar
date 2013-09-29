@@ -38,7 +38,10 @@ module Briar
     end
 
     def briar_keyboard_enter_text (text)
-      @text_entered_by_keyboard = keyboard_enter_text text
+      keyboard_enter_text text
+      # not ideal, but entering text by uia keyboard will never return what
+      # was text was actually input to the keyboard
+      @text_entered_by_keyboard = text
     end
 
     #def briar_keyboard_set_text (text, view_id, &do_for_each_char)

@@ -71,11 +71,8 @@ module Briar
     end
 
     def should_see_row (row_id, table_id = nil)
-      unless row_visible? row_id, table_id
-        screenshot_and_raise "i do not see a row '#{row_id}'"
-      end
+      wait_for_row(row_id, {:table_id => table_id})
     end
-
 
     def should_not_see_row(row_id, table_id=nil)
       if row_visible? row_id, table_id
@@ -84,10 +81,10 @@ module Briar
     end
 
     def wait_for_row(row_id, options={:table_id => nil,
-                                      :timeout => 1.0})
+                                      :timeout => BRIAR_WAIT_TIMEOUT})
       table_id = options[:table_id]
       query_str = query_str_for_row row_id, table_id
-      timeout = options[:timeout] || 1.0
+      timeout = options[:timeout] || BRIAR_WAIT_TIMEOUT
       msg = "waited for '#{timeout}' seconds but did not see row '#{query_str}' with query '#{query_str}'"
       wait_for(:timeout => timeout,
                :retry_frequency => 0.2,
@@ -189,6 +186,7 @@ module Briar
 
     def touch_row (row_id, table_id = nil)
       should_see_row row_id
+      step_pause
       offset = touch_row_offset_hash row_id, table_id
       query_str = query_str_for_row(row_id, table_id)
       #puts "touch(\"#{query_str}\", :offset => #{offset})"
@@ -225,6 +223,7 @@ module Briar
       if device.ios7? and device.simulator?
         pending('swiping on rows is not available on iOS 7 because of a bug in Xcode 5 simulator')
       end
+      wait_for_row row_id, {:table_id => table_id}
       query_str = query_str_for_row row_id, table_id
       swipe(dir, {:query => query_str})
       step_pause
@@ -365,6 +364,7 @@ module Briar
     end
 
     def swipe_to_delete_row (row_id, table_id = nil)
+      step_pause
       swipe_on_row 'left', row_id, table_id
       step_pause
       should_see_delete_confirmation_in_row row_id, table_id

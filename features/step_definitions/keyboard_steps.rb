@@ -36,4 +36,5 @@ Then /^I am done text editing$/ do
   else
     touch_button 'done text editing'
   end
+  2.times { step_pause }
 end
