@@ -145,15 +145,13 @@ module Briar
     end
 
     def navbar_has_title? (title)
-      al = :accessibilityLabel
-      all_items = query('navigationItemView', al).to_set
-      button_items = query('navigationItemButtonView', al).to_set
-      diff =  all_items - button_items
-      diff.include?(title)
+      all_items = query("navigationItemView marked:'#{title}'")
+      button_items = query('navigationItemButtonView')
+      non_button_items = all_items.delete_if { |item| button_items.include?(item) }
+      !non_button_items.empty?
     end
 
-    def should_see_navbar_with_title(title)
-      timeout = 1.0
+    def should_see_navbar_with_title(title, timeout=BRIAR_WAIT_TIMEOUT)
       msg = "waited for '#{timeout}' seconds but i did not see #{title} in navbar"
       wait_for(:timeout => timeout,
                :retry_frequency => 0.2,
