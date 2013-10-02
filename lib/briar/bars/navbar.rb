@@ -28,7 +28,7 @@ module Briar
       wait_for(:timeout => timeout,
                :retry_frequency => 0.2,
                :post_timeout => 0.1,
-               :timeout_message => msg ) do
+               :timeout_message => msg) do
         navbar_has_back_button?
       end
     end
@@ -54,7 +54,7 @@ module Briar
         wait_for(:timeout => timeout,
                  :retry_frequency => 0.2,
                  :post_timeout => 0.1,
-                 :timeout_message => msg ) do
+                 :timeout_message => msg) do
           element_exists qstr
         end
       else
@@ -75,7 +75,7 @@ module Briar
         wait_for(:timeout => timeout,
                  :retry_frequency => 0.2,
                  :post_timeout => 0.1,
-                 :timeout_message => msg ) do
+                 :timeout_message => msg) do
           element_does_not_exist qstr
         end
       else
@@ -113,8 +113,8 @@ module Briar
 
       touch_transition('navigationItemButtonView first',
                        "view marked:'#{view}'",
-                       {:timeout=>TOUCH_TRANSITION_TIMEOUT,
-                        :retry_frequency=>TOUCH_TRANSITION_RETRY_FREQ})
+                       {:timeout => TOUCH_TRANSITION_TIMEOUT,
+                        :retry_frequency => TOUCH_TRANSITION_RETRY_FREQ})
       step_pause
     end
 
@@ -156,7 +156,7 @@ module Briar
       wait_for(:timeout => timeout,
                :retry_frequency => 0.2,
                :post_timeout => 0.1,
-               :timeout_message => msg ) do
+               :timeout_message => msg) do
         navbar_has_title? title
       end
     end

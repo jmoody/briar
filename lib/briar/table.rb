@@ -1,6 +1,5 @@
-#require 'calabash-cucumber'
-
 module Briar
+  #noinspection ALL
   module Table
 
     def query_str_for_row_content (row_id, table_id = nil)
@@ -89,7 +88,7 @@ module Briar
       wait_for(:timeout => timeout,
                :retry_frequency => 0.2,
                :post_timeout => 0.1,
-               :timeout_message => msg ) do
+               :timeout_message => msg) do
         row_visible? row_id, table_id
       end
     end
@@ -114,6 +113,21 @@ module Briar
         screenshot_and_raise "expected to see row '#{row_id}' with label '#{label_id}' that has text '#{text}', but found '#{actual}'"
       end
     end
+
+    def should_see_row_with_label_that_has_no_text(row_id, label_id)
+      wait_for_row row_id
+      qstr = "#{query_str_for_row_content row_id} label marked:'#{label_id}'"
+      res = query(qstr, :text)
+      if res.empty?
+        screenshot_and_raise "expected to see row '#{row_id}' with label '#{label_id}'"
+      end
+
+      text = res.first
+      unless text.nil? or text.eql?('')
+        screenshot_and_raise "expected to see no text in row '#{row_id}' in label '#{label_id}' but found '#{text}'"
+      end
+    end
+
 
     def should_see_row_with_image (row_id, image_id, table_id = nil)
       should_see_row row_id, table_id
@@ -250,7 +264,7 @@ module Briar
       wait_for(:timeout => timeout,
                :retry_frequency => 0.2,
                :post_timeout => 0.1,
-               :timeout_message => msg ) do
+               :timeout_message => msg) do
         element_exists query_str
       end
     end
@@ -352,7 +366,7 @@ module Briar
       touch_edit_mode_delete_button row_id, table_id
       2.times { step_pause }
       touch_delete_confirmation row_id, table_id
-      2.times{ step_pause }
+      2.times { step_pause }
       should_not_see_row row_id, table_id
     end
 

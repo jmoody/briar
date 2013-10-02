@@ -1,6 +1,5 @@
 require 'calabash-cucumber'
 
-
 module Briar
   module Core
 
@@ -59,7 +58,7 @@ module Briar
         screenshot_and_raise "should see view with id '#{view_id}'"
       end
 
-      actual_ht = {x:res['rect']['center_x'], y:res['rect']['center_y']}
+      actual_ht = {x: res['rect']['center_x'], y: res['rect']['center_y']}
 
       unless actual_ht == center_ht
         screenshot_and_raise "#{view_id} has center '#{actual_ht}' but should have center '#{center_ht}'"
@@ -97,7 +96,7 @@ module Briar
       wait_for(:timeout => timeout,
                :retry_frequency => 0.2,
                :post_timeout => 0.1,
-               :timeout_message => msg ) do
+               :timeout_message => msg) do
         view_exists? view_id
       end
     end
@@ -107,7 +106,7 @@ module Briar
       wait_for(:timeout => timeout,
                :retry_frequency => 0.2,
                :post_timeout => 0.1,
-               :timeout_message => msg ) do
+               :timeout_message => msg) do
         !query(qstr).empty?
       end
     end
@@ -117,7 +116,7 @@ module Briar
       wait_for(:timeout => timeout,
                :retry_frequency => 0.2,
                :post_timeout => 0.1,
-               :timeout_message => msg ) do
+               :timeout_message => msg) do
         !query("view:'#{view_class}' marked:'#{view_id}'").empty?
       end
     end
@@ -162,7 +161,7 @@ module Briar
       wait_for_view_to_disappear view_id, timeout
     end
 
-    
+
     # backdoor helpers
     # canonical backdoor command: 'calabash_backdoor_handle_command'
     # selector key = :selector
@@ -176,6 +175,12 @@ module Briar
       array = args.kind_of?(Array) ? args : [args]
       json = "{\":selector\" : \"#{command}\", \":args\" : #{array}}"
       backdoor('calabash_backdoor_handle_command:', json)
+    end
+
+    def tokenize_list (list)
+      tokens = list.split(/[,]|(and )/)
+      stripped = tokens.map { |elm| elm.strip }
+      stripped.delete_if { |elm| ['and', 'or', ''].include?(elm) }
     end
   end
 end

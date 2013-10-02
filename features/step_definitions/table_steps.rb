@@ -101,9 +101,10 @@ Then /^I move the "([^"]*)" row (up|down) (\d+) times? using the reorder edit co
 
   should_see_row row_id
   dir_str = (dir.eql?('up')) ? 'drag_row_up' : 'drag_row_down'
-  n.to_i.times do (
+  n.to_i.times do
+    (
     playback(dir_str,
-            {:query => "tableViewCell marked:'#{row_id}' descendant tableViewCellReorderControl"})
+             {:query => "tableViewCell marked:'#{row_id}' descendant tableViewCellReorderControl"})
     step_pause)
   end
 end
@@ -160,16 +161,6 @@ end
 
 
 Then(/^I should see that the "([^"]*)" row has no text in the "([^"]*)" label$/) do |row_id, label_id|
-  wait_for_row row_id
-  qstr = "#{query_str_for_row_content row_id} label marked:'#{label_id}'"
-  res = query(qstr, :text)
-  if res.empty?
-    screenshot_and_raise "expected to see row '#{row_id}' with label '#{label_id}'"
-  end
-
-  text = res.first
-  unless text.nil? or text.eql?('')
-    screenshot_and_raise "expected to see no text in row '#{row_id}' in label '#{label_id}' but found '#{text}'"
-  end
+  should_see_row_with_label_that_has_no_text
 end
 

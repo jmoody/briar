@@ -125,7 +125,7 @@ elsif cmd == BRIAR_RM_CAL_TARGETS
 elsif cmd == BRIAR_INSTALL_CALABASH_GEM
   puts "use 'briar install calabash-gem'"
   exit 1
-elsif cmsd == BRIAR_INSTALL_GEM
+elsif cmd == BRIAR_INSTALL_GEM
   puts "use 'briar install gem'"
   exit 1
 elsif cmd == BRIAR_INSTALL_CALABASH_SERVER
