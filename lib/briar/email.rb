@@ -95,7 +95,7 @@ module Briar
       wait_for(:timeout => timeout,
                :retry_frequency => 0.2,
                :post_timeout => 0.1,
-               :timeout_message => msg ) do
+               :timeout_message => msg) do
         if dev.ios5?
           is_ios5_mail_view
         else
@@ -104,9 +104,14 @@ module Briar
       end
     end
 
+    #noinspection RubyResolve
     def device_can_send_email
       return true if device.simulator?
-      backdoor_device_configured_for_mail?
+      if defined? backdoor_device_configured_for_mail?
+        backdoor_device_configured_for_mail?
+      else
+        pending 'you will need to create a backdoor method to check if the device can send an email'
+      end
     end
 
     def delete_draft_and_wait_for (view_id)
@@ -141,8 +146,8 @@ module Briar
         wait_for(:timeout => timeout,
                  :retry_frequency => 1.1,
                  :post_timeout => 0.1,
-                 :timeout_message => msg ) do
-          uia_element_exists?(:view, marked:'Cancel')
+                 :timeout_message => msg) do
+          uia_element_exists?(:view, marked: 'Cancel')
         end
 
         uia_tap_mark('Cancel')
@@ -150,8 +155,8 @@ module Briar
         wait_for(:timeout => timeout,
                  :retry_frequency => 1.1,
                  :post_timeout => 0.1,
-                 :timeout_message => msg ) do
-          uia_element_exists?(:view, marked:'Delete Draft')
+                 :timeout_message => msg) do
+          uia_element_exists?(:view, marked: 'Delete Draft')
         end
 
         uia_tap_mark('Delete Draft')

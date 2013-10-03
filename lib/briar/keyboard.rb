@@ -1,5 +1,8 @@
 module Briar
   module Keyboard
+    # dismiss the keyboard on iPad
+    # send_uia_command command:"uia.keyboard().buttons()['Hide keyboard'].tap()"
+
     # these are not ready for prime time
     # the methods for setting auto correct, spell check, etc. are not ready
     UITextAutocapitalizationTypeNone = 0

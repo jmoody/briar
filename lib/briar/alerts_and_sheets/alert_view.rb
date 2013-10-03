@@ -1,5 +1,6 @@
 module Briar
   module Alerts_and_Sheets
+
     def alert_exists? (alert_id=nil)
       if alert_id.nil?
         !query('alertView').empty?
