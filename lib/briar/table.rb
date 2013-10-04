@@ -418,5 +418,11 @@ module Briar
       touch("#{query_str} descendant view marked:'#{header_id}'")
       step_pause
     end
+
+    def touch_button_in_row(button_id, row_id, table_id=nil)
+      query_str = query_str_for_table(table_id)
+      touch("#{query_str} descendant button marked:'#{button_id}'")
+      step_pause
+    end
   end
 end
