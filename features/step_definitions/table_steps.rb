@@ -91,6 +91,7 @@ Then /^I should see that the "([^"]*)" row has text "([^"]*)" in the "([^"]*)" l
 end
 
 Then /^I should see that the text I just entered is in the "([^"]*)" row "([^"]*)" label$/ do |row_id, label_id|
+  #noinspection RubyResolve
   should_see_row_with_label_with_text row_id, label_id, @text_entered_by_keyboard
 end
 
@@ -159,8 +160,10 @@ Then /^I should see that the "([^"]*)" row has image "([^"]*)"$/ do |row_id, ima
   should_see_row_with_image row_id, image_id
 end
 
-
 Then(/^I should see that the "([^"]*)" row has no text in the "([^"]*)" label$/) do |row_id, label_id|
-  should_see_row_with_label_that_has_no_text
+  should_see_row_with_label_that_has_no_text row_id, label_id
 end
+
+
+
 
