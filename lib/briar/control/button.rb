@@ -38,10 +38,10 @@ module Briar
         touch("button marked:'#{button_id}'")
       end
 
-      def touch_button_and_wait_for_view (button_id, view_id)
+      def touch_button_and_wait_for_view (button_id, view_id, timeout=BRIAR_WAIT_TIMEOUT)
         touch_button(button_id)
         unless view_id.nil?
-          wait_for_view view_id
+          wait_for_view view_id, timeout
         end
       end
 

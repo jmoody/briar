@@ -106,12 +106,13 @@ module Briar
       end
     end
 
-    def briar_clear_text(view_id)
+    def briar_clear_text(view_id, timeout=5)
       wait_for_view view_id
-      touch("view marked:'#{view_id}'")
-      wait_for_button 'Select All'
       step_pause
-      touch_button_and_wait_for_view 'Select All', 'Cut'
+      touch("view marked:'#{view_id}'")
+      wait_for_button 'Select All', timeout
+      step_pause
+      touch_button_and_wait_for_view 'Select All', 'Cut', timeout
       step_pause
       touch_button 'Cut'
       step_pause
