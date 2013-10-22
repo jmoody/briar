@@ -107,15 +107,16 @@ module Briar
     end
 
     def briar_clear_text(view_id, timeout=5)
-      wait_for_view view_id
-      step_pause
-      touch("view marked:'#{view_id}'")
-      wait_for_button 'Select All', timeout
-      step_pause
-      touch_button_and_wait_for_view 'Select All', 'Cut', timeout
-      step_pause
-      touch_button 'Cut'
-      step_pause
+      clear_text("view marked:'#{view_id}'")
+      #wait_for_view view_id
+      #step_pause
+      #touch("view marked:'#{view_id}'")
+      #wait_for_button 'Select All', timeout
+      #step_pause
+      #touch_button_and_wait_for_view 'Select All', 'Cut', timeout
+      #step_pause
+      #touch_button 'Cut'
+      #step_pause
     end
 
     #def is_capitalize_none (cap_type)

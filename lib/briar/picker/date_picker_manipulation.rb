@@ -90,7 +90,7 @@ module Briar
 
       def target_date_for_change_time_on_picker_with_time(target_time, convert, picker_id=nil)
         current_time = ruby_time_from_picker picker_id
-        tz_offset = convert ? 0 : (current_time.gmt_offset/3600)/12
+        tz_offset = (convert) ? 0 : Rational((target_time.utc_offset/3600.0)/24.0)
         DateTime.new(current_time.year, current_time.mon, current_time.day,
                      target_time.hour, target_time.min,
                      0, tz_offset)
@@ -117,8 +117,8 @@ module Briar
       def ensure_can_change_picker_to_date(target_dt, picker_id=nil)
         max_date = maximum_date_time_from_picker picker_id
         if max_date and target_dt > max_date
-          p "target: '#{target_dt}'"
-          p "   max: '#{max_date}'"
+          puts "\ntarget: '#{target_dt}'"
+          puts "   max: '#{max_date}'"
           screenshot_and_raise "cannot change time to '#{target_dt}' because the picker has a maximum date of '#{max_date}'"
         end
 

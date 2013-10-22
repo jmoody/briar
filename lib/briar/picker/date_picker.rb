@@ -141,7 +141,7 @@ module Briar
         if convert
           past = Time.now.gmtime + Time.now.gmtoff - (target_minutes.to_i * 60)
         else
-          past = Time.new - (60 * target_minutes.to_i)
+          past = Time.now - (60 * target_minutes.to_i)
         end
 
         opts = {:picker_id => picker_id,
