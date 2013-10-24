@@ -106,8 +106,8 @@ module Briar
 
     def go_back_and_wait_for_view (view)
       sleep(0.2)
-      wait_for(:timeout => 1.0,
-               :retry_frequency => 0.2) do
+      wait_for(:timeout => BRIAR_WAIT_TIMEOUT,
+               :retry_frequency => BRIAR_RETRY_FREQ) do
         not query('navigationItemButtonView first').empty?
       end
 
@@ -119,8 +119,8 @@ module Briar
     end
 
     def touch_navbar_item(item_name, wait_for_view_id=nil)
-      wait_for(:timeout => 1.0,
-               :retry_frequency => 0.4) do
+      wait_for(:timeout => BRIAR_WAIT_TIMEOUT,
+               :retry_frequency => BRIAR_RETRY_FREQ) do
         (index_of_navbar_button(item_name) != nil) || button_exists?(item_name)
       end
       sleep(0.2)
@@ -154,7 +154,7 @@ module Briar
     def should_see_navbar_with_title(title, timeout=BRIAR_WAIT_TIMEOUT)
       msg = "waited for '#{timeout}' seconds but i did not see #{title} in navbar"
       wait_for(:timeout => timeout,
-               :retry_frequency => 0.2,
+               :retry_frequency => BRIAR_RETRY_FREQ,
                :post_timeout => 0.1,
                :timeout_message => msg) do
         navbar_has_title? title

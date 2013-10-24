@@ -1,11 +1,19 @@
 #$:.unshift File.dirname(__FILE__)
 
 DEVICE_ENDPOINT = (ENV['DEVICE_ENDPOINT'] || 'http://localhost:37265')
+
+# deprecate these #
 TOUCH_TRANSITION_TIMEOUT = 30.0
 TOUCH_TRANSITION_RETRY_FREQ = 0.5
+##################
+
 BRIAR_STEP_PAUSE = (ENV['STEP_PAUSE'] || 0.5).to_f
 BRIAR_WAIT_TIMEOUT = (ENV['WAIT_TIMEOUT'] || 2.0).to_f
+BRIAR_RETRY_FREQ = (ENV['RETRY_FREQ'] || 0.1).to_f
+BRIAR_POST_TIMEOUT = (ENV['POST_TIMEOUT'] || 0.2).to_f
+
 ANIMATION_PAUSE = (ENV['ANIMATION_PAUSE'] || 0.6).to_f
+
 #noinspection RubyConstantNamingConvention
 AI = :accessibilityIdentifier
 #noinspection RubyConstantNamingConvention
@@ -64,9 +72,12 @@ def device ()
 end
 
 def uia_available?
-  launcher = Calabash::Cucumber::Launcher.launcher
-  return false if launcher.nil?
-  launcher.active?
+  # proxy for testing if run_loop exists
+  if default_device.nil?
+    false
+  else
+    true
+  end
 end
 
 #noinspection RubyDefParenthesesInspection

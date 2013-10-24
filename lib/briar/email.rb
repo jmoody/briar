@@ -81,25 +81,32 @@ module Briar
     end
 
     def is_ios6_mail_view
-      warn 'WARN: deprected 0.0.9'
+      warn 'WARN: deprecated 0.0.9'
     end
 
-    def should_see_mail_view (timeout=BRIAR_WAIT_TIMEOUT)
+    def should_see_mail_view (opts = {:timeout => BRIAR_WAIT_TIMEOUT,
+                                      :email_view_mark => 'compose email'})
+
+      {:timeout => BRIAR_WAIT_TIMEOUT, :email_view_mark => 'compose email'}.merge!(opts)
+
+
       if email_not_testable?
         warn_about_no_ios5_email_view
         return
       end
 
+      timeout = opts[:timeout]
       msg = "waited for '#{timeout}' seconds but did not see email compose view"
       dev = device()
+      email_view_mark = opts[:email_view_mark]
       wait_for(:timeout => timeout,
-               :retry_frequency => 0.2,
-               :post_timeout => 0.1,
+               :retry_frequency => BRIAR_RETRY_FREQ,
+               :post_timeout => BRIAR_POST_TIMEOUT,
                :timeout_message => msg) do
         if dev.ios5?
           is_ios5_mail_view
         else
-          view_exists? 'compose email'
+          view_exists? email_view_mark
         end
       end
     end
@@ -144,8 +151,8 @@ module Briar
         timeout = BRIAR_WAIT_TIMEOUT * 2
         msg = "waited for '#{timeout}' seconds but did not see cancel button"
         wait_for(:timeout => timeout,
-                 :retry_frequency => 1.1,
-                 :post_timeout => 0.1,
+                 :retry_frequency => BRIAR_RETRY_FREQ,
+                 :post_timeout => BRIAR_POST_TIMEOUT,
                  :timeout_message => msg) do
           uia_element_exists?(:view, marked: 'Cancel')
         end
@@ -153,8 +160,8 @@ module Briar
         uia_tap_mark('Cancel')
         msg = "waited for '#{timeout}' seconds but did not see dismiss email action sheet"
         wait_for(:timeout => timeout,
-                 :retry_frequency => 1.1,
-                 :post_timeout => 0.1,
+                 :retry_frequency => BRIAR_RETRY_FREQ,
+                 :post_timeout => BRIAR_POST_TIMEOUT,
                  :timeout_message => msg) do
           uia_element_exists?(:view, marked: 'Delete Draft')
         end
