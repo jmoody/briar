@@ -26,8 +26,8 @@ module Briar
       timeout = BRIAR_WAIT_TIMEOUT * 2.0
       msg = "waited for '#{timeout}' seconds but did not see navbar back button"
       wait_for(:timeout => timeout,
-               :retry_frequency => 0.2,
-               :post_timeout => 0.1,
+               :retry_frequency => BRIAR_RETRY_FREQ,
+               :post_timeout => BRIAR_POST_TIMEOUT,
                :timeout_message => msg) do
         navbar_has_back_button?
       end
@@ -52,8 +52,8 @@ module Briar
         timeout = BRIAR_WAIT_TIMEOUT
         msg = "waited for '#{timeout}' seconds but did not see '#{name}' in navigation bar"
         wait_for(:timeout => timeout,
-                 :retry_frequency => 0.2,
-                 :post_timeout => 0.1,
+                 :retry_frequency => BRIAR_RETRY_FREQ,
+                 :post_timeout => BRIAR_POST_TIMEOUT,
                  :timeout_message => msg) do
           element_exists qstr
         end
@@ -73,8 +73,8 @@ module Briar
         timeout = 1.0
         msg = "waited for '#{timeout}' seconds but i still see '#{name}' in navigation bar"
         wait_for(:timeout => timeout,
-                 :retry_frequency => 0.2,
-                 :post_timeout => 0.1,
+                 :retry_frequency => BRIAR_RETRY_FREQ,
+                 :post_timeout => BRIAR_POST_TIMEOUT,
                  :timeout_message => msg) do
           element_does_not_exist qstr
         end
@@ -97,7 +97,8 @@ module Briar
     def go_back_after_waiting
       sleep(0.2)
       wait_for(:timeout => 1.0,
-               :retry_frequency => 0.2) do
+               :retry_frequency => BRIAR_RETRY_FREQ,
+               :post_timeout => BRIAR_POST_TIMEOUT) do
         not query('navigationItemButtonView first').empty?
       end
       touch('navigationItemButtonView first')
@@ -155,15 +156,10 @@ module Briar
       msg = "waited for '#{timeout}' seconds but i did not see #{title} in navbar"
       wait_for(:timeout => timeout,
                :retry_frequency => BRIAR_RETRY_FREQ,
-               :post_timeout => 0.1,
+               :post_timeout => BRIAR_POST_TIMEOUT,
                :timeout_message => msg) do
         navbar_has_title? title
       end
-    end
-
-
-    def navbar_should_have_title(title)
-      pending "deprecated 0.0.6 - use should_see_navbar_with_title '#{title}'"
     end
   end
 end

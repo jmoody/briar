@@ -94,8 +94,8 @@ module Briar
     def wait_for_view (view_id, timeout=BRIAR_WAIT_TIMEOUT)
       msg = "waited for '#{timeout}' seconds but did not see '#{view_id}'"
       wait_for(:timeout => timeout,
-               :retry_frequency => 0.2,
-               :post_timeout => 0.1,
+               :retry_frequency => BRIAR_RETRY_FREQ,
+               :post_timeout => BRIAR_POST_TIMEOUT,
                :timeout_message => msg) do
         view_exists? view_id
       end
@@ -104,8 +104,8 @@ module Briar
     def wait_for_query(qstr, timeout=BRIAR_WAIT_TIMEOUT)
       msg = "waited for '#{timeout}' seconds but did not see\n '#{qstr}'"
       wait_for(:timeout => timeout,
-               :retry_frequency => 0.2,
-               :post_timeout => 0.1,
+               :retry_frequency => BRIAR_RETRY_FREQ,
+               :post_timeout => BRIAR_POST_TIMEOUT,
                :timeout_message => msg) do
         !query(qstr).empty?
       end
@@ -114,8 +114,8 @@ module Briar
     def wait_for_custom_view (view_class, view_id, timeout=BRIAR_WAIT_TIMEOUT)
       msg = "waited for '#{timeout}' seconds but did not see '#{view_id}'"
       wait_for(:timeout => timeout,
-               :retry_frequency => 0.2,
-               :post_timeout => 0.1,
+               :retry_frequency => BRIAR_RETRY_FREQ,
+               :post_timeout => BRIAR_POST_TIMEOUT,
                :timeout_message => msg) do
         !query("view:'#{view_class}' marked:'#{view_id}'").empty?
       end
@@ -137,8 +137,8 @@ module Briar
     def wait_for_views(views, timeout=BRIAR_WAIT_TIMEOUT)
       msg = "waited for '#{timeout}' seconds but did not see '#{views}'"
       options = {:timeout => timeout,
-                 :retry_frequency => 0.2,
-                 :post_timeout => 0.1,
+                 :retry_frequency => BRIAR_RETRY_FREQ,
+                 :post_timeout => BRIAR_POST_TIMEOUT,
                  :timeout_message => msg}
       wait_for(options) do
         views.all? { |view_id| view_exists?(view_id) }
@@ -148,8 +148,8 @@ module Briar
     def wait_for_view_to_disappear(view_id, timeout=BRIAR_WAIT_TIMEOUT)
       msg = "waited for '#{timeout}' seconds for '#{view_id}' to disappear but it is still visible"
       options = {:timeout => timeout,
-                 :retry_frequency => 0.2,
-                 :post_timeout => 0.1,
+                 :retry_frequency => BRIAR_RETRY_FREQ,
+                 :post_timeout => BRIAR_POST_TIMEOUT,
                  :timeout_message => msg}
       wait_for(options) do
         not view_exists? view_id

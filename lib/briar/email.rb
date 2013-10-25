@@ -61,7 +61,7 @@ module Briar
     end
 
     def email_to_contains? (address)
-      addrs = email_to.split(/, ?/)
+      addrs = tokenize_list(email_to)
       addrs.include? address
     end
 

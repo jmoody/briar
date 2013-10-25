@@ -86,8 +86,8 @@ module Briar
       timeout = options[:timeout] || BRIAR_WAIT_TIMEOUT
       msg = "waited for '#{timeout}' seconds but did not see row '#{query_str}' with query '#{query_str}'"
       wait_for(:timeout => timeout,
-               :retry_frequency => 0.2,
-               :post_timeout => 0.1,
+               :retry_frequency => BRIAR_RETRY_FREQ,
+               :post_timeout => BRIAR_POST_TIMEOUT,
                :timeout_message => msg) do
         row_visible? row_id, table_id
       end
@@ -169,19 +169,6 @@ module Briar
       end
     end
 
-    def scroll_until_i_see_row (dir, row_id, table_id=nil)
-      warn "deprecated 0.0.8 - use 'scroll_to_row #{row_id}' with optional table view mark"
-      wait_poll({:until_exists => query_str_for_row(row_id, table_id),
-                 :timeout => 2}) do
-        scroll('tableView', dir)
-      end
-
-      unless row_visible?(row_id)
-        screenshot_and_raise "i scrolled '#{dir}' but did not see '#{row_id}'"
-      end
-    end
-
-
     def touch_row_offset_hash (row_id, table_id = nil)
       offset = 0
       query = query_str_for_row row_id, table_id
@@ -262,8 +249,8 @@ module Briar
       timeout = 5
       msg = "waited for '#{timeout}' seconds but did not see 'Delete' confirmation in row '#{row_id}'"
       wait_for(:timeout => timeout,
-               :retry_frequency => 0.2,
-               :post_timeout => 0.1,
+               :retry_frequency => BRIAR_RETRY_FREQ,
+               :post_timeout => BRIAR_POST_TIMEOUT,
                :timeout_message => msg) do
         element_exists query_str
       end

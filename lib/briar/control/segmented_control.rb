@@ -16,66 +16,53 @@ module Briar
       end
 
       def index_of_segment_with_name_in_control_with_id(segment_id, control_id)
-        control_idx = index_of_control_with_id (control_id)
-        if control_idx
-          titles = query("segmentedControl index:#{control_idx} child segment child segmentLabel", :text).reverse
-          titles.index(segment_id)
-        else
-          nil
+        qstr = "segmentedControl marked:'#{control_id}'"
+        num_segs = query(qstr, :numberOfSegments).first.to_i
+        idx = 0
+        while idx < num_segs
+          title = query(qstr, {titleForSegmentAtIndex:idx}).first
+          return idx if title.eql?(segment_id)
+          idx = idx + 1
         end
+        return nil
       end
 
       def should_see_segment_with_selected_state (control_id, segment_id, selected_state)
         @segment_id = segment_id
         @control_id = control_id
-        control_idx = index_of_control_with_id control_id
-        if control_idx
-          segment_idx = index_of_segment_with_name_in_control_with_id(segment_id, control_id)
-          if segment_idx
-            selected_arr = query("segmentedControl index:#{control_idx} child segment", :isSelected).reverse
-            res = selected_arr[segment_idx]
-            unless res.to_i == selected_state
-              screenshot_and_raise "found segment named #{segment_id} in  #{control_id}, but it was _not_ selected"
-            end
-          else
-            screenshot_and_raise "could not find #{segment_id} in #{control_id}"
-          end
-        else
-          screenshot_and_raise "could not find control named #{control_id}"
+        res = query("segmentedControl marked:'#{control_id}' child segment marked:'#{segment_id}'",
+                    :isSelected)
+        if res.empty?
+          screenshot_and_raise "expected to see segmented control '#{control_id}' with segment '#{segment_id}'"
+        end
+
+        unless res.first.to_i == selected_state
+          screenshot_and_raise "expected to see segment '#{segment_id}' in '#{control_id}' with selection state '#{selected_state}' but found '#{res.to_i}'"
         end
       end
 
       def touch_segment(segment_id, control_id)
         @segment_id = segment_id
         @control_id = control_id
-        idx = index_of_control_with_id control_id
-        if idx
-          touch("segmentedControl index:#{idx} child segment child segmentLabel marked:'#{segment_id}'")
-          step_pause
-        else
-          screenshot_and_raise "could not find segmented control with name #{control_id}"
-        end
+        touch("segmentedControl marked:'#{control_id}' child segment marked:'#{segment_id}'")
+        step_pause
       end
 
       def should_see_control_with_segment_titles (control_id, segment_titles)
         @control_id = control_id
         should_see_view control_id
-        tokens = segment_titles.split(',')
+        tokens = tokenize_list(segment_titles)
         tokens.each do |token|
           token.strip!
         end
-        idx = index_of_control_with_id control_id
-        if idx
-          actual_titles = query("segmentedControl index:#{idx} child segment child segmentLabel", :text).reverse
-          counter = 0
-          tokens.zip(actual_titles).each do |expected, actual|
-            unless actual.eql? expected
-              screenshot_and_raise "when inspecting #{control_id} i expected title: #{expected} but found: #{actual} at index #{counter}"
-            end
-            counter = counter + 1
+        counter = 0
+        tokens.each do |expected|
+          idx = index_of_segment_with_name_in_control_with_id expected, control_id
+          unless idx == counter
+            actual = query("segmentedControl marked:'#{control_id}'", {titleForSegmentAtIndex:counter}).first
+            screenshot_and_raise "expected to see segment '#{expected}' at index '#{counter}' but found '#{actual}'"
           end
-        else
-          screenshot_and_raise "could not find segmented control with name #{control_id}"
+          counter = counter + 1
         end
       end
     end

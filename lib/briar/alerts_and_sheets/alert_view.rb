@@ -49,8 +49,8 @@ module Briar
         qstr = 'alertView child label'
         msg = "waited for '#{timeout}' for alert with title '#{title}'"
         wait_for(:timeout => timeout,
-                 :retry_frequency => 0.2,
-                 :post_timeout => 0.1,
+                 :retry_frequency => BRIAR_RETRY_FREQ,
+                 :post_timeout => BRIAR_POST_TIMEOUT,
                  :timeout_message => msg) do
           query(qstr, :text).include?(title)
         end
@@ -68,8 +68,8 @@ module Briar
         qstr = 'alertView child label'
         msg = "waited for '#{timeout}' for alert with message '#{message}'"
         wait_for(:timeout => timeout,
-                 :retry_frequency => 0.2,
-                 :post_timeout => 0.1,
+                 :retry_frequency => BRIAR_RETRY_FREQ,
+                 :post_timeout => BRIAR_POST_TIMEOUT,
                  :timeout_message => msg) do
           query(qstr, :text).include?(title)
         end

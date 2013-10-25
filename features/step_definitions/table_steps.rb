@@ -77,7 +77,7 @@ Then /^I should see "([^"]*)" in row (\d+)$/ do |row_id, row_index|
 end
 
 Then /^I should see the rows in this order "([^"]*)"$/ do |row_ids|
-  tokens = row_ids.split(',')
+  tokens = tokenize_list(row_ids)
   counter = 0
   tokens.each do |token|
     token.strip!

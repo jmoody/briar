@@ -82,3 +82,10 @@ Given(/^we are testing on the simulator or a device configured to send emails$/)
     pending 'device is not configured to send email - we cannot proceed with email view testing'
   end
 end
+
+Given(/^I can test an email view$/) do
+  if (not device.ios5?) and (not uia_available?)
+    warn_about_no_ios5_email_view
+    pending('cannot test email views yet')
+  end
+end

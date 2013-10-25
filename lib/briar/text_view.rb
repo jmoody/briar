@@ -9,8 +9,8 @@ module Briar
     def wait_for_text_view(view_id, timeout=BRIAR_WAIT_TIMEOUT)
       msg = "waited for '#{timeout}' seconds but did not see '#{view_id}'"
       wait_for(:timeout => timeout,
-               :retry_frequency => 0.2,
-               :post_timeout => 0.1,
+               :retry_frequency => BRIAR_RETRY_FREQ,
+               :post_timeout => BRIAR_POST_TIMEOUT,
                :timeout_message => msg) do
         text_view_exists? view_id
       end
@@ -19,8 +19,8 @@ module Briar
     def wait_for_text_view_to_disappear(view_id, timeout=BRIAR_WAIT_TIMEOUT)
       msg = "waited for '#{timeout}' seconds for '#{view_id}' to disappear but it is still visible"
       options = {:timeout => timeout,
-                 :retry_frequency => 0.2,
-                 :post_timeout => 0.1,
+                 :retry_frequency => BRIAR_RETRY_FREQ,
+                 :post_timeout => BRIAR_POST_TIMEOUT,
                  :timeout_message => msg}
       wait_for(options) do
         not text_view_exists? view_id

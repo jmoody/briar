@@ -15,13 +15,8 @@ Gem::Specification.new do |gem|
   gem.license       = 'MIT'
 
   gem.add_runtime_dependency 'calabash-cucumber'
-  #gem.add_runtime_dependency 'calabash-cucumber', '0.9.159'
   gem.add_runtime_dependency 'rake'
   gem.add_runtime_dependency 'syntax' 
-  gem.add_runtime_dependency 'rspec'
-
-  # rubymine is not picking up development dependencies in the gemspec
-  #gem.add_development_dependency 'rspec'
 
   gem.files         = `git ls-files`.split($/)
   gem.executables   = 'briar'

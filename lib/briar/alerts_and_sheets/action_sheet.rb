@@ -36,8 +36,8 @@ module Briar
     def wait_for_sheet (sheet_id, timeout=BRIAR_WAIT_TIMEOUT)
       msg = "waited for '#{timeout}' seconds but did not see '#{sheet_id}'"
       wait_for(:timeout => timeout,
-               :retry_frequency => 0.2,
-               :post_timeout => 0.1,
+               :retry_frequency => BRIAR_RETRY_FREQ,
+               :post_timeout => BRIAR_POST_TIMEOUT,
                :timeout_message => msg ) do
         sheet_exists? sheet_id
       end
@@ -46,8 +46,8 @@ module Briar
     def wait_for_sheet_to_disappear(sheet_id, timeout=BRIAR_WAIT_TIMEOUT)
       msg = "waited for '#{timeout}' seconds for '#{sheet_id}' to disappear but it is still visible"
       options = {:timeout => timeout,
-                 :retry_frequency => 0.2,
-                 :post_timeout => 0.1,
+                 :retry_frequency => BRIAR_RETRY_FREQ,
+                 :post_timeout => BRIAR_POST_TIMEOUT,
                  :timeout_message => msg}
       wait_for(options) do
         not sheet_exists? sheet_id

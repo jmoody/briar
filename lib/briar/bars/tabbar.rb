@@ -25,8 +25,8 @@ module Briar
 
     def touch_tabbar_item(name, wait_for_view_id=nil)
       sleep(0.2)
-      wait_for(:timeout => 1.0,
-               :retry_frequency => 0.4) do
+      wait_for(:timeout => BRIAR_WAIT_TIMEOUT,
+               :retry_frequency => BRIAR_RETRY_FREQ) do
         index_of_tabbar_item(name) != nil
       end
       should_see_tabbar
@@ -48,10 +48,6 @@ module Briar
       unless tabs.index(name) == index.to_i
         screenshot_and_raise "should have seen tab named '#{name}' at index '#{index}' but found these: '#{tabs}'"
       end
-    end
-
-    def tabbar_item_is_at_index(name, index)
-      pending "deprecated 0.0.6 - use should_see_tab_at_index '#{name}', '#{index}'"
     end
   end
 end
