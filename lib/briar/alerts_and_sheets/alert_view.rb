@@ -39,8 +39,8 @@ module Briar
     end
 
     def should_see_alert_with_title (title, timeout=BRIAR_WAIT_TIMEOUT)
-      warn 'cannot distinguish between alert titles and messages'
       if device.ios7?
+        warn 'WARN: cannot distinguish between alert titles and messages'
         should_see_alert()
         if uia_query(:view, marked:"#{title}").empty?
           screenshot_and_raise "expected to see alert with title '#{title}'"
@@ -57,10 +57,10 @@ module Briar
       end
     end
 
-    def should_see_alert_with_message (message)
-      warn 'cannot distinguish between alert titles and messages'
+    def should_see_alert_with_message (message, timeout=BRIAR_WAIT_TIMEOUT)
       if device.ios7?
-        should_see_alert()
+        warn 'WARN: cannot distinguish between alert titles and messages'
+        should_see_alert
         if uia_query(:view, marked:"#{message}").empty?
           screenshot_and_raise "expected to see alert with title '#{message}'"
         end
@@ -71,7 +71,7 @@ module Briar
                  :retry_frequency => BRIAR_RETRY_FREQ,
                  :post_timeout => BRIAR_POST_TIMEOUT,
                  :timeout_message => msg) do
-          query(qstr, :text).include?(title)
+          query(qstr, :text).include?(message)
         end
       end
     end

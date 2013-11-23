@@ -2,8 +2,8 @@ require 'calabash-cucumber'
 
 module Briar
   module ImageView
-    def image_view_exists? name
-      query_str = "imageView marked:'#{name}'"
+    def image_view_exists?(iv_id)
+      query_str = "imageView marked:'#{iv_id}'"
       exists = !query(query_str).empty?
       if exists
         alpha = query(query_str, :alpha).first.to_i
@@ -12,15 +12,33 @@ module Briar
       end
     end
 
-    def should_see_image_view name
-      unless image_view_exists? name
-        screenshot_and_raise "i should see image view with id '#{name}'"
+    def should_see_image_view(iv_id, timeout=BRIAR_WAIT_TIMEOUT)
+      wait_for_image_view iv_id, timeout
+    end
+
+    def should_not_see_image_view(iv_id, timeout=BRIAR_WAIT_TIMEOUT)
+      wait_for_image_view_to_disappear iv_id, timeout
+    end
+
+    def wait_for_image_view(iv_id, timeout=BRIAR_WAIT_TIMEOUT)
+      msg = "waited for '#{timeout}' seconds but did not see image view marked: '#{iv_id}'"
+      options = {:timeout => timeout,
+                 :retry_frequency => BRIAR_RETRY_FREQ,
+                 :post_timeout => BRIAR_POST_TIMEOUT,
+                 :timeout_message => msg}
+      wait_for(options) do
+        image_view_exists? iv_id
       end
     end
 
-    def should_not_see_image_view name
-      if image_view_exists? name
-        screenshot_and_raise "i should not see an image view with id #{name}"
+    def wait_for_image_view_to_disappear(iv_id, timeout=BRIAR_WAIT_TIMEOUT)
+      msg = "waited for '#{timeout}' seconds but i still see image view marked: '#{iv_id}'"
+      options = {:timeout => timeout,
+                 :retry_frequency => BRIAR_RETRY_FREQ,
+                 :post_timeout => BRIAR_POST_TIMEOUT,
+                 :timeout_message => msg}
+      wait_for(options) do
+        not image_view_exists? iv_id
       end
     end
   end

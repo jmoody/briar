@@ -37,6 +37,7 @@ Then /^I should (not see|see) (?:the|an?) "([^"]*)" button in the navbar$/ do |v
   else
     should_not_see_navbar_button name
   end
+  step_pause
 end
 
 When /^I touch the "([^"]*)" navbar button, then I should see the "([^"]*)" view$/ do |button_name, view_id|

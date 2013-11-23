@@ -312,10 +312,33 @@ module Briar
       should_see_delete_confirmation_in_row row_id
     end
 
-    def should_see_switch_in_row_with_state (switch_id, row_id, state, table_id=nil)
+    def should_see_switch_in_row_with_state (switch_id, row_id, state, opts={})
+
+      if (not opts.is_a?(Hash)) and (not opts.nil?)
+        warn "WARN: deprecated 0.1.1 - you should no longer pass a table_id '#{table_id}' at an arg, pass opts hash instead"
+        opts = {:table_id => opts}
+      end
+
+      default_opts = {:table_id => nil,
+                      :switch_class => nil,
+                      :switch_state_selector => :isOn}
+
+      opts = default_opts.merge(opts)
+
+      table_id = opts[:table_id]
+
       should_see_row row_id, table_id
-      query_str = query_str_for_row_content row_id, table_id
-      res = query("#{query_str} switch marked:'#{switch_id}'", :isOn).first
+      row_content_qstr = query_str_for_row_content row_id, table_id
+
+      switch_class = opts[:switch_class]
+      if switch_class.nil?
+        switch_qstr = "switch marked:'#{switch_id}'"
+      else
+        switch_qstr = "view:'#{switch_class}' marked:'#{switch_id}'"
+      end
+
+      qstr = "#{row_content_qstr} #{switch_qstr}"
+      res = query(qstr, opts[:switch_state_selector]).first
       unless res
         screenshot_and_raise "expected to find a switch marked '#{switch_id}' in row '#{row_id}'"
       end
@@ -357,10 +380,32 @@ module Briar
       should_not_see_row row_id, table_id
     end
 
-    def touch_switch_in_row (switch_id, row_id, table_id=nil)
+    def touch_switch_in_row (switch_id, row_id, opts={})
+      if (not opts.is_a?(Hash)) and (not table_id.nil?)
+        warn "WARN: deprecated 0.1.1 - passing a table_id '#{table_id}' has been deprecated pass a hash instead"
+        opts = {:table_id => table_id}
+      end
+
+      default_opts = {:table_id => nil,
+                      :switch_class => nil}
+
+      opts = default_opts.merge(opts)
+
+      table_id = opts[:table_id]
+
+      switch_class = opts[:switch_class]
+
+
+      if switch_class.nil?
+        switch_query = "switch marked:'#{switch_id}'"
+      else
+        switch_query = "view:'#{switch_class}' marked:'#{switch_id}'"
+      end
+
+
       should_see_row row_id, table_id
       query_str = query_str_for_row_content row_id, table_id
-      touch("#{query_str} switch marked:'#{switch_id}'")
+      touch("#{query_str} #{switch_query}")
       step_pause
     end
 

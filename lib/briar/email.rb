@@ -121,14 +121,20 @@ module Briar
       end
     end
 
-    def delete_draft_and_wait_for (view_id)
+    def delete_draft_and_wait_for (view_id, opts={})
+
+
       if email_not_testable?
         warn_about_no_ios5_email_view
         return
       end
 
+      default_opts = {:timeout => BRIAR_WAIT_TIMEOUT,
+                      :email_view_mark => 'compose email'}
+      opts = default_opts.merge(opts)
+
       # does a wait for iOS > 5 + uia available
-      should_see_mail_view
+      should_see_mail_view opts
 
       device = device()
 

@@ -130,6 +130,7 @@ Then /^I touch the "([^"]*)" button in the "([^"]*)" row$/ do |button_id, row_id
 end
 
 Then /^I should see a switch for "([^"]*)" in the "([^"]*)" row that is in the "([^"]*)" position$/ do |switch_id, row_id, on_off|
+  warn 'WARN: deprecated 0.1.1 - write a custom step'
   should_see_switch_in_row_with_state switch_id, row_id, (on_off.eql? 'on') ? 1 : 0
 end
 
@@ -138,6 +139,7 @@ Then /^I should see a detail disclosure chevron in the "([^"]*)" row$/ do |row_i
 end
 
 Then /^I touch the "([^"]*)" switch in the "([^"]*)" row$/ do |switch_id, row_id|
+  warn 'WARN: deprecated 0.1.1 - write a custom step'
   touch_switch_in_row switch_id, row_id
 end
 

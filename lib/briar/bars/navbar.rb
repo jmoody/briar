@@ -46,22 +46,29 @@ module Briar
       titles.index(name)
     end
 
-    def should_see_navbar_button (name, is_ui_button=false)
-      if is_ui_button
-        qstr = "button marked:'#{name}' parent navigationBar"
-        timeout = BRIAR_WAIT_TIMEOUT
-        msg = "waited for '#{timeout}' seconds but did not see '#{name}' in navigation bar"
+    # bar_button_type options =>
+    # button    <= the button is a UIButton
+    # bar_item  <= the button is UIBarButtonItem
+    def should_see_navbar_button (mark, opts={})
+      default_opts = {:bar_button_type => :bar_item,
+                      :timeout => BRIAR_WAIT_TIMEOUT}
+      opts = default_opts.merge(opts)
+      if opts[:bar_button_type] == :button
+        queries = ["buttonLabel marked:'#{mark}' parent navigationBar",
+                   "button marked:'#{mark}' parent navigationBar"]
+        timeout = opts[:timeout]
+        msg = "waited for '#{timeout}' seconds but did not see '#{mark}' in navigation bar"
         wait_for(:timeout => timeout,
                  :retry_frequency => BRIAR_RETRY_FREQ,
                  :post_timeout => BRIAR_POST_TIMEOUT,
                  :timeout_message => msg) do
-          element_exists qstr
+          queries.any? { |query| element_exists query }
         end
       else
-        idx = index_of_navbar_button name
+        idx = index_of_navbar_button mark
         if idx.nil?
           # check to see if it is a ui button
-          should_see_navbar_button(name, true)
+          should_see_navbar_button mark, {:bar_button_type => :button}
         end
       end
     end
@@ -69,7 +76,7 @@ module Briar
 
     def should_not_see_navbar_button (name, is_ui_button=false)
       if is_ui_button
-        qstr = "button marked:'#{name}' parent navigationBar"
+        qstr = "buttonLabel marked:'#{name}' parent navigationBar"
         timeout = 1.0
         msg = "waited for '#{timeout}' seconds but i still see '#{name}' in navigation bar"
         wait_for(:timeout => timeout,
