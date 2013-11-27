@@ -2,6 +2,7 @@ require 'briar'
 
 World(Briar)
 World(Briar::Core)
+World(Briar::UIA)
 World(Briar::Alerts_and_Sheets)
 World(Briar::Bars)
 World(Briar::Control::Button)
@@ -20,7 +21,6 @@ World(Briar::ScrollView)
 World(Briar::Table)
 World(Briar::TextField)
 World(Briar::TextView)
-
 
 
 AfterConfiguration do

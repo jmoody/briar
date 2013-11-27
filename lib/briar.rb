@@ -21,6 +21,7 @@ AL = :accessibilityLabel
 
 require 'briar/version'
 require 'briar/briar_core'
+require 'briar/briar_uia'
 
 require 'briar/alerts_and_sheets/alert_view'
 require 'briar/alerts_and_sheets/action_sheet'
@@ -68,15 +69,6 @@ def device ()
   if status=='200'
     version_body = JSON.parse(res.body)
     Calabash::Cucumber::Device.new(url, version_body)
-  end
-end
-
-def uia_available?
-  # proxy for testing if run_loop exists
-  if default_device.nil?
-    false
-  else
-    true
   end
 end
 

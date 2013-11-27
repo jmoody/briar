@@ -11,14 +11,6 @@ module Briar
       sleep(ANIMATION_PAUSE)
     end
 
-    def uia_not_available
-      env('NO_LAUNCH') == '1'
-    end
-
-    def uia_available
-      not uia_not_available
-    end
-
     def view_exists? (view_id)
       !query("view marked:'#{view_id}'").empty?
     end
