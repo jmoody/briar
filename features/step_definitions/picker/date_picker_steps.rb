@@ -32,13 +32,6 @@ Then /^I change the picker to (\d+) days? ago at "([^"]*)"$/ do |days_ago, targe
   change_time_on_picker_with_time_str target_time
 end
 
-
-#noinspection RubyUnusedLocalVariable
-Then /^I change the picker date time to "([^"]*)"$/ do |target_time|
-  pending 'deprecated 0.0.6 - not replaced with anything'
-end
-
-
 Then /^I should see that the date picker is in (time|date|date and time) mode$/ do |mode|
   if mode.eql? 'time'
     unless picker_is_in_time_mode

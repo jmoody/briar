@@ -57,15 +57,6 @@ module Briar
       end
     end
 
-    def should_see_view_after_animation (view_id)
-      pending "WARN: deprecated 0.0.8 - use 'wait_for_view #{view_id}' instead"
-
-    end
-
-    def should_not_see_view_after_animation (view_id)
-      pending "WARN: deprecated 0.0.8 - use 'wait_for_view_to_disappear #{view_id}' instead"
-    end
-
     def should_see_view_with_text (text)
       res = view_exists_with_text? text
       unless res

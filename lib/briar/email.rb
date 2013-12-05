@@ -80,10 +80,6 @@ module Briar
       query("layoutContainerView descendant view:'MFMailComposeView'").count == 1
     end
 
-    def is_ios6_mail_view
-      warn 'WARN: deprecated 0.0.9'
-    end
-
     def should_see_mail_view (opts = {:timeout => BRIAR_WAIT_TIMEOUT,
                                       :email_view_mark => 'compose email'})
 

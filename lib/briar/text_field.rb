@@ -31,6 +31,11 @@ module Briar
       end
     end
 
+    def clear_text_field_with_button(text_field_id)
+      should_see_clear_button_in_text_field text_field_id
+      touch("textField marked:'#{text_field_id}' child button")
+    end
+
     def should_see_clear_button_in_text_field (text_field_id)
       unless button_in_text_field_is_clear? text_field_id
         screenshot_and_raise "expected to see clear button in text field #{text_field_id}"

@@ -47,7 +47,7 @@ module Briar
 
 
     # is it possible to find what view the keyboard is responding to?
-    def autocapitalization_type ()
+    def autocapitalization_type
       if !query('textView index:0').empty?
         query('textView index:0', :autocapitalizationType).first.to_i
       elsif !query('textField index:0').empty?
@@ -57,7 +57,7 @@ module Briar
       end
     end
 
-    def auto_correct_type()
+    def auto_correct_type
       if !query('textView index:0').empty?
         query('textView index:0', :autocorrectionType).first.to_i
       elsif !query('textField index:0').empty?
@@ -68,8 +68,9 @@ module Briar
     end
 
 
+    #noinspection RubyUnusedLocalVariable
     def briar_clear_text(view_id, timeout=5)
-      warn("deprecated 0.1.1 - will remove 'timeout' argument in a future release")
+      deprecated('0.1.1', "will remove 'timeout' argument in a future release", :warn)
       clear_text("view marked:'#{view_id}'")
 
       # i really wanted this to work, but there are too many issues with the
@@ -88,8 +89,9 @@ module Briar
 
     ### deprecated ###
 
+    #noinspection RubyUnusedLocalVariable
     def set_autocapitalization (type)
-      pending('deprecated 0.1.1 - does not work')
+      deprecated('0.1.1', 'does not work', :pending)
       #if !query('textView index:0').empty?
       #  query('textView index:0', [{setAutocapitalizationType: type}])
       #elsif !query('textField index:0').empty?
@@ -100,12 +102,13 @@ module Briar
     end
 
     def turn_autocapitalization_off
-      pending('deprecated 0.1.1 - does not work')
+      deprecated('0.1.1', 'does not work', :pending)
       #set_autocapitalization UITextAutocapitalizationTypeNone
     end
 
+    #noinspection RubyUnusedLocalVariable
     def set_autocorrect (type)
-      pending('deprecated 0.1.1 - does not work')
+      deprecated('0.1.1', 'does not work', :pending)
       #if !query('textView index:0').empty?
       #  query('textView index:0', [{setAutocorrectionType: type}])
       #elsif !query('textField index:0').empty?
@@ -116,12 +119,12 @@ module Briar
     end
 
     def turn_autocorrect_off
-      pending('deprecated 0.1.1 - does not work')
+      deprecated('0.1.1', 'does not work', :pending)
       # set_autocorrect UITextAutocorrectionTypeNo
     end
 
     def turn_spell_correct_off
-      pending('deprecated 0.1.1 - does not work')
+      deprecated('0.1.1', 'does not work', :pending)
       #if !query('textView index:0').empty?
       #  query('textView index:0', [{setSpellCheckingType: UITextSpellCheckingTypeNo}])
       #elsif !query('textField index:0').empty?

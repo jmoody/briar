@@ -32,11 +32,6 @@ module Briar
       res.first.eql? success_value
     end
 
-    #noinspection RubyUnusedLocalVariable
-    def row_exists? (row_id, table_id = nil)
-      pending "deprecated 0.0.8 - use 'row_visible?' instead"
-    end
-
     def row_visible? (row_id, table_id = nil)
       query_str = query_str_for_row row_id, table_id
       !query(query_str, AI).empty?
@@ -160,12 +155,25 @@ module Briar
       step_pause
     end
 
-    def briar_scroll_to_row_and_touch (row_id, wait_for_view=nil)
-      briar_scroll_to_row(row_id)
-      if wait_for_view.nil?
+    def briar_scroll_to_row_and_touch (row_id, opts=nil)
+      if (not opts.is_a?(Hash)) and (not opts.nil?)
+        warn "WARN: deprecated 0.1.3 - you should no longer pass a view_id '#{opts}' as an arg, pass opts hash instead"
+        opts = {:wait_for_id => opts}
+      end
+
+      default_opts = {:wait_for_id => nil,
+                      :table_id => nil,
+                      :timeout => BRIAR_WAIT_TIMEOUT}
+      opts = default_opts.merge(opts)
+      table_id = opts[:table_id]
+      wait_for_id = opts[:wait_for_id]
+      timeout = opts[:timeout]
+      briar_scroll_to_row(row_id, table_id)
+      if wait_for_id.nil?
         touch_row row_id
       else
-        touch_row_and_wait_to_see row_id, wait_for_view
+        touch_row_and_wait_to_see row_id, wait_for_id, {:timeout => timeout,
+                                                        :table_id => table_id}
       end
     end
 
@@ -196,10 +204,20 @@ module Briar
     end
 
 
-    def touch_row_and_wait_to_see(row_id, view, table_id = nil)
-      should_see_row row_id, table_id
-      touch_row row_id, table_id
-      wait_for_view view, 3.0
+    def touch_row_and_wait_to_see(row_id, view, opts={})
+      if (not opts.is_a?(Hash)) and (not opts.nil?)
+        deprecated('0.1.3',
+                   "you should no longer pass a table_id '#{opts}' as an arg, pass opts hash instead",
+                   :warn)
+        opts = {:table_id => opts}
+      end
+
+      default_opts = {:table_id => nil,
+                      :timeout => BRIAR_WAIT_TIMEOUT}
+      opts = default_opts.merge(opts)
+      should_see_row row_id, opts[:table_id]
+      touch_row row_id, opts[:table_id]
+      wait_for_view view, opts[:timeout]
     end
 
     def table_exists? (table_name)
@@ -315,7 +333,9 @@ module Briar
     def should_see_switch_in_row_with_state (switch_id, row_id, state, opts={})
 
       if (not opts.is_a?(Hash)) and (not opts.nil?)
-        warn "WARN: deprecated 0.1.1 - you should no longer pass a table_id '#{table_id}' at an arg, pass opts hash instead"
+        deprecated('0.1.1',
+                   "you should no longer pass a table_id '#{opts}' as an arg, pass opts hash instead",
+                   :warn)
         opts = {:table_id => opts}
       end
 
@@ -381,9 +401,11 @@ module Briar
     end
 
     def touch_switch_in_row (switch_id, row_id, opts={})
-      if (not opts.is_a?(Hash)) and (not table_id.nil?)
-        warn "WARN: deprecated 0.1.1 - passing a table_id '#{table_id}' has been deprecated pass a hash instead"
-        opts = {:table_id => table_id}
+      if (not opts.is_a?(Hash)) and (not opts.nil?)
+        deprecated('0.1.1',
+                   "you should no longer pass a table_id '#{opts}' pass a hash instead",
+                   :warn)
+        opts = {:table_id => opts}
       end
 
       default_opts = {:table_id => nil,

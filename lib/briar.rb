@@ -8,9 +8,10 @@ TOUCH_TRANSITION_RETRY_FREQ = 0.5
 ##################
 
 BRIAR_STEP_PAUSE = (ENV['STEP_PAUSE'] || 0.5).to_f
-BRIAR_WAIT_TIMEOUT = (ENV['WAIT_TIMEOUT'] || 4.0).to_f
+BRIAR_WAIT_TIMEOUT = (ENV['WAIT_TIMEOUT'] || 10.0).to_f
 BRIAR_RETRY_FREQ = (ENV['RETRY_FREQ'] || 0.1).to_f
-BRIAR_POST_TIMEOUT = (ENV['POST_TIMEOUT'] || 0.2).to_f
+# post timeout is the time to wait after a wait function returns true
+BRIAR_POST_TIMEOUT = (ENV['POST_TIMEOUT'] || 0.5).to_f
 
 ANIMATION_PAUSE = (ENV['ANIMATION_PAUSE'] || 0.6).to_f
 
@@ -72,10 +73,22 @@ def device ()
   end
 end
 
-#noinspection RubyDefParenthesesInspection
-def gestalt ()
-  pending("deprecated 0.0.8: replaced with Calabash::Cucumber::Device implementation - from now on use use 'device.*'")
+def deprecated(version, msg, type)
+  allowed = [:pending, :warn]
+  unless allowed.include?(type)
+    screenshot_and_raise "type '#{type}' must be on of '#{allowed}'"
+  end
+
+  msg = "deprecated '#{version}' - '#{msg}'"
+
+  if type.eql?(:pending)
+    pending(msg)
+  else
+    warn "\nWARN: #{msg}\n"
+  end
 end
+
+
 
 
 

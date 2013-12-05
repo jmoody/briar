@@ -1,10 +1,3 @@
-
-
-#noinspection RubyUnusedLocalVariable
-Then /^I scroll (left|right|up|down) until I see "([^\"]*)" limit (\d+)$/ do |dir, marker, limit|
-  pending "deprecated 0.0.6 - use Then I scroll #{dir} until I see \"#{marker}\""
-end
-
 Then /^I scroll (left|right|up|down) until I see "([^\"]*)"$/ do |dir, marker|
   wait_poll({:until_exists => "view marked:'#{marker}'",
              :timeout => 2}) do

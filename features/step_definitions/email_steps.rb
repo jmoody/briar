@@ -1,9 +1,3 @@
-
-#noinspection RubyUnusedLocalVariable
-Then /^I should see email body that contains "([^"]*)"$/ do |text|
-  pending "deprecated 0.0.6 - use 'Then I should see email view with body that contains \"#{text}\"'"
-end
-
 Then /^I should see email view with body that contains "([^"]*)"$/ do |text|
   if not device.ios5?
     warn_about_no_ios5_email_view
