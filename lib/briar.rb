@@ -2,9 +2,14 @@
 
 DEVICE_ENDPOINT = (ENV['DEVICE_ENDPOINT'] || 'http://localhost:37265')
 
-# deprecate these #
+# will deprecate soon
 TOUCH_TRANSITION_TIMEOUT = 30.0
 TOUCH_TRANSITION_RETRY_FREQ = 0.5
+ANIMATION_PAUSE = (ENV['ANIMATION_PAUSE'] || 0.6).to_f
+
+# see below for replacements
+BRIAR_RETRY_FREQ=0.1
+BRIAR_POST_TIMEOUT=0.5
 ##################
 
 BRIAR_STEP_PAUSE = (ENV['STEP_PAUSE'] || 0.5).to_f
@@ -16,11 +21,11 @@ BRIAR_STEP_PAUSE = (ENV['STEP_PAUSE'] || 0.5).to_f
 # the problem with a long time out is that during development you want the
 # tests to fail fast.
 BRIAR_WAIT_TIMEOUT = (ENV['WAIT_TIMEOUT'] || 14.0).to_f
-BRIAR_RETRY_FREQ = (ENV['RETRY_FREQ'] || 0.1).to_f
-# post timeout is the time to wait after a wait function returns true
-BRIAR_POST_TIMEOUT = (ENV['POST_TIMEOUT'] || 0.5).to_f
+BRIAR_WAIT_RETRY_FREQ = (ENV['RETRY_FREQ'] || 0.1).to_f
 
-ANIMATION_PAUSE = (ENV['ANIMATION_PAUSE'] || 0.6).to_f
+# 'post timeout' is the time to wait after a wait function returns true
+# i think 'wait step pause' is a better variable name
+BRIAR_WAIT_STEP_PAUSE = (ENV['POST_TIMEOUT'] || 0.5).to_f
 
 #noinspection RubyConstantNamingConvention
 AI = :accessibilityIdentifier
@@ -59,6 +64,7 @@ require 'briar/table'
 require 'briar/text_field'
 require 'briar/text_view'
 
+
 #noinspection RubyDefParenthesesInspection
 def device ()
   url = URI.parse(ENV['DEVICE_ENDPOINT']|| 'http://localhost:37265/')
@@ -81,6 +87,8 @@ def device ()
   end
 end
 
+# todo deprecated function needs file + line numbers
+# todo deprecated function does not output on a new line when called within cucumber
 def deprecated(version, msg, type)
   allowed = [:pending, :warn]
   unless allowed.include?(type)
@@ -92,7 +100,7 @@ def deprecated(version, msg, type)
   if type.eql?(:pending)
     pending(msg)
   else
-    warn "\nWARN: #{msg}\n"
+    warn "\nWARN: #{msg}"
   end
 end
 

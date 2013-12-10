@@ -1,5 +1,3 @@
-require 'calabash-cucumber'
-
 module Briar
   module Bars
 
@@ -56,8 +54,8 @@ module Briar
       end
 
       options = {:timeout => timeout,
-                 :retry_frequency => BRIAR_RETRY_FREQ,
-                 :post_timeout => BRIAR_POST_TIMEOUT,
+                 :retry_frequency => BRIAR_WAIT_RETRY_FREQ,
+                 :post_timeout => BRIAR_WAIT_STEP_PAUSE,
                  :timeout_message => msg}
       wait_for(options) do
         toolbar_button_exists? button_id, opts
@@ -73,8 +71,8 @@ module Briar
     def wait_for_toolbar_to_disappear(toolbar_id, timeout=BRIAR_WAIT_TIMEOUT)
       msg = "waited for '#{timeout}' seconds but i still see toolbar marked: '#{toolbar_id}'"
       options = {:timeout => timeout,
-                 :retry_frequency => BRIAR_RETRY_FREQ,
-                 :post_timeout => BRIAR_POST_TIMEOUT,
+                 :retry_frequency => BRIAR_WAIT_RETRY_FREQ,
+                 :post_timeout => BRIAR_WAIT_STEP_PAUSE,
                  :timeout_message => msg}
 
       wait_for(options) do
@@ -86,8 +84,8 @@ module Briar
     def wait_for_toolbar(toolbar_id, timeout=BRIAR_WAIT_TIMEOUT)
       msg = "waited for '#{timeout}' seconds but did not see toolbar marked: '#{toolbar_id}'"
       options = {:timeout => timeout,
-                 :retry_frequency => BRIAR_RETRY_FREQ,
-                 :post_timeout => BRIAR_POST_TIMEOUT,
+                 :retry_frequency => BRIAR_WAIT_RETRY_FREQ,
+                 :post_timeout => BRIAR_WAIT_STEP_PAUSE,
                  :timeout_message => msg}
       wait_for(options) do
         toolbar_exists? toolbar_id
@@ -108,8 +106,8 @@ module Briar
                    "second argument should be a hash - found '#{opts}'",
                    :warn)
         opts = {:wait_for_view => opts[:wait_for_view],
-               :timeout => BRIAR_WAIT_TIMEOUT,
-               :toolbar_id => nil}
+                :timeout => BRIAR_WAIT_TIMEOUT,
+                :toolbar_id => nil}
       end
 
       should_see_toolbar_button button_id, opts
@@ -122,8 +120,8 @@ module Briar
         timeout = opts[:timeout]
         msg = "touched '#{button_id}' and waited for '#{timeout}' sec but did not see '#{wait_for_view}'"
         options = {:timeout => timeout,
-                   :retry_frequency => BRIAR_RETRY_FREQ,
-                   :post_timeout => BRIAR_POST_TIMEOUT,
+                   :retry_frequency => BRIAR_WAIT_RETRY_FREQ,
+                   :post_timeout => BRIAR_WAIT_STEP_PAUSE,
                    :timeout_message => msg}
         wait_for(options) do
           view_exists? wait_for_view

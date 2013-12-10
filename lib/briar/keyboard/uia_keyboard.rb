@@ -86,33 +86,63 @@ module Briar
     end
 
     def touch_international_until_language(language_key, opts={})
-    default_opts = {:await_keyboard => false}
-    opts = default_opts.merge(opts)
-    await_keyboard if opts[:await_keyboard]
-    
-    unless keyboard_has_international?
-      screenshot_and_raise 'keyboard does not have an international key'
-    end
+      default_opts = {:await_keyboard => false}
+      opts = default_opts.merge(opts)
+      await_keyboard if opts[:await_keyboard]
 
-    target = BRIAR_LANGUAGE_KEYS[language_key]
-    if target.nil?
-      screenshot_and_raise "unknown language key '#{language_key}'"
-    end
+      unless keyboard_has_international?
+        screenshot_and_raise 'keyboard does not have an international key'
+      end
 
-    stop_at = spacebar_label
-    return if target.eql?(stop_at)
+      target = BRIAR_LANGUAGE_KEYS[language_key]
+      if target.nil?
+        screenshot_and_raise "unknown language key '#{language_key}'"
+      end
 
-    touch_international_key
+      stop_at = spacebar_label
+      return if target.eql?(stop_at)
 
-    current = spacebar_label
-    loop do
-      break if current.eql?(target)
       touch_international_key
+
+      current = spacebar_label
+      loop do
+        break if current.eql?(target)
+        touch_international_key
         current = spacebar_label
-      if current.eql?(stop_at)
+        if current.eql?(stop_at)
           screenshot_and_raise "could not find keyboard using key '#{language_key}' and space bar label '#{target}'"
+        end
       end
     end
+
+    def is_numeric_keyboard?(opts={})
+      default_opts = {:await_keyboard => false}
+      opts = default_opts.merge(opts)
+      await_keyboard if opts[:await_keyboard]
+      res = uia('UIATarget.localTarget().frontMostApp().keyboard().keys().length')['value']
+      res == 12
+    end
+
+    def briar_keyboard_send_numeric_backspace(opts={})
+      default_opts = {:await_keyboard => false}
+      opts = default_opts.merge(opts)
+      await_keyboard if opts[:await_keyboard]
+      if ios7?
+        uia('UIATarget.localTarget().frontMostApp().keyboard().buttons()[0].tap()')
+      else
+        keyboard_enter_char 'Delete'
+      end
+    end
+
+    def briar_keyboard_send_backspace(opts={})
+      default_opts = {:await_keyboard => false}
+      opts = default_opts.merge(opts)
+      await_keyboard if opts[:await_keyboard]
+      if is_numeric_keyboard?
+        briar_keyboard_send_numeric_backspace
+      else
+        briar_keyboard_send_backspace
+      end
     end
   end
 end

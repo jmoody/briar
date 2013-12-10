@@ -81,8 +81,8 @@ module Briar
       timeout = options[:timeout] || BRIAR_WAIT_TIMEOUT
       msg = "waited for '#{timeout}' seconds but did not see row '#{query_str}' with query '#{query_str}'"
       wait_for(:timeout => timeout,
-               :retry_frequency => BRIAR_RETRY_FREQ,
-               :post_timeout => BRIAR_POST_TIMEOUT,
+               :retry_frequency => BRIAR_WAIT_RETRY_FREQ,
+               :post_timeout => BRIAR_WAIT_STEP_PAUSE,
                :timeout_message => msg) do
         row_visible? row_id, table_id
       end
@@ -155,7 +155,7 @@ module Briar
       step_pause
     end
 
-    def briar_scroll_to_row_and_touch (row_id, opts=nil)
+    def briar_scroll_to_row_and_touch (row_id, opts={})
       if (not opts.is_a?(Hash)) and (not opts.nil?)
         warn "WARN: deprecated 0.1.3 - you should no longer pass a view_id '#{opts}' as an arg, pass opts hash instead"
         opts = {:wait_for_id => opts}
@@ -267,8 +267,8 @@ module Briar
       timeout = 5
       msg = "waited for '#{timeout}' seconds but did not see 'Delete' confirmation in row '#{row_id}'"
       wait_for(:timeout => timeout,
-               :retry_frequency => BRIAR_RETRY_FREQ,
-               :post_timeout => BRIAR_POST_TIMEOUT,
+               :retry_frequency => BRIAR_WAIT_RETRY_FREQ,
+               :post_timeout => BRIAR_WAIT_STEP_PAUSE,
                :timeout_message => msg) do
         element_exists query_str
       end

@@ -32,9 +32,7 @@ module Briar
 
       def should_see_date_picker (picker_id=nil)
         query_str = query_string_for_picker picker_id
-        if query(query_str).empty?
-          screenshot_and_raise "should see picker with query '#{query_str}'"
-        end
+        wait_for_query query_str
         query_str
       end
 
@@ -145,7 +143,7 @@ module Briar
 
       # funky little bugger - used to change a picker to the nearest minute
       # based on the minute interval
-      def time_hash_by_add_minutes_until_at_closest_interval (time_str, interval=picker_minute_interval())
+      def time_hash_by_add_minutes_until_at_closest_interval (time_str, interval=picker_minute_interval)
         screenshot_and_raise "interval '#{interval}' is not on (0, 59) which is not allowed" unless (0..59).member?(interval)
         time = Time.parse(time_str)
         # normalize to zero

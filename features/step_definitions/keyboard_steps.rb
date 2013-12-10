@@ -1,4 +1,3 @@
-
 Then /^I should see the keyboard$/ do
   should_see_keyboard
 end
@@ -20,7 +19,7 @@ end
 
 
 Then /^I touch the delete key$/ do
-  keyboard_enter_char 'Delete'
+  briar_keyboard_send_backspace
 end
 
 Then(/^I turn off spell checking and capitalization$/) do

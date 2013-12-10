@@ -1,5 +1,3 @@
-require 'calabash-cucumber'
-
 module Briar
   module Email
 
@@ -9,7 +7,7 @@ module Briar
     end
 
     def email_not_testable?
-      not email_testable?()
+      not email_testable?
     end
 
     def warn_about_no_ios5_email_view
@@ -93,11 +91,12 @@ module Briar
 
       timeout = opts[:timeout]
       msg = "waited for '#{timeout}' seconds but did not see email compose view"
+      #noinspection RubyParenthesesAfterMethodCallInspection
       dev = device()
       email_view_mark = opts[:email_view_mark]
       wait_for(:timeout => timeout,
-               :retry_frequency => BRIAR_RETRY_FREQ,
-               :post_timeout => BRIAR_POST_TIMEOUT,
+               :retry_frequency => BRIAR_WAIT_RETRY_FREQ,
+               :post_timeout => BRIAR_WAIT_STEP_PAUSE,
                :timeout_message => msg) do
         if dev.ios5?
           is_ios5_mail_view
@@ -132,6 +131,7 @@ module Briar
       # does a wait for iOS > 5 + uia available
       should_see_mail_view opts
 
+      #noinspection RubyParenthesesAfterMethodCallInspection
       device = device()
 
       if device.ios5?
@@ -153,8 +153,8 @@ module Briar
         timeout = BRIAR_WAIT_TIMEOUT * 2
         msg = "waited for '#{timeout}' seconds but did not see cancel button"
         wait_for(:timeout => timeout,
-                 :retry_frequency => BRIAR_RETRY_FREQ,
-                 :post_timeout => BRIAR_POST_TIMEOUT,
+                 :retry_frequency => BRIAR_WAIT_RETRY_FREQ,
+                 :post_timeout => BRIAR_WAIT_STEP_PAUSE,
                  :timeout_message => msg) do
           uia_element_exists?(:view, marked: 'Cancel')
         end
@@ -162,8 +162,8 @@ module Briar
         uia_tap_mark('Cancel')
         msg = "waited for '#{timeout}' seconds but did not see dismiss email action sheet"
         wait_for(:timeout => timeout,
-                 :retry_frequency => BRIAR_RETRY_FREQ,
-                 :post_timeout => BRIAR_POST_TIMEOUT,
+                 :retry_frequency => BRIAR_WAIT_RETRY_FREQ,
+                 :post_timeout => BRIAR_WAIT_STEP_PAUSE,
                  :timeout_message => msg) do
           uia_element_exists?(:view, marked: 'Delete Draft')
         end

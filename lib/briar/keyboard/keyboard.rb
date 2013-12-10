@@ -21,8 +21,8 @@ module Briar
     def should_see_keyboard (timeout=BRIAR_WAIT_TIMEOUT)
       msg = "waited for '#{timeout}' seconds but did not see keyboard"
       wait_for(:timeout => timeout,
-               :retry_frequency => BRIAR_RETRY_FREQ,
-               :post_timeout => BRIAR_POST_TIMEOUT,
+               :retry_frequency => BRIAR_WAIT_RETRY_FREQ,
+               :post_timeout => BRIAR_WAIT_STEP_PAUSE,
                :timeout_message => msg) do
         element_exists('keyboardAutomatic')
       end
@@ -31,8 +31,8 @@ module Briar
     def should_not_see_keyboard (timeout=BRIAR_WAIT_TIMEOUT)
       msg = "waited for '#{timeout}' seconds but keyboard did not disappear"
       wait_for(:timeout => timeout,
-               :retry_frequency => BRIAR_RETRY_FREQ,
-               :post_timeout => BRIAR_POST_TIMEOUT,
+               :retry_frequency => BRIAR_WAIT_RETRY_FREQ,
+               :post_timeout => BRIAR_WAIT_STEP_PAUSE,
                :timeout_message => msg) do
         element_does_not_exist 'keyboardAutomatic'
       end
