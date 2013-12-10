@@ -50,7 +50,6 @@ BRIAR_DATE_CONVERSION_FORMATS = {:objc => {:zoned => BRIAR_PICKER_OBJC_DATE_AND_
 module Briar
   module Picker
     module DateManipulation
-      include Briar::Picker::DateCore
 
       def date_format_for_target (target, zoned)
         res = BRIAR_DATE_CONVERSION_FORMATS[target][zoned]

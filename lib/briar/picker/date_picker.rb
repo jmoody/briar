@@ -23,9 +23,6 @@ examples
 module Briar
   module Picker
     module DateSteps
-      include Briar::Picker::DateCore
-      include Briar::Picker::DateManipulation
-
       def should_see_label_has_time_i_just_entered (label_id)
         should_see_label label_id
         query_str = "label marked:'#{label_id}'"

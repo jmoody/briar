@@ -2,7 +2,7 @@ require 'calabash-cucumber'
 
 module Briar
   module Picker
-    include Briar::Picker_Shared
+
     def should_see_picker (picker_name)
       picker_exists = !query("pickerView marked:'#{picker_name}").empty?
       unless picker_exists

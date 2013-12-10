@@ -3,8 +3,6 @@ require 'calabash-cucumber'
 module Briar
   module Control
     module Button
-      include Briar::Core
-
       def button_exists? (button_id)
         res = query("button marked:'#{button_id}'", :alpha)
         if res.empty?
