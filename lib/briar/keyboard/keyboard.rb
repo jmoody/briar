@@ -1,3 +1,5 @@
+require 'calabash-cucumber'
+
 module Briar
   module Keyboard
     # dismiss the keyboard on iPad

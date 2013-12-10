@@ -1,3 +1,5 @@
+require 'calabash-cucumber'
+
 module Briar
   module Control
     module Slider
@@ -18,11 +20,11 @@ module Briar
         args
       end
 
-      def briar_slider_set_value(slider_id, value,  options = {:animate => true,
-                                                         :notify_targets => true})
+      def briar_slider_set_value(slider_id, value, options = {:animate => true,
+                                                              :notify_targets => true})
         value_str = value.to_f.to_s
         args = briar_args_for_slider_set_value(options)
-        query_str =  "slider marked:'#{slider_id}'"
+        query_str = "slider marked:'#{slider_id}'"
         views_touched = map(query_str, :changeSlider, value_str, *args)
         if views_touched.empty? or views_touched.member? '<VOID>'
           screenshot_and_raise "could not slider marked '#{slider_id}' to '#{value}' using query '#{query_str}' with options '#{options}'"
@@ -30,7 +32,6 @@ module Briar
 
         views_touched
       end
-
 
 
       # WARNING: requires a tap gesture recognizer on the slider

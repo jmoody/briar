@@ -32,6 +32,8 @@ AI = :accessibilityIdentifier
 #noinspection RubyConstantNamingConvention
 AL = :accessibilityLabel
 
+require 'calabash-cucumber'
+
 require 'briar/version'
 require 'briar/briar_core'
 require 'briar/briar_uia'

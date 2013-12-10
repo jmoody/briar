@@ -40,7 +40,7 @@ module Briar
     def uia_touch_with_options(point, opts={})
       defaults = {:tap_count => 1,
                   :touch_count => 1,
-                  :duration => 1.0}
+                  :duration => 0.0}
       opts = defaults.merge(opts)
       pt = "{x: #{point[:x]}, y: #{point[:y]}}"
       args = "{tapCount: #{opts[:tap_count]}, touchCount: #{opts[:touch_count]}, duration: #{opts[:duration]}}"
@@ -50,11 +50,24 @@ module Briar
     def dismiss_ipad_keyboard
       screenshot_and_raise 'cannot dismiss keyboard on iphone' if iphone?
       screenshot_and_raise 'cannot dismiss keyboard without launching with instruments' unless uia_available?
-      send_uia_command command:"uia.keyboard().buttons()['Hide keyboard'].tap()"
+      send_uia_command command: "uia.keyboard().buttons()['Hide keyboard'].tap()"
       step_pause
     end
 
     def make_ipad_emulation_1x
+      #irb(main):040:0> uia('UIATarget.localTarget().frontMostApp().windows()[2].buttons()[0].label()')
+      #{
+      #      "status" => "success",
+      #      "value" => "Switch to normal mode",
+      #      "index" => 21
+      #}
+      #irb(main):041:0> uia('UIATarget.localTarget().frontMostApp().windows()[2].buttons()[0].label()')
+      #{
+      #      "status" => "success",
+      #      "value" => "Switch to full screen mode",
+      #      "index" => 22
+      #}
+
       device = device()
       unless device.ipad?
         pending 'this trick only works on the iPad'
@@ -70,14 +83,14 @@ module Briar
 
       # this only works because iPhone apps emulated on iPads in iOS 7 _always_
       # launch at 2x
-      uia_touch_with_options({x:738, y:24})
+      uia_touch_with_options({x: 738, y: 24})
       step_pause
     end
 
     def ensure_ipad_emulation_1x
       device = device()
       if device.ipad? and device.ios7? and uia_available?
-        uia_touch_with_options({x:738, y:24})
+        uia_touch_with_options({x: 738, y: 24})
       end
     end
 

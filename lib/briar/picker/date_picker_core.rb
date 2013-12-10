@@ -1,3 +1,5 @@
+require 'calabash-cucumber'
+
 UIDatePickerModeTime = 0
 UIDatePickerModeDate = 1
 UIDatePickerModeDateAndTime = 2

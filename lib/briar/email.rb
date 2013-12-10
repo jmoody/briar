@@ -1,3 +1,5 @@
+require 'calabash-cucumber'
+
 module Briar
   module Email
 
@@ -173,6 +175,44 @@ module Briar
         wait_for_view_to_disappear 'compose email'
       end
       step_pause
+    end
+
+    def uia_touch_email_to (opts={})
+      default_opts = {:await_keyboard => true}
+      opts = default_opts.merge(opts)
+
+      if uia_not_available?
+        screenshot_and_raise 'UIA needs to be available'
+      end
+
+      res = uia_query(:view, marked: 'To:').first
+      rect = res['rect']
+      point = {:x => rect['x'] + (2 * rect['width']),
+               :y => rect['y']}
+      uia_touch_with_options(point)
+      uia_await_keyboard if opts[:await_keyboard]
+    end
+
+    def uia_set_email_to(addresses, opts={})
+      default_opts = {:await_keyboard => true}
+      opts = default_opts.merge(opts)
+      uia_touch_email_to opts
+      addresses.each do |addr|
+        uia_type_string addr
+        uia_enter
+        step_pause
+      end
+    end
+
+    def uia_touch_send_email
+      uia_tap_mark('Send')
+    end
+
+    def uia_send_email_to(addresses, opts={})
+      default_opts = {:await_keyboard => true}
+      opts = default_opts.merge(opts)
+      uia_set_email_to addresses, opts
+      uia_touch_send_email
     end
   end
 end

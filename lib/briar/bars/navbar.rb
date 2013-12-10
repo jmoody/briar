@@ -1,3 +1,5 @@
+require 'calabash-cucumber'
+
 module Briar
   module Bars
     def navbar_visible?

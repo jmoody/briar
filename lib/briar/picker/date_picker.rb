@@ -1,3 +1,4 @@
+require 'calabash-cucumber'
 =begin
 
 examples

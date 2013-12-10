@@ -1,3 +1,4 @@
+require 'calabash-cucumber'
 module Briar
   module TextView
     def text_view_exists? (view_id)

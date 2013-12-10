@@ -1,3 +1,5 @@
+require 'calabash-cucumber'
+
 module Briar
   module ImageView
     def image_view_exists?(iv_id)

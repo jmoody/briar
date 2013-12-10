@@ -1,3 +1,5 @@
+require 'calabash-cucumber'
+
 module Briar
   module Label
     def label_exists? (name)
