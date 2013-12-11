@@ -19,7 +19,7 @@ end
 
 
 Then /^I touch the delete key$/ do
-  briar_keyboard_send_backspace
+  keyboard_send_backspace
 end
 
 Then(/^I turn off spell checking and capitalization$/) do

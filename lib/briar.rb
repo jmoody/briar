@@ -36,7 +36,8 @@ require 'calabash-cucumber'
 
 require 'briar/version'
 require 'briar/briar_core'
-require 'briar/briar_uia'
+require 'briar/uia/briar_uia'
+require 'briar/uia/briar_ipad_emulation'
 
 require 'briar/alerts_and_sheets/alert_view'
 require 'briar/alerts_and_sheets/action_sheet'
@@ -57,8 +58,12 @@ require 'briar/picker/date_picker'
 
 require 'briar/email'
 require 'briar/image_view'
+
 require 'briar/keyboard/keyboard'
 require 'briar/keyboard/uia_keyboard'
+require 'briar/keyboard/uia_keyboard_language'
+require 'briar/keyboard/uia_numeric_keyboard'
+
 require 'briar/label'
 require 'briar/scroll_view'
 
