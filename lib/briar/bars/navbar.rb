@@ -101,11 +101,26 @@ module Briar
     end
 
 
-    def go_back_after_waiting
-      sleep(0.2)
-      wait_for(:timeout => 1.0,
-               :retry_frequency => BRIAR_WAIT_RETRY_FREQ,
-               :post_timeout => BRIAR_WAIT_STEP_PAUSE) do
+    def go_back_after_waiting(opts={})
+      default_opts = {:wait_before_going_back => 0.2,
+                      :timeout => BRIAR_WAIT_TIMEOUT,
+                      :timeout_message => nil,
+                      :wait_step_pause => BRIAR_WAIT_STEP_PAUSE,
+                      :retry_frequency => BRIAR_WAIT_RETRY_FREQ}
+      opts = default_opts.merge(opts)
+      wait_before = opts[:wait_before_going_back]
+      sleep(wait_before)
+
+      msg = opts[:timeout_message]
+      timeout = opts[:timeout]
+      if msg.nil?
+        msg = "waited for '#{timeout + wait_before}' for navbar back button but didn't see it"
+      end
+
+      wait_for(:timeout => timeout,
+               :retry_frequency => opts[:retry_frequency],
+               :post_timeout => opts[:wait_step_pause],
+               :timeout_message => msg) do
         not query('navigationItemButtonView first').empty?
       end
       touch('navigationItemButtonView first')
@@ -114,8 +129,9 @@ module Briar
 
     def go_back_and_wait_for_view (view)
       sleep(0.2)
-      wait_for(:timeout => BRIAR_WAIT_TIMEOUT,
-               :retry_frequency => BRIAR_WAIT_RETRY_FREQ) do
+      timeout = BRIAR_WAIT_TIMEOUT
+      msg = "waited '#{timeout}' seconds but did not see navbar back button"
+      wait_for(wait_opts(msg, timeout)) do
         not query('navigationItemButtonView first').empty?
       end
 
@@ -127,10 +143,13 @@ module Briar
     end
 
     def touch_navbar_item(item_name, wait_for_view_id=nil)
-      wait_for(:timeout => BRIAR_WAIT_TIMEOUT,
-               :retry_frequency => BRIAR_WAIT_RETRY_FREQ) do
+      timeout = BRIAR_WAIT_TIMEOUT
+      msg = "waited '#{timeout}' seconds for nav bar item '#{item_name}' to appear"
+
+      wait_for(wait_opts(msg, timeout)) do
         (index_of_navbar_button(item_name) != nil) || button_exists?(item_name)
       end
+
       sleep(0.2)
       idx = index_of_navbar_button item_name
 

@@ -260,6 +260,10 @@ module Briar
     end
 
     def query_str_for_confirm_delete_in_row(row_id, table_id=nil)
+      if device.ios5?
+        # it is not either of those...
+        pending 'cannot detect the confirm delete button (yet) in iOS 5'
+      end
       mark = device.ios7? ? 'Delete' : 'Confirm Deletion'
       "#{query_str_for_row row_id, table_id} descendant control marked:'#{mark}'"
     end
