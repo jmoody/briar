@@ -3,15 +3,6 @@ require 'calabash-cucumber'
 module Briar
   module UIA
 
-    def uia_available?
-      # proxy for testing if run_loop exists
-      not uia_not_available?
-    end
-
-    def uia_not_available?
-      default_device.nil?
-    end
-
     def uia_handle_target_command(cmd, *query_args)
       args = query_args.map do |part|
         if part.is_a?(String)

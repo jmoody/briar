@@ -72,29 +72,16 @@ require 'briar/text_field'
 require 'briar/text_view'
 
 
-#noinspection RubyDefParenthesesInspection
-def device ()
-  url = URI.parse(ENV['DEVICE_ENDPOINT']|| 'http://localhost:37265/')
-  http = Net::HTTP.new(url.host, url.port)
-  res = http.start do |sess|
-    sess.request Net::HTTP::Get.new(ENV['CALABASH_VERSION_PATH'] || 'version')
-  end
-  status = res.code
-
-  #noinspection RubyUnusedLocalVariable
-  begin
-    http.finish if http and http.started?
-  rescue Exception => e
-    # ignored
-  end
-
-  if status=='200'
-    version_body = JSON.parse(res.body)
-    Calabash::Cucumber::Device.new(url, version_body)
-  end
+def device
+  deprecated('0.1.3', "use the calabash function 'default_device' instead", :warn)
+  @device = default_device()
 end
 
-# todo deprecated function needs file + line numbers
+def xamarin_test_cloud?
+  ENV['XAMARIN_TEST_CLOUD'] == '1'
+end
+
+
 # todo deprecated function does not output on a new line when called within cucumber
 def deprecated(version, msg, type)
   allowed = [:pending, :warn]
@@ -102,7 +89,9 @@ def deprecated(version, msg, type)
     screenshot_and_raise "type '#{type}' must be on of '#{allowed}'"
   end
 
-  msg = "deprecated '#{version}' - '#{msg}'"
+  info = Kernel.caller.first
+
+  msg = "deprecated '#{version}' - '#{msg}'\n#{info}"
 
   if type.eql?(:pending)
     pending(msg)
