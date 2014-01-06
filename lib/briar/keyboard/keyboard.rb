@@ -72,7 +72,7 @@ module Briar
 
     #noinspection RubyUnusedLocalVariable
     def briar_clear_text(view_id, timeout=5)
-      deprecated('0.1.1', "will remove 'timeout' argument in a future release", :warn)
+      _deprecated('0.1.1', "will remove 'timeout' argument in a future release", :warn)
       clear_text("view marked:'#{view_id}'")
 
       # i really wanted this to work, but there are too many issues with the
@@ -93,7 +93,7 @@ module Briar
 
     #noinspection RubyUnusedLocalVariable
     def set_autocapitalization (type)
-      deprecated('0.1.1', 'does not work', :pending)
+      _deprecated('0.1.1', 'does not work', :pending)
       #if !query('textView index:0').empty?
       #  query('textView index:0', [{setAutocapitalizationType: type}])
       #elsif !query('textField index:0').empty?
@@ -104,13 +104,13 @@ module Briar
     end
 
     def turn_autocapitalization_off
-      deprecated('0.1.1', 'does not work', :pending)
+      _deprecated('0.1.1', 'does not work', :pending)
       #set_autocapitalization UITextAutocapitalizationTypeNone
     end
 
     #noinspection RubyUnusedLocalVariable
     def set_autocorrect (type)
-      deprecated('0.1.1', 'does not work', :pending)
+      _deprecated('0.1.1', 'does not work', :pending)
       #if !query('textView index:0').empty?
       #  query('textView index:0', [{setAutocorrectionType: type}])
       #elsif !query('textField index:0').empty?
@@ -121,12 +121,12 @@ module Briar
     end
 
     def turn_autocorrect_off
-      deprecated('0.1.1', 'does not work', :pending)
+      _deprecated('0.1.1', 'does not work', :pending)
       # set_autocorrect UITextAutocorrectionTypeNo
     end
 
     def turn_spell_correct_off
-      deprecated('0.1.1', 'does not work', :pending)
+      _deprecated('0.1.1', 'does not work', :pending)
       #if !query('textView index:0').empty?
       #  query('textView index:0', [{setSpellCheckingType: UITextSpellCheckingTypeNo}])
       #elsif !query('textField index:0').empty?

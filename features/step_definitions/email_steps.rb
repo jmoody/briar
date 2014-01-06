@@ -1,5 +1,5 @@
 Then /^I should see email view with body that contains "([^"]*)"$/ do |text|
-  if not device.ios5?
+  if not ios5?
     warn_about_no_ios5_email_view
   else
     2.times { step_pause }
@@ -26,7 +26,7 @@ Then /^I touch the "([^"]*)" row and wait to see the email view$/ do |row_id|
 end
 
 Then /^I should see email view with "([^"]*)" in the subject$/ do |text|
-  if not device.ios5?
+  if not ios5?
     warn_about_no_ios5_email_view
   else
     wait_for_animation
@@ -38,7 +38,7 @@ Then /^I should see email view with "([^"]*)" in the subject$/ do |text|
 end
 
 Then /^I should see email view with recipients? "([^"]*)"$/ do |comma_sep_addrs|
-  if not device.ios5?
+  if not ios5?
     warn_about_no_ios5_email_view
   else
     should_see_recipients comma_sep_addrs
@@ -51,7 +51,7 @@ Then /^I should see email view with to field set to "([^"]*)"$/ do |text|
 end
 
 Then /^I should see email view with text like "([^"]*)" in the subject$/ do |text|
-  if not device.ios5?
+  if not ios5?
     warn_about_no_ios5_email_view
   else
     should_see_mail_view
@@ -78,7 +78,7 @@ Given(/^we are testing on the simulator or a device configured to send emails$/)
 end
 
 Given(/^I can test an email view$/) do
-  if (not device.ios5?) and (not uia_available?)
+  if (not ios5?) and (not uia_available?)
     warn_about_no_ios5_email_view
     pending('cannot test email views yet')
   end

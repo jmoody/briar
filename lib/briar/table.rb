@@ -208,7 +208,7 @@ module Briar
 
     def touch_row_and_wait_to_see(row_id, view, opts={})
       if (not opts.is_a?(Hash)) and (not opts.nil?)
-        deprecated('0.1.3',
+        _deprecated('0.1.3',
                    "you should no longer pass a table_id '#{opts}' as an arg, pass opts hash instead",
                    :warn)
         opts = {:table_id => opts}
@@ -241,7 +241,7 @@ module Briar
     end
 
     def swipe_on_row (dir, row_id, table_id=nil)
-      if device.ios7? and device.simulator?
+      if ios7? and simulator?
         pending('swiping on rows is not available on iOS 7 because of a bug in Xcode 5 simulator')
       end
       wait_for_row row_id, {:table_id => table_id}
@@ -260,11 +260,11 @@ module Briar
     end
 
     def query_str_for_confirm_delete_in_row(row_id, table_id=nil)
-      if device.ios5?
+      if ios5?
         # it is not either of those...
         pending 'cannot detect the confirm delete button (yet) in iOS 5'
       end
-      mark = device.ios7? ? 'Delete' : 'Confirm Deletion'
+      mark = ios7? ? 'Delete' : 'Confirm Deletion'
       "#{query_str_for_row row_id, table_id} descendant control marked:'#{mark}'"
     end
 
@@ -343,7 +343,7 @@ module Briar
     def should_see_switch_in_row_with_state (switch_id, row_id, state, opts={})
 
       if (not opts.is_a?(Hash)) and (not opts.nil?)
-        deprecated('0.1.1',
+        _deprecated('0.1.1',
                    "you should no longer pass a table_id '#{opts}' as an arg, pass opts hash instead",
                    :warn)
         opts = {:table_id => opts}
@@ -412,7 +412,7 @@ module Briar
 
     def touch_switch_in_row (switch_id, row_id, opts={})
       if (not opts.is_a?(Hash)) and (not opts.nil?)
-        deprecated('0.1.1',
+        _deprecated('0.1.1',
                    "you should no longer pass a table_id '#{opts}' pass a hash instead",
                    :warn)
         opts = {:table_id => opts}

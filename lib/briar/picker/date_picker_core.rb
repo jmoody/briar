@@ -23,7 +23,7 @@ BRIAR_PICKER_12H_BRIEF_DATE_FMT = '%a %b %e'
 BRIAR_DATE_FORMATS = {:brief_24h => BRIAR_PICKER_24H_BRIEF_DATE_FMT,
                       :brief_12h => BRIAR_PICKER_12H_BRIEF_DATE_FMT}
 
-
+# todo briar picker should be a class - 1 instance per picker
 module Briar
   module Picker
     module DateCore
@@ -38,14 +38,37 @@ module Briar
         query_str
       end
 
-      def ruby_time_from_picker (options = {:picker_id => nil,
-                                            :convert_time_to_utc => false})
-        picker_id = picker_id_from_options options
-
-        if picker_is_in_countdown_mode picker_id
-          screenshot_and_raise 'method is not available for pickers that are not in date or date time mode'
+      def ruby_time_from_picker (options = {})
+        if not options.is_a?(Hash) or options == nil
+          if options == nil
+            msg = "'picker_id' argument has been replaced with options hash; pass '{:picker_id => nil}' instead"
+            options = {:picker_id => nil}
+          else
+            msg = "'picker_id' argument has been replaced with options hash; pass '{:picker_id => #{options}}' instead"
+            options = {:picker_id => options}
+          end
+          _deprecated('0.1.3', msg, :warn)
         end
-        query_str = should_see_date_picker picker_id
+
+        default_options = {:picker_id => nil,
+                           :convert_time_to_utc => false,
+                           :assert_mode => true,
+                           :assert_picker => true}
+        options = default_options.merge(options)
+
+        picker_id = options[:picker_id]
+
+        if options[:assert_mode]
+          if picker_is_in_countdown_mode picker_id
+            screenshot_and_raise 'method is not available for pickers that are not in date or date time mode'
+          end
+        end
+
+        if options[:assert_picker]
+          should_see_date_picker picker_id
+        end
+
+        query_str = query_string_for_picker(picker_id)
         res = query(query_str, :date)
         if res.empty?
           screenshot_and_raise "should be able to get date from picker with query '#{query_str}'"
@@ -192,72 +215,125 @@ module Briar
       end
 
       # get the times off the picker in 12h and 24h format
-      def picker_time_str(format_key, options={:picker_id => nil,
-                                               :convert_time_to_utc => false})
-        picker_id = picker_id_from_options options
+      def picker_time_str(format_key, options={})
+        default_options = {:picker_id => nil,
+                           :convert_time_to_utc => false,
+                           :time_on_picker => nil,
+                           :assert_mode => true}
+        options = default_options.merge(options)
 
-        if picker_is_in_date_mode picker_id or picker_is_in_countdown_mode picker_id
-          screenshot_and_raise 'the time is not applicable for this mode'
+        picker_id = options[:picker_id]
+
+        if options[:assert_mode]
+          if picker_is_in_date_mode picker_id or picker_is_in_countdown_mode picker_id
+            screenshot_and_raise 'the time is not applicable for this mode'
+          end
         end
+
         format = BRIAR_TIME_FORMATS[format_key]
         unless format
           screenshot_and_raise "format '#{format_key}' was not one of '#{BRIAR_TIME_FORMATS}'"
         end
 
-        time = ruby_time_from_picker options
+        time = options[:time_on_picker] || ruby_time_from_picker(options)
         time.strftime(format).strip.sub(BRIAR_REMOVE_LEADING_ZERO_REGEX, '')
       end
 
 
-      def picker_time_strs_hash(options={:picker_id => nil,
-                                         :convert_time_to_utc => false})
-        picker_id = picker_id_from_options options
-        if picker_is_in_date_mode picker_id or picker_is_in_countdown_mode picker_id
-          screenshot_and_raise 'the time is not applicable for this mode'
+      def picker_time_strs_hash(options={})
+        default_options = {:picker_id => nil,
+                           :convert_time_to_utc => false,
+                           :time_on_picker => nil,
+                           :assert_mode => true}
+        options = default_options.merge(options)
+        picker_id = options[:picker_id]
+
+        if options[:assert_mode]
+          if picker_is_in_date_mode picker_id or picker_is_in_countdown_mode picker_id
+            screenshot_and_raise 'the time is not applicable for this mode'
+          end
         end
 
         {:h24 => picker_time_str(:h24, options),
          :h12 => picker_time_str(:h12, options)}
       end
 
-      def picker_time_strs_arr(options={:picker_id => nil,
-                                        :convert_time_to_utc => false})
-        picker_id = picker_id_from_options options
-        if picker_is_in_date_mode picker_id or picker_is_in_countdown_mode picker_id
-          screenshot_and_raise 'the time is not applicable for this mode'
+      def picker_time_strs_arr(options={})
+
+        default_options = {:picker_id => nil,
+                           :convert_time_to_utc => false,
+                           :time_on_picker => nil,
+                           :assert_mode => true}
+        options = default_options.merge(options)
+
+        picker_id = options[:picker_id]
+
+        if options[:assert_mode]
+          if picker_is_in_date_mode picker_id or picker_is_in_countdown_mode picker_id
+            screenshot_and_raise 'the time is not applicable for this mode'
+          end
         end
         [picker_time_str(:h24, options), picker_time_str(:h12, options)]
       end
 
-      def picker_brief_date_str(format_key, options={:picker_id => nil,
-                                                     :convert_time_to_utc => false})
-        picker_id = picker_id_from_options options
-        if picker_is_in_countdown_mode picker_id
-          screenshot_and_raise 'date is not applicable for this mode'
+      def picker_brief_date_str(format_key, options={})
+
+        default_options = {:picker_id => nil,
+                           :convert_time_to_utc => false,
+                           :time_on_picker => nil,
+                           :assert_mode => true}
+        options = default_options.merge(options)
+
+        picker_id = options[:picker_id]
+
+        if options[:assert_mode]
+          if picker_is_in_countdown_mode picker_id
+            screenshot_and_raise 'date is not applicable for this mode'
+          end
         end
+
         format = BRIAR_DATE_FORMATS[format_key]
         unless format
           screenshot_and_raise "format '#{format_key}' is not one of '#{BRIAR_DATE_FORMATS.keys}'"
         end
-        time = ruby_time_from_picker options
+
+        time = options[:time_on_picker] || ruby_time_from_picker(options)
         time.strftime(format).strip.squeeze(' ')
       end
 
-      def picker_brief_date_strs_hash(options={:picker_id => nil,
-                                               :convert_time_to_utc => false})
-        picker_id = picker_id_from_options options
-        if picker_is_in_countdown_mode picker_id
-          screenshot_and_raise 'date is not applicable for this mode'
+      def picker_brief_date_strs_hash(options={})
+
+        default_options = {:picker_id => nil,
+                           :convert_time_to_utc => false,
+                           :time_on_picker => nil,
+                           :assert_mode => true}
+        options = default_options.merge(options)
+
+        picker_id = options[:picker_id]
+
+        if options[:assert_mode]
+          if picker_is_in_countdown_mode picker_id
+            screenshot_and_raise 'date is not applicable for this mode'
+          end
         end
         {:brief_24h => picker_brief_date_str(:brief_24h, options),
          :brief_12h => picker_brief_date_str(:brief_12h, options)}
       end
 
-      def picker_brief_date_strs_arr(options={:picker_id => nil,
-                                              :convert_time_to_utc => false})
-        picker_id = picker_id_from_options options
-        if picker_is_in_countdown_mode picker_id
-          screenshot_and_raise 'date is not applicable for this mode'
+      def picker_brief_date_strs_arr(options={})
+
+        default_options = {:picker_id => nil,
+                           :convert_time_to_utc => false,
+                           :time_on_picker => nil,
+                           :assert_mode => true}
+        options = default_options.merge(options)
+
+        picker_id = options[:picker_id]
+
+        if options[:assert_mode]
+          if picker_is_in_countdown_mode picker_id
+            screenshot_and_raise 'date is not applicable for this mode'
+          end
         end
         [picker_brief_date_str(:brief_24h, options), picker_brief_date_str(:brief_12h, options)]
       end

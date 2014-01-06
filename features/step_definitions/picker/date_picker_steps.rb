@@ -1,3 +1,4 @@
+require 'benchmark'
 
 Then /^I change the time on the picker to "([^"]*)"$/ do |target_time|
   change_time_on_picker_with_time_str target_time

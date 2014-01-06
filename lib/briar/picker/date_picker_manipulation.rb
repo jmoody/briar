@@ -1,5 +1,6 @@
 require 'calabash-cucumber'
 require 'date'
+require 'benchmark'
 
 =begin
 
@@ -19,7 +20,7 @@ options ==>
 # WARN: only set this if you need times converted to UTC - if you are in UTC
 # timezone, don't set this
 :convert_time_to_utc => false,
-# animat the change
+# animate the change
 :animate => true,
 # optionally pass the picker id
 :picker_id => nil,
@@ -89,7 +90,7 @@ module Briar
       end
 
       def target_date_for_change_time_on_picker_with_time(target_time, convert, picker_id=nil)
-        current_time = ruby_time_from_picker picker_id
+        current_time = ruby_time_from_picker({:picker_id => picker_id})
         tz_offset = (convert) ? 0 : Rational((target_time.utc_offset/3600.0)/24.0)
         DateTime.new(current_time.year, current_time.mon, current_time.day,
                      target_time.hour, target_time.min,
@@ -136,22 +137,31 @@ module Briar
                                                          :picker_id => nil,
                                                          :notify_targets => true})
 
+
         picker_id = picker_id_from_options options
         unless picker_is_in_time_mode picker_id or picker_is_in_date_and_time_mode picker_id
           screenshot_and_raise 'picker is not in date time or time mode'
         end
 
+
         should_see_date_picker picker_id
+
 
         convert = convert_to_utc_from_options options
 
+
         ensure_can_change_picker_to_date target_dt, picker_id
+
 
         target_str = convert_date_time_to_objc_fmt target_dt, convert
         fmt_str = date_format_for_target(:objc, convert ? :zoned : :default)
 
+
         args = args_for_change_date_on_picker options
+
+
         query_str = query_string_for_picker picker_id
+
 
         views_touched = map(query_str, :changeDatePickerDate, target_str, fmt_str, *args)
 
@@ -169,9 +179,12 @@ module Briar
                                                                     :animate => true,
                                                                     :picker_id => nil,
                                                                     :notify_targets => true})
+
         convert = convert_to_utc_from_options options
         picker_id = picker_id_from_options options
+
         target_dt = target_date_for_change_time_on_picker_with_time_str time_str, convert, picker_id
+
         change_picker_date_time target_dt, options
       end
 
@@ -204,10 +217,22 @@ module Briar
       end
 
 
-      def set_briar_date_picker_variables(target_dt, options={:picker_id => nil,
-                                                              :convert_time_to_utc => false})
-        picker_id = picker_id_from_options options
-        if picker_is_in_date_and_time_mode picker_id or picker_is_in_time_mode picker_id
+      def set_briar_date_picker_variables(target_dt, options={})
+        default_options = {:picker_id => nil,
+                           :convert_time_to_utc => false,
+                           :assert_mode => false}
+        options = default_options.merge(options)
+
+        options[:assert_picker] = false
+        ruby_picker_time = ruby_time_from_picker options
+
+        options[:time_on_picker] = ruby_picker_time
+
+
+        picker_mode = picker_mode(options[:picker_id])
+
+        if picker_mode == UIDatePickerModeDateAndTime or
+              picker_mode == UIDatePickerModeTime
           @date_picker_time_12h = picker_time_str :h12, options
           @date_picker_time_24h = picker_time_str :h24, options
           @date_picker_time_hash = picker_time_strs_hash options

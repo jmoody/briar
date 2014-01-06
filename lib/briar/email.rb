@@ -4,7 +4,7 @@ module Briar
   module Email
 
     def email_testable?
-      return true if device.ios5?
+      return true if ios5?
       uia_available?
     end
 
@@ -21,7 +21,7 @@ module Briar
     end
 
     def email_body_contains? (text)
-      if device.ios5?
+      if ios5?
         !query("view:'MFComposeTextContentView' {text LIKE '*#{text}*'}").empty?
       else
         warn 'WARN: iOS > 5 detected - cannot test for email body text'
@@ -33,7 +33,7 @@ module Briar
     end
 
     def email_subject_is? (text)
-      if device.ios5?
+      if ios5?
         email_subject.eql? text
       else
         warn 'WARN: iOS > 5 detected - cannot test for email subject text'
@@ -41,7 +41,7 @@ module Briar
     end
 
     def email_subject_has_text_like? (text)
-      if device.ios5?
+      if ios5?
         !query("view:'MFComposeSubjectView' {text LIKE '*#{text}*'}").empty?
       else
         warn 'WARN: iOS > 5 detected - cannot test for email subject text'
@@ -53,7 +53,7 @@ module Briar
     end
 
     def email_to_field_is? (text)
-      if device.ios5?
+      if ios5?
         email_to.eql? text
       else
         warn 'WARN: iOS > 5 detected - cannot test for email to field'
@@ -94,13 +94,13 @@ module Briar
       timeout = opts[:timeout]
       msg = "waited for '#{timeout}' seconds but did not see email compose view"
       #noinspection RubyParenthesesAfterMethodCallInspection
-      dev = device()
+
       email_view_mark = opts[:email_view_mark]
       wait_for(:timeout => timeout,
                :retry_frequency => BRIAR_WAIT_RETRY_FREQ,
                :post_timeout => BRIAR_WAIT_STEP_PAUSE,
                :timeout_message => msg) do
-        if dev.ios5?
+        if ios5?
           is_ios5_mail_view
         else
           view_exists? email_view_mark
@@ -110,7 +110,7 @@ module Briar
 
     #noinspection RubyResolve
     def device_can_send_email
-      return true if device.simulator?
+      return true if simulator?
       if defined? backdoor_device_configured_for_mail?
         backdoor_device_configured_for_mail?
       else
@@ -119,7 +119,6 @@ module Briar
     end
 
     def delete_draft_and_wait_for (view_id, opts={})
-
 
       if email_not_testable?
         warn_about_no_ios5_email_view
@@ -133,10 +132,7 @@ module Briar
       # does a wait for iOS > 5 + uia available
       should_see_mail_view opts
 
-      #noinspection RubyParenthesesAfterMethodCallInspection
-      device = device()
-
-      if device.ios5?
+      if ios5?
         touch_navbar_item_and_wait_for_view 'Cancel', 'Delete Draft'
         step_pause
         touch_sheet_button_and_wait_for_view 'Delete Draft', view_id
@@ -147,12 +143,11 @@ module Briar
           pending "iOS > 5 detected AND orientation '#{sbo}' - there is a bug in UIAutomation that prohibits touching the cancel button"
         end
 
-        # might also occur on devices, but i don't know
-        if sbo.eql?(:up) and device.ipad? and device.simulator?
-          pending "iOS > 5 detected AND orientation '#{sbo}' AND simulator - there is a bug in UIAutomation prohibits touching the cancel button"
+        if sbo.eql?(:up) and ipad?
+          pending "iOS > 5 detected AND orientation '#{sbo}' AND ipad - there is a bug in UIAutomation prohibits touching the cancel button"
         end
 
-        timeout = BRIAR_WAIT_TIMEOUT * 2
+        timeout = BRIAR_WAIT_TIMEOUT
         msg = "waited for '#{timeout}' seconds but did not see cancel button"
         wait_for(:timeout => timeout,
                  :retry_frequency => BRIAR_WAIT_RETRY_FREQ,
@@ -178,7 +173,7 @@ module Briar
     end
 
     def uia_touch_email_to (opts={})
-      default_opts = {:await_keyboard => true}
+      default_opts = {:wait_for_keyboard => true}
       opts = default_opts.merge(opts)
 
       if uia_not_available?
@@ -190,11 +185,11 @@ module Briar
       point = {:x => rect['x'] + (2 * rect['width']),
                :y => rect['y']}
       uia_touch_with_options(point)
-      uia_await_keyboard if opts[:await_keyboard]
+      uia_wait_for_keyboard if opts[:wait_for_keyboard]
     end
 
     def uia_set_email_to(addresses, opts={})
-      default_opts = {:await_keyboard => true}
+      default_opts = {:wait_for_keyboard => true}
       opts = default_opts.merge(opts)
       uia_touch_email_to opts
       addresses.each do |addr|
@@ -209,7 +204,7 @@ module Briar
     end
 
     def uia_send_email_to(addresses, opts={})
-      default_opts = {:await_keyboard => true}
+      default_opts = {:wait_for_keyboard => true}
       opts = default_opts.merge(opts)
       uia_set_email_to addresses, opts
       uia_touch_send_email

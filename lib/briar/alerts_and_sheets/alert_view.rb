@@ -8,7 +8,7 @@ module Briar
     # touch("view:'_UIModalItemAlertContentView' descendant view:'_UIModalItemTableViewCell'  marked:'OK'")
 
     def alert_exists? (alert_id=nil)
-      if device.ios7?
+      if uia_available?
         res = send_uia_command command: 'uia.alert() != null'
         res['value']
       else
@@ -41,26 +41,26 @@ module Briar
     end
 
     def should_see_alert_with_title (title, timeout=BRIAR_WAIT_TIMEOUT)
-      if device.ios7?
+      if ios7?
         warn 'WARN: cannot distinguish between alert titles and messages'
         should_see_alert
-        if uia_query(:view, marked: "#{title}").empty?
-          screenshot_and_raise "expected to see alert with title '#{title}'"
+        msg = "waited for '#{timeout}' but did not see an alert"
+        opts = wait_opts(msg, timeout)
+        wait_for(opts) do
+          not uia_query(:view, marked: "#{title}").empty?
         end
       else
         qstr = 'alertView child label'
         msg = "waited for '#{timeout}' for alert with title '#{title}'"
-        wait_for(:timeout => timeout,
-                 :retry_frequency => BRIAR_WAIT_RETRY_FREQ,
-                 :post_timeout => BRIAR_WAIT_STEP_PAUSE,
-                 :timeout_message => msg) do
+        opts = wait_opts(msg, timeout)
+        wait_for(opts) do
           query(qstr, :text).include?(title)
         end
       end
     end
 
     def should_see_alert_with_message (message, timeout=BRIAR_WAIT_TIMEOUT)
-      if device.ios7?
+      if ios7?
         warn 'WARN: cannot distinguish between alert titles and messages'
         should_see_alert
         if uia_query(:view, marked: "#{message}").empty?
@@ -79,7 +79,7 @@ module Briar
     end
 
     def alert_button_exists? (button_id)
-      if device.ios7?
+      if uia_available?
         should_see_alert
         not uia_query(:view, marked: "#{button_id}").empty?
       else
@@ -95,7 +95,7 @@ module Briar
 
     def dismiss_alert_with_button (button_label)
       touch_alert_button(button_label)
-      if device.ios7?
+      if uia_available?
         wait_for_view_to_disappear button_label
       else
         wait_for_view_to_disappear 'alertView'
@@ -105,7 +105,7 @@ module Briar
 
     def touch_alert_button(button_title)
       should_see_alert
-      if device.ios7?
+      if ios7?
         touch("view marked:'#{button_title}'")
       else
         touch("alertView child button marked:'#{button_title}'")

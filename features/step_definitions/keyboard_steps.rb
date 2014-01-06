@@ -23,7 +23,7 @@ Then /^I touch the delete key$/ do
 end
 
 Then(/^I turn off spell checking and capitalization$/) do
-  deprecated('0.1.1', 'not working', :pending)
+  _deprecated('0.1.1', 'not working', :pending)
   #should_see_keyboard
   #turn_autocapitalization_off
   #turn_autocorrect_off

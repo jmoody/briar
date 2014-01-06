@@ -13,6 +13,7 @@ BRIAR_POST_TIMEOUT=0.5
 ##################
 
 BRIAR_STEP_PAUSE = (ENV['STEP_PAUSE'] || 0.5).to_f
+
 # we need an insanely long time out because of some changes in 0.9.163
 # the waits succeed after a short amount of time (visually < 1 sec),
 # but fail if the wait time out is too short (4s)
@@ -72,37 +73,38 @@ require 'briar/text_field'
 require 'briar/text_view'
 
 
+# <b>DEPRECATED</b> since 0.9.163
+#
+# replaced with:
+# * calabash function <tt>default_device</tt>
+# * methods in <tt>calabash-cucumber/environment_helpers.rb</tt>
+# * briar function <tt>default_device_or_create</tt>
 def device
-  deprecated('0.1.3', "use the calabash function 'default_device' instead", :warn)
-  @device = default_device()
-end
+  msg = "use the calabash function 'default_device', one of the methods in calabash-cucumber/environment_helpers.rb', or briar's 'default_device_or_create'"
+  _deprecated('0.9.163', msg, :warn)
+  default_device_or_create()
 
-def xamarin_test_cloud?
-  ENV['XAMARIN_TEST_CLOUD'] == '1'
-end
-
-
-# todo deprecated function does not output on a new line when called within cucumber
-def deprecated(version, msg, type)
-  allowed = [:pending, :warn]
-  unless allowed.include?(type)
-    screenshot_and_raise "type '#{type}' must be on of '#{allowed}'"
+  d = default_device()
+  if d.nil?
+    d = Calabash::Cucumber::Device.new(nil, server_version())
   end
-
-  info = Kernel.caller.first
-
-  msg = "deprecated '#{version}' - '#{msg}'\n#{info}"
-
-  if type.eql?(:pending)
-    pending(msg)
-  else
-    warn "\nWARN: #{msg}"
-  end
+  d
 end
 
-
-
-
+# returns the device that is currently being tested against
+#
+# returns the +device+ attr of <tt>Calabash::Cucumber::Launcher</tt> if
+# it is defined.  otherwise, creates a new <tt>Calabash::Cucumber::Device</tt>
+# by querying the server.
+#
+# raises an error if the server cannot be reached
+def default_device_or_create
+  device = default_device()
+  if device.nil?
+    device = Calabash::Cucumber::Device.new(nil, server_version())
+  end
+  device
+end
 
 
 

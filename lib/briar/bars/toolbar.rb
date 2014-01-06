@@ -104,7 +104,7 @@ module Briar
                        :toolbar_id => nil}
         opts = default_opts.merge(opts)
       else
-        deprecated('0.1.2',
+        _deprecated('0.1.2',
                    "second argument should be a hash - found '#{opts}'",
                    :warn)
         opts = {:wait_for_view => opts[:wait_for_view],

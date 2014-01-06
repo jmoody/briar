@@ -85,7 +85,7 @@ Then /^I should see that the text I just entered is in the "([^"]*)" row "([^"]*
 end
 
 Then /^I move the "([^"]*)" row (up|down) (\d+) times? using the reorder edit control$/ do |row_id, dir, n|
-  if device.ios7?
+  if ios7?
     pending 'reordering on iOS 7 (more specifically playback) is not supported'
   end
 
@@ -128,7 +128,7 @@ Then /^I should see a detail disclosure chevron in the "([^"]*)" row$/ do |row_i
 end
 
 Then /^I touch the "([^"]*)" switch in the "([^"]*)" row$/ do |switch_id, row_id|
-  deprecated('0.1.1', 'write a custom step', :warn)
+  _deprecated('0.1.1', 'write a custom step', :warn)
   touch_switch_in_row switch_id, row_id
 end
 

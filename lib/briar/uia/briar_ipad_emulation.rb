@@ -16,7 +16,7 @@ module Briar
         def current_device
           if device_internal.nil?
             #noinspection RubyParenthesesAfterMethodCallInspection
-            @device_internal = device()
+            @device_internal = default_device_or_create()
           end
           @device_internal
         end

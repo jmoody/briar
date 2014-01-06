@@ -18,20 +18,20 @@ module Briar
       # 3 <== there is no international button
       # 4 <== there is an international button
       def keyboard_has_international? (opts={})
-        default_opts = {:await_keyboard => false}
+        default_opts = {:wait_for_keyboard => false}
         opts = default_opts.merge(opts)
-        await_keyboard if opts[:await_keyboard]
+        wait_for_keyboard if opts[:wait_for_keyboard]
         res = uia('UIATarget.localTarget().frontMostApp().keyboard().buttons().length')
         button_count = res['value']
         button_count == 4
       end
 
       def touch_international_key(opts={})
-        default_opts = {:await_keyboard => false,
+        default_opts = {:wait_for_keyboard => false,
                         :step_pause => 0.4}
         opts = default_opts.merge(opts)
 
-        await_keyboard if opts[:await_keyboard]
+        wait_for_keyboard if opts[:wait_for_keyboard]
 
         unless keyboard_has_international?
           screenshot_and_raise 'could not find an international key on the keyboard'
@@ -53,9 +53,9 @@ module Briar
       # when looking at elements() the space bar will be at the penultimate index
       # when looking at keys() the space bar index seems to float around
       def spacebar_label (opts={})
-        default_opts = {:await_keyboard => false}
+        default_opts = {:wait_for_keyboard => false}
         opts = default_opts.merge(opts)
-        await_keyboard if opts[:await_keyboard]
+        wait_for_keyboard if opts[:wait_for_keyboard]
         elm_count = uia('UIATarget.localTarget().frontMostApp().keyboard().elements().length')['value']
         spacebar_idx = elm_count - 2
         res = uia("UIATarget.localTarget().frontMostApp().keyboard().elements()[#{spacebar_idx}].label()")
@@ -63,37 +63,37 @@ module Briar
       end
 
       def spacebar_has_label?(label, opts={})
-        default_opts = {:await_keyboard => false}
+        default_opts = {:wait_for_keyboard => false}
         opts = default_opts.merge(opts)
-        await_keyboard if opts[:await_keyboard]
+        wait_for_keyboard if opts[:wait_for_keyboard]
         spacebar_label.eql?(label)
       end
 
       def english_keyboard? (opts={})
-        default_opts = {:await_keyboard => false}
+        default_opts = {:wait_for_keyboard => false}
         opts = default_opts.merge(opts)
-        await_keyboard if opts[:await_keyboard]
+        wait_for_keyboard if opts[:wait_for_keyboard]
         spacebar_has_label? BRIAR_LANGUAGE_KEYS[:en]
       end
 
       def german_keyboard? (opts={})
-        default_opts = {:await_keyboard => false}
+        default_opts = {:wait_for_keyboard => false}
         opts = default_opts.merge(opts)
-        await_keyboard if opts[:await_keyboard]
+        wait_for_keyboard if opts[:wait_for_keyboard]
         spacebar_has_label? BRIAR_LANGUAGE_KEYS[:de]
       end
 
       def romaji_keyboard? (opts={})
-        default_opts = {:await_keyboard => false}
+        default_opts = {:wait_for_keyboard => false}
         opts = default_opts.merge(opts)
-        await_keyboard if opts[:await_keyboard]
+        wait_for_keyboard if opts[:wait_for_keyboard]
         spacebar_has_label? BRIAR_LANGUAGE_KEYS[:ja]
       end
 
       def touch_international_until_language(language_key, opts={})
-        default_opts = {:await_keyboard => false}
+        default_opts = {:wait_for_keyboard => false}
         opts = default_opts.merge(opts)
-        await_keyboard if opts[:await_keyboard]
+        wait_for_keyboard if opts[:wait_for_keyboard]
 
         unless keyboard_has_international?
           screenshot_and_raise 'keyboard does not have an international key'
