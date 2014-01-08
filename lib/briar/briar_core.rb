@@ -50,7 +50,7 @@ module Briar
         screenshot_and_raise "should see view with id '#{view_id}'"
       end
 
-      actual_ht = {x: res['rect']['center_x'].to_f, y: res['rect']['center_y'].to_f}
+      actual_ht = {:x =>  res['rect']['center_x'].to_f, :y =>  res['rect']['center_y'].to_f}
 
       unless actual_ht == center_ht
         screenshot_and_raise "#{view_id} has center '#{actual_ht}' but should have center '#{center_ht}'"
