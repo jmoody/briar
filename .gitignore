@@ -17,6 +17,8 @@ test/tmp
 test/version_tmp
 tmp
 
+.ruby-version
+
 # JetBrains
 .idea
 
