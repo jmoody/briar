@@ -14,7 +14,7 @@ Gem::Specification.new do |gem|
   gem.homepage = 'https://github.com/jmoody/briar'
   gem.license = 'MIT'
 
-  gem.add_runtime_dependency 'calabash-cucumber'
+  gem.add_runtime_dependency 'calabash-cucumber', '0.9.163'
   gem.add_runtime_dependency 'rake'
   gem.add_runtime_dependency 'syntax'
 
