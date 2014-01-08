@@ -17,9 +17,8 @@ When /^I touch the done button the keyboard disappears$/ do
   should_not_see_keyboard
 end
 
-
 Then /^I touch the delete key$/ do
-  keyboard_send_backspace
+  keyboard_enter_char 'Delete'
 end
 
 Then(/^I turn off spell checking and capitalization$/) do
