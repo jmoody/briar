@@ -26,7 +26,28 @@ World(Briar::Table)
 World(Briar::TextField)
 World(Briar::TextView)
 
+require_relative '../../features/step_definitions/alerts_and_sheets/action_sheet_steps'
+require_relative '../../features/step_definitions/alerts_and_sheets/alert_view_steps'
 
-AfterConfiguration do
-  require 'briar/briar_steps'
-end
+require_relative '../../features/step_definitions/bars/tabbar_steps'
+require_relative '../../features/step_definitions/bars/navbar_steps'
+require_relative '../../features/step_definitions/bars/toolbar_steps'
+
+require_relative '../../features/step_definitions/control/button_steps'
+require_relative '../../features/step_definitions/control/segmented_control_steps'
+require_relative '../../features/step_definitions/control/slider_steps'
+
+
+require_relative '../../features/step_definitions/picker/picker_steps'
+require_relative '../../features/step_definitions/picker/date_picker_steps'
+
+
+require_relative '../../features/step_definitions/email_steps'
+require_relative '../../features/step_definitions/image_view_steps'
+require_relative '../../features/step_definitions/keyboard_steps'
+require_relative '../../features/step_definitions/label_steps'
+require_relative '../../features/step_definitions/scroll_view_steps'
+
+require_relative '../../features/step_definitions/table_steps'
+require_relative '../../features/step_definitions/text_field_steps'
+require_relative '../../features/step_definitions/text_view_steps'

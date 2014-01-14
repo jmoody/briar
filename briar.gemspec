@@ -1,8 +1,5 @@
 # -*- encoding: utf-8 -*-
-$:.push File.expand_path('../lib', __FILE__)
-#lib = File.expand_path('../lib', __FILE__)
-#$LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'briar/version'
+require_relative 'lib/briar/version'
 
 Gem::Specification.new do |gem|
   gem.name = 'briar'
@@ -14,12 +11,14 @@ Gem::Specification.new do |gem|
   gem.homepage = 'https://github.com/jmoody/briar'
   gem.license = 'MIT'
 
-  gem.add_runtime_dependency 'calabash-cucumber', '0.9.163'
-  gem.add_runtime_dependency 'rake'
-  gem.add_runtime_dependency 'syntax'
+  gem.required_ruby_version = Gem::Requirement.new('>= 1.9.2')
 
-  gem.files = `git ls-files`.split($/)
+  gem.add_runtime_dependency 'calabash-cucumber', '>= 0.9.164'
+  gem.add_runtime_dependency 'rake', '~>10.1'
+  gem.add_runtime_dependency 'syntax', '~>1.2'
+
+  gem.files = `git ls-files`.split("\n") - ['.gitignore']
   gem.executables = 'briar'
-  gem.test_files = gem.files.grep(%r{^(test|spec|features)/})
-  gem.require_paths = ['lib']
+  gem.test_files = gem.files.grep(%r{^(test|spec)/})
+  gem.require_paths = ['lib', 'features']
 end
