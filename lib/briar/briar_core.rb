@@ -7,7 +7,12 @@ module Briar
       sleep(BRIAR_STEP_PAUSE)
     end
 
+    def step_pause_if_xtc
+      sleep(BRIAR_STEP_PAUSE) if xamarin_test_cloud?
+    end
+
     def wait_for_animation
+      _deprecated('0.1.3', "use any of the 'wait_*' functions instead", :warn)
       sleep(ANIMATION_PAUSE)
     end
 
@@ -176,6 +181,39 @@ module Briar
       stripped = tokens.map { |elm| elm.strip }
       stripped.delete_if { |elm| ['and', 'or', ''].include?(elm) }
     end
+
+
+    # <b>DEPRECATED</b> since 0.9.163
+    #
+    # replaced with:
+    # * calabash function <tt>default_device</tt>
+    # * methods in <tt>calabash-cucumber/environment_helpers.rb</tt>
+    # * briar function <tt>default_device_or_create</tt>
+    def device
+      msg = "use the calabash function 'default_device', one of the methods in calabash-cucumber/environment_helpers.rb', or briar's 'default_device_or_create'"
+      _deprecated('0.9.163', msg, :warn)
+      d = default_device_or_create()
+      if d.nil?
+        d = Calabash::Cucumber::Device.new(nil, server_version())
+      end
+      d
+    end
+
+    # returns the device that is currently being tested against
+    #
+    # returns the +device+ attr of <tt>Calabash::Cucumber::Launcher</tt> if
+    # it is defined.  otherwise, creates a new <tt>Calabash::Cucumber::Device</tt>
+    # by querying the server.
+    #
+    # raises an error if the server cannot be reached
+    def default_device_or_create
+      device = default_device()
+      if device.nil?
+        device = Calabash::Cucumber::Device.new(nil, server_version())
+      end
+      device
+    end
+
   end
 end
 
