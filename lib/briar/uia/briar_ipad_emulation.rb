@@ -5,21 +5,13 @@ module Briar
     module IPadEmulation
 
       class Cache
-        attr_accessor :device_internal
+
         attr_accessor :window_index
 
         def initialize
-          @device_internal = nil
           @window_index = nil
         end
 
-        def current_device
-          if device_internal.nil?
-            #noinspection RubyParenthesesAfterMethodCallInspection
-            @device_internal = default_device_or_create()
-          end
-          @device_internal
-        end
 
       end
       # use the apple localization codes
@@ -28,13 +20,12 @@ module Briar
                     :emulated_2x => 'Switch to normal mode'}
       }
 
-      def ensure_uia_and_ipad(cache=Cache.new)
-        #noinspection RubyParenthesesAfterMethodCallInspection
-        unless cache.current_device.ipad?
+      def ensure_uia_and_ipad()
+        unless ipad?
           screenshot_and_raise 'this function is only for the iPad'
         end
 
-        unless cache.current_device.ios7?
+        unless ios7?
           screenshot_and_raise 'this function only works on iOS 7'
         end
 
@@ -64,7 +55,7 @@ module Briar
         opts = default_opts.merge(opts)
 
         if opts[:ensure_uia_and_ipad]
-          ensure_uia_and_ipad(opts[:cache])
+          ensure_uia_and_ipad()
           opts[:ensure_uia_and_ipad] = false
         end
 
@@ -85,7 +76,7 @@ module Briar
 
 
       def is_iphone_app_emulated_on_ipad?(cache=Cache.new)
-        return false unless cache.current_device.ipad?
+        return false unless ipad?
         idx = window_index_of_ipad_1x_2x_button({:raise_if_not_found => false,
                                                  :cache => cache})
         idx != -1
@@ -103,7 +94,7 @@ module Briar
         return cache.window_index unless cache.window_index.nil?
 
 
-        ensure_uia_and_ipad(opts[:cache]) if opts[:ensure_uia_and_ipad]
+        ensure_uia_and_ipad() if opts[:ensure_uia_and_ipad]
 
         window_count = uia('UIATarget.localTarget().frontMostApp().windows().length')['value']
         index = 0
@@ -137,7 +128,7 @@ module Briar
                         :step_pause_after_touch => BRIAR_STEP_PAUSE,
                         :cache => Cache.new}
         opts = default_opts.merge(opts)
-        ensure_uia_and_ipad(opts[:cache]) if opts[:ensure_uia_and_ipad]
+        ensure_uia_and_ipad() if opts[:ensure_uia_and_ipad]
 
         idx = window_index_of_ipad_1x_2x_button(opts)
         uia("UIATarget.localTarget().frontMostApp().windows()[#{idx}].buttons()[0].tap()")
@@ -185,6 +176,7 @@ module Briar
         opts = default_opts.merge(opts)
         ensure_ipad_emulation_scale(:emulated_2x, opts)
       end
+
     end
   end
 end
