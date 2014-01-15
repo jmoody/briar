@@ -1,5 +1,13 @@
 # -*- encoding: utf-8 -*-
-require_relative 'lib/briar/version'
+
+# ==> require_relative 'lib/briar/version' <==
+# bundler on 1.9.3 complains
+# 'Does it try to require a relative path? That's been removed in Ruby 1.9'
+# 
+# this is the current _best_ solution
+$:.push File.expand_path("../lib", __FILE__)
+require 'briar/version'
+
 
 Gem::Specification.new do |gem|
   gem.name = 'briar'
