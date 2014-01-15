@@ -1,6 +1,6 @@
 require 'require_relative'
 
-require 'briar'
+require_relative '../briar'
 
 World(Briar)
 World(Briar::Core)
