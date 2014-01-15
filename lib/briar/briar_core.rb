@@ -13,7 +13,7 @@ module Briar
 
     def wait_for_animation
       _deprecated('0.1.3', "use any of the 'wait_*' functions instead", :warn)
-      sleep(ANIMATION_PAUSE)
+      sleep(0.6)
     end
 
     def view_exists? (view_id)

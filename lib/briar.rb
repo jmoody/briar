@@ -1,11 +1,11 @@
 #$:.unshift File.dirname(__FILE__)
 
-DEVICE_ENDPOINT = (ENV['DEVICE_ENDPOINT'] || 'http://localhost:37265')
-
-# will deprecate soon
+# will deprecate soon (starting 0.1.3)
 TOUCH_TRANSITION_TIMEOUT = 30.0
 TOUCH_TRANSITION_RETRY_FREQ = 0.5
-ANIMATION_PAUSE = (ENV['ANIMATION_PAUSE'] || 0.6).to_f
+
+# deprecated 0.1.3
+# ANIMATION_PAUSE = (ENV['ANIMATION_PAUSE'] || 0.6).to_f
 
 # see below for replacements
 BRIAR_RETRY_FREQ=0.1
@@ -15,12 +15,16 @@ BRIAR_POST_TIMEOUT=0.5
 BRIAR_STEP_PAUSE = (ENV['STEP_PAUSE'] || 0.5).to_f
 
 # we need an insanely long time out because of some changes in 0.9.163
-# the waits succeed after a short amount of time (visually < 1 sec),
-# but fail if the wait time out is too short (4s)
+#
+# the waits succeed after a short amount of time (visually < 1 sec), but fail if
+# the wait time out is too short (4s)
+#
 # 8 seconds works most of the time
 # 10 seconds seems safe
-# the problem with a long time out is that during development you want the
-# tests to fail fast.
+# 14 seconds is safe
+#
+# the problem with a long time out is that during development you want the tests
+# to fail fast.
 BRIAR_WAIT_TIMEOUT = (ENV['WAIT_TIMEOUT'] || 14.0).to_f
 BRIAR_WAIT_RETRY_FREQ = (ENV['RETRY_FREQ'] || 0.1).to_f
 
