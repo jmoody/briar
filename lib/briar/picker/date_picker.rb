@@ -46,7 +46,7 @@ module Briar
 
       def change_minute_interval_on_picker (target_interval, picker_id=nil)
         query_str = should_see_date_picker picker_id
-        res = query(query_str, [{setMinuteInterval: target_interval.to_i}])
+        res = query(query_str, [{:setMinuteInterval => target_interval.to_i}])
         if res.empty?
           screenshot_and_raise "could not change the minute interval with query '#{query_str}'"
         end

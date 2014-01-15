@@ -7,7 +7,7 @@ module Briar
     end
 
     def should_see_label (name)
-      res = label_exists? (name)
+      res = label_exists?(name)
       unless res
         screenshot_and_raise "i could not find label with access id #{name}"
       end

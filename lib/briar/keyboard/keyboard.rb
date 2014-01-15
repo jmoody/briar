@@ -2,8 +2,6 @@ require 'calabash-cucumber'
 
 module Briar
   module Keyboard
-    # dismiss the keyboard on iPad
-    # send_uia_command command:"uia.keyboard().buttons()['Hide keyboard'].tap()"
 
     UITextAutocapitalizationTypeNone = 0
     UITextAutocapitalizationTypeWords = 1

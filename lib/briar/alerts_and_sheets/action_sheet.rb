@@ -10,12 +10,12 @@ module Briar
       end
     end
 
-    def sheet_exists? (sheet_id)
+    def sheet_exists?(sheet_id)
       !query(query_str_for_sheet sheet_id).empty?
     end
 
-    def should_see_sheet (sheet_id, button_titles=nil, sheet_title=nil)
-      unless sheet_exists? (sheet_id)
+    def should_see_sheet(sheet_id, button_titles=nil, sheet_title=nil)
+      unless sheet_exists?(sheet_id)
         screenshot_and_raise "should see sheet marked '#{sheet_id}'"
       end
 
@@ -29,7 +29,7 @@ module Briar
     end
 
     def should_not_see_sheet(sheet_id)
-      if sheet_exists? (sheet_id)
+      if sheet_exists?(sheet_id)
         screenshot_and_raise "should not see sheet marked '#{sheet_id}'"
       end
     end

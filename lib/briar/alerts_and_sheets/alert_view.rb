@@ -9,7 +9,7 @@ module Briar
 
     def alert_exists? (alert_id=nil)
       if uia_available?
-        res = send_uia_command command: 'uia.alert() != null'
+        res = uia('uia.alert() != null')
         res['value']
       else
         if alert_id.nil?
@@ -47,7 +47,7 @@ module Briar
         msg = "waited for '#{timeout}' but did not see an alert"
         opts = wait_opts(msg, timeout)
         wait_for(opts) do
-          not uia_query(:view, marked: "#{title}").empty?
+          not uia_query(:view, {:marked => "#{title}"}).empty?
         end
       else
         qstr = 'alertView child label'
@@ -63,7 +63,7 @@ module Briar
       if ios7?
         warn 'WARN: cannot distinguish between alert titles and messages'
         should_see_alert
-        if uia_query(:view, marked: "#{message}").empty?
+        if uia_query(:view, {:marked => "#{message}"}).empty?
           screenshot_and_raise "expected to see alert with title '#{message}'"
         end
       else
@@ -81,7 +81,7 @@ module Briar
     def alert_button_exists? (button_id)
       if uia_available?
         should_see_alert
-        not uia_query(:view, marked: "#{button_id}").empty?
+        not uia_query(:view, {:marked => "#{button_id}"}).empty?
       else
         query('alertView child button child label', :text).include?(button_id)
       end

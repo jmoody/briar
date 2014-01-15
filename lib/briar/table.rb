@@ -27,13 +27,6 @@ module Briar
             "tableView marked:'#{table_id}'"
     end
 
-    def table_has_calabash_additions
-      success_value = '1'
-      res = query('tableView', [{hasCalabashAdditions: success_value}])
-      screenshot_and_raise 'table is not visible' if res.empty?
-      res.first.eql? success_value
-    end
-
     def row_visible? (row_id, table_id = nil)
       query_str = query_str_for_row row_id, table_id
       !query(query_str, AI).empty?

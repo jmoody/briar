@@ -8,6 +8,9 @@
 $:.push File.expand_path("../lib", __FILE__)
 require 'briar/version'
 
+# experimental
+# not yet
+# $:.push File.expand_path("../features", __FILE__)
 
 Gem::Specification.new do |gem|
   gem.name = 'briar'
@@ -19,8 +22,10 @@ Gem::Specification.new do |gem|
   gem.homepage = 'https://github.com/jmoody/briar'
   gem.license = 'MIT'
 
-  gem.required_ruby_version = Gem::Requirement.new('>= 1.9.2')
+  gem.platform = Gem::Platform::RUBY
+  gem.required_ruby_version = '>= 1.8.7'
 
+  gem.add_runtime_dependency 'rbx-require-relative', "~> 0.0.9"
   gem.add_runtime_dependency 'calabash-cucumber', '>= 0.9.164'
   gem.add_runtime_dependency 'rake', '~>10.1'
   gem.add_runtime_dependency 'syntax', '~>1.2'

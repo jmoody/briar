@@ -1,3 +1,5 @@
+require 'require_relative'
+
 require 'briar'
 
 World(Briar)
@@ -25,6 +27,7 @@ World(Briar::ScrollView)
 World(Briar::Table)
 World(Briar::TextField)
 World(Briar::TextView)
+
 
 require_relative '../../features/step_definitions/alerts_and_sheets/action_sheet_steps'
 require_relative '../../features/step_definitions/alerts_and_sheets/alert_view_steps'

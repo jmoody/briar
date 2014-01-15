@@ -15,7 +15,7 @@ DRY: I have several iOS projects that use calabash-cucumber and I found I was re
 
 ## Installation 
 
-Requires ruby >= 1.9.2
+Requires ruby >= 1.8.7; ruby 2.0 is recommended.
 
 In your Gemfile:
 
