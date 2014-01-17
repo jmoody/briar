@@ -75,3 +75,6 @@ require 'briar/scroll_view'
 require 'briar/table'
 require 'briar/text_field'
 require 'briar/text_view'
+
+require 'briar/page/briar_page_helpers'
+require 'briar/page/briar_page'
