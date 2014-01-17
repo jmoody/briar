@@ -25,10 +25,12 @@ Gem::Specification.new do |gem|
   gem.platform = Gem::Platform::RUBY
   gem.required_ruby_version = '>= 1.8.7'
 
-  gem.add_runtime_dependency 'rbx-require-relative', "~> 0.0.9"
+  gem.add_runtime_dependency 'rbx-require-relative', '~> 0.0.9'
   gem.add_runtime_dependency 'calabash-cucumber', '>= 0.9.164'
   gem.add_runtime_dependency 'rake', '~>10.1'
-  gem.add_runtime_dependency 'syntax', '~>1.2'
+  # downgrading to 1.0.0 from 1.2.0
+  # https://trello.com/c/YKREVfCX/630-lesspainfulformatter-should-depend-on-syntax-1-2-0
+  gem.add_runtime_dependency 'syntax', '~>1.0.0'
 
   gem.files = `git ls-files`.split("\n") - ['.gitignore']
   gem.executables = 'briar'
