@@ -33,6 +33,9 @@ require 'briar/cucumber'
 I18n.enforce_available_locales = false
 ```
 
+To integrate briar and your calabash-ios console see: https://github.com/jmoody/briar/wiki/Integrating-Briar-Into-Your-Calabash-Console
+
+
 ## Xamarin Test Cloud
 
 There is currently an issue with using briar predefined steps on the XTC:
