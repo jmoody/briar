@@ -1,3 +1,4 @@
+#noinspection RubyResolve
 require 'calabash-cucumber'
 
 module Briar
@@ -49,6 +50,7 @@ module Briar
       }
     end
 
+    # todo refactor should_see_view_with_center to wait for view
     def should_see_view_with_center(view_id, center_ht)
       res = query("view marked:'#{view_id}'").first
       if res.nil?
@@ -69,13 +71,18 @@ module Briar
       end
     end
 
-    def touch_view_named(view_id)
+    def touch_view(view_id)
       wait_for_view view_id
       touch("view marked:'#{view_id}'")
     end
 
+    def touch_view_named(view_id)
+      _deprecated('0.1.3', "use 'touch_view' instead", :warn)
+      touch_view(view_id)
+    end
+
     def touch_and_wait_for_view(view_id, view_to_wait_for, timeout=BRIAR_WAIT_TIMEOUT)
-      touch_view_named(view_id)
+      touch_view(view_id)
       wait_for_view(view_to_wait_for, timeout)
     end
 
@@ -152,7 +159,7 @@ module Briar
     end
 
     def touch_and_wait_to_disappear(view_id, timeout=BRIAR_WAIT_TIMEOUT)
-      touch_view_named(view_id)
+      touch_view(view_id)
       wait_for_view_to_disappear view_id, timeout
     end
 
