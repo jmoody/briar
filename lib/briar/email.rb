@@ -162,7 +162,7 @@ module Briar
                  :retry_frequency => BRIAR_WAIT_RETRY_FREQ,
                  :post_timeout => BRIAR_WAIT_STEP_PAUSE,
                  :timeout_message => msg) do
-          uia_element_exists?(:view, {:marked => 'Delete Draft'})
+            uia_element_exists?(:view, {:marked => 'Delete Draft'})
         end
 
         uia_tap_mark('Delete Draft')
@@ -180,11 +180,9 @@ module Briar
         screenshot_and_raise 'UIA needs to be available'
       end
 
-      res = uia_query(:view, {:marked => 'To:'}).first
-      rect = res['rect']
-      point = {:x => rect['x'] + (2 * rect['width']),
-               :y => rect['y']}
-      uia_touch_with_options(point)
+      # with predicate
+      # uia_tap(:textField, {[:label, :beginswith] => "'To:'"})
+      uia_tap(:textField, marked:'toField')
       uia_wait_for_keyboard if opts[:wait_for_keyboard]
     end
 
