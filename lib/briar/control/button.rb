@@ -68,8 +68,17 @@ module Briar
                  :timeout_message => msg) do
           button_exists? button_id
         end
-        should_see_button_with_title(button_id, title)
+        res = query("button descendant view {text LIKE '#{title}'")
+        if res.empty?
+          screenshot_and_raise "expected button '#{button_id}' to have title '#{title}'"
+        end
       end
+
+      def touch_button_with_title(button_id, title, timeout=BRIAR_WAIT_TIMEOUT)
+        wait_for_button_with_title button_id, title, timeout
+        touch("button marked:'#{button_id}'")
+      end
+
     end
   end
 end
