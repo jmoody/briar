@@ -33,10 +33,3 @@ module Briar
     end
   end
 end
-
-
-begin
-  World(Briar::Page::Helpers)
-rescue
-  puts 'loaded Briar::Page::Helpers'
-end

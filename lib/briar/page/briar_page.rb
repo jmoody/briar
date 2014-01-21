@@ -3,7 +3,6 @@ require 'calabash-cucumber/ibase'
 # extends Calabash::IBase
 class BriarPage < Calabash::IBase
 
-
   def initialize(world, transition_duration=BRIAR_WAIT_STEP_PAUSE)
     super(world, transition_duration)
   end
@@ -43,6 +42,10 @@ class BriarPage < Calabash::IBase
   # raises an exception if subclass does not implement
   def mark
     raise "subclasses must implement the 'mark' method"
+  end
+
+  def trait
+    qstr_for_trait(mark)
   end
 
   def page_visible?

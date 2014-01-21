@@ -27,6 +27,7 @@ World(Briar::ScrollView)
 World(Briar::Table)
 World(Briar::TextField)
 World(Briar::TextView)
+World(Briar::Page::Helpers)
 
 # briar predefined steps are not found during the XTC validation phase
 #
