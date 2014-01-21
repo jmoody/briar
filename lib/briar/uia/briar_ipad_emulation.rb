@@ -74,14 +74,6 @@ module Briar
         end
       end
 
-
-      def is_iphone_app_emulated_on_ipad?(cache=Cache.new)
-        return false unless ipad?
-        idx = window_index_of_ipad_1x_2x_button({:raise_if_not_found => false,
-                                                 :cache => cache})
-        idx != -1
-      end
-
       def window_index_of_ipad_1x_2x_button(opts={})
 
         default_opts = {:language_code => :en,
@@ -143,8 +135,8 @@ module Briar
         end
 
         cache = Cache.new
-        #noinspection RubyParenthesesAfterMethodCallInspection
-        return unless is_iphone_app_emulated_on_ipad?(cache)
+
+        return unless iphone_app_emulated_on_ipad?
 
         default_opts = {:language_code => :en,
                         :ensure_uia_and_ipad => false,
