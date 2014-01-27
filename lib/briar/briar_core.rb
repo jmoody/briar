@@ -221,6 +221,23 @@ module Briar
       device
     end
 
+    def error_no_rescue(msg)
+      if RUBY_VERSION < '2.0'
+        stack = Kernel.caller()[1..6].join("\n")
+      else
+        stack = Kernel.caller(0, 6)[1..-1].join("\n")
+      end
+
+      msg = "ERROR: '#{msg}'\n#{stack}"
+
+      # todo error_no_rescue function does not output on a new line when called within cucumber
+      begin
+        warn "\033[31m\n#{msg}\033[0m"
+      rescue
+        warn "\n#{msg}"
+      end
+    end
+
   end
 end
 
