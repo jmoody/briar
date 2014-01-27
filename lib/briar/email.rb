@@ -182,7 +182,7 @@ module Briar
 
       # with predicate
       # uia_tap(:textField, {[:label, :beginswith] => "'To:'"})
-      uia_tap(:textField, marked:'toField')
+      uia_tap(:textField, {:marked => 'toField'})
       uia_wait_for_keyboard if opts[:wait_for_keyboard]
     end
 
