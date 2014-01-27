@@ -26,11 +26,8 @@ module Briar
         args = briar_args_for_slider_set_value(options)
         query_str = "slider marked:'#{slider_id}'"
         views_touched = map(query_str, :changeSlider, value_str, *args)
-        if views_touched.empty? or views_touched.member? '<VOID>'
-          screenshot_and_raise "could not slider marked '#{slider_id}' to '#{value}' using query '#{query_str}' with options '#{options}'"
-        end
-
-        views_touched
+        msg = "could not slider marked '#{slider_id}' to '#{value}' using query '#{query_str}' with options '#{options}'"
+        assert_map_results(views_touched, msg)
       end
 
 
