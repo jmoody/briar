@@ -25,15 +25,21 @@ IRB.conf[:SAVE_HISTORY] = 50
 # Store results in home directory with specified file name
 IRB.conf[:HISTORY_FILE] = '.irb-history'
 
+
+#noinspection RubyResolve
 require 'calabash-cucumber'
+#noinspection RubyResolve
 require 'calabash-cucumber/operations'
+#noinspection RubyResolve
 require 'calabash-cucumber/launch/simulator_helper'
+#noinspection RubyResolve
 require 'calabash-cucumber/launcher'
 
 SIM=Calabash::Cucumber::SimulatorHelper
 
 extend Calabash::Cucumber::Operations
 
+#noinspection RubyUnusedLocalVariable
 def embed(x,y=nil,z=nil)
   puts "Screenshot at #{x}"
 end
@@ -195,5 +201,5 @@ def briar_message_of_the_day
         'What is a calabash anyway?', 'Smile! You are on camera!', 'Let op! Wild Rooster!',
         "Don't touch that button!", "I'm gonna take this to 11.", 'Console. Engaged.',
         'Your wish is my command.', 'This console session was created just for you.']
-  puts "#{motd.sample}"
+  puts "#{motd.shuffle().first}"
 end
