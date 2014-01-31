@@ -262,10 +262,6 @@ module Briar
     end
 
     def should_see_delete_confirmation_in_row(row_id, table_id=nil)
-      if ios7?
-        pending 'cannot detect delete confirmation in iOS 7'
-      end
-
       query_str = query_str_for_confirm_delete_in_row(row_id, table_id)
       timeout = 5
       msg = "waited for '#{timeout}' seconds but did not see 'Delete' confirmation in row '#{row_id}'"
