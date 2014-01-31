@@ -238,6 +238,16 @@ module Briar
       end
     end
 
+    def warn_pretty(msg)
+      # todo warn_pretty does not output on a new line when called within cucumber
+      msg = "WARN: #{msg}"
+      begin
+        puts "\033[34m#{msg}\033[0m"
+      rescue
+        puts "#{msg}"
+      end
+    end
+
   end
 end
 
