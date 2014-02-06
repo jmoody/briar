@@ -134,7 +134,7 @@ module Briar
 
     def briar_scroll_to_row (row_id, table_id=nil)
       unless table_id.nil?
-        should_see_table row_id
+        should_see_table table_id
       end
 
       query_str = query_str_for_table table_id
