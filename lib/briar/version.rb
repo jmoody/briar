@@ -1,3 +1,3 @@
 module Briar
-  VERSION = '0.1.3.b10'
+  VERSION = '0.1.3.rc1'
 end
