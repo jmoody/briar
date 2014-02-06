@@ -91,7 +91,12 @@ module Briar
 
       def target_date_for_change_time_on_picker_with_time(target_time, convert, picker_id=nil)
         current_time = ruby_time_from_picker({:picker_id => picker_id})
-        tz_offset = (convert) ? 0 : Rational((target_time.utc_offset/3600.0)/24.0)
+        if RUBY_VERSION.start_with?('1.8')
+          tz_offset = (convert) ? 0 : Rational(((target_time.utc_offset/3600.0)/24.0).to_i)
+        else
+          tz_offset = (convert) ? 0 : Rational((target_time.utc_offset/3600.0)/24.0)
+        end
+
         DateTime.new(current_time.year, current_time.mon, current_time.day,
                      target_time.hour, target_time.min,
                      0, tz_offset)

@@ -78,3 +78,16 @@ require 'briar/text_view'
 
 require 'briar/page/briar_page_helpers'
 require 'briar/page/briar_page'
+
+# date picker requires DateTime.to_time
+if RUBY_VERSION.start_with?('1.8')
+  require 'date'
+  class DateTime
+
+    def to_time
+      str = self.strftime('%z')
+      Time.send(:make_time, year, mon, day, hour, min, 0, nil, str, nil)
+    end
+
+  end
+end
