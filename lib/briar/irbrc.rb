@@ -14,7 +14,6 @@ def World(*world_modules, &proc)
   }
 end
 
-
 ARGV.concat [ '--readline',
               '--prompt-mode',
               'simple']
@@ -24,7 +23,6 @@ IRB.conf[:SAVE_HISTORY] = 50
 
 # Store results in home directory with specified file name
 IRB.conf[:HISTORY_FILE] = '.irb-history'
-
 
 #noinspection RubyResolve
 require 'calabash-cucumber'
@@ -184,7 +182,7 @@ end
 def puts_calabash_environment
 
   puts ''
-  puts "loaded #{Dir.pwd}/.irbrc"
+  puts "loaded #{File.expand_path(ENV['IRBRC'])}"
   puts ''
   puts "             DEVICE_ENDPOINT => '#{ENV['DEVICE_ENDPOINT']}'"
   puts "               DEVICE_TARGET => '#{ENV['DEVICE_TARGET']}'"
