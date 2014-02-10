@@ -131,6 +131,15 @@ def text_marks(opts={})
   opts[:return] ? res : nil
 end
 
+def verbose
+  ENV['DEBUG'] = '1'
+  ENV['CALABASH_FULL_CONSOLE_OUTPUT'] = '1'
+end
+
+def quiet
+  ENV['DEBUG'] = '0'
+  ENV['CALABASH_FULL_CONSOLE_OUTPUT'] = '0'
+end
 
 def ids
   accessibility_marks(:id)
@@ -188,10 +197,12 @@ def puts_calabash_environment
   puts "                       DEBUG => '#{ENV['DEBUG']}'"
   puts ''
   puts '*** useful functions defined in .irbrc ***'
-  puts '> ids     => all accessibilityIdentifiers'
-  puts '> labels  => all accessibilityLabels'
-  puts '> text    => all text'
-  puts '> row_ids => all tableViewCell accessibilityIdentifiers'
+  puts '>     ids #=> all accessibilityIdentifiers'
+  puts '>  labels #=> all accessibilityLabels'
+  puts '>    text #=> all text'
+  puts '> row_ids #=> all tableViewCell accessibilityIdentifiers'
+  puts '> verbose #=> set debug logging on'
+  puts '>   quiet #=> set debug logging off'
   puts ''
 end
 
