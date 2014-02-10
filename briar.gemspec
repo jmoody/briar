@@ -5,7 +5,7 @@
 # 'Does it try to require a relative path? That's been removed in Ruby 1.9'
 # 
 # this is the current _best_ solution
-$:.push File.expand_path("../lib", __FILE__)
+$:.push File.expand_path('../lib', __FILE__)
 require 'briar/version'
 
 # experimental
@@ -28,6 +28,10 @@ Gem::Specification.new do |gem|
   gem.add_runtime_dependency 'rbx-require-relative', '~> 0.0.9'
   gem.add_runtime_dependency 'calabash-cucumber', '>= 0.9.166'
   gem.add_runtime_dependency 'rake', '~>10.1'
+  gem.add_runtime_dependency 'dotenv', '~> 0.9.0'
+  gem.add_runtime_dependency 'ansi', '~> 1.4.3'
+  gem.add_runtime_dependency 'rainbow', '~> 1.99.0'
+
   # downgrading to 1.0.0 from 1.2.0
   # https://trello.com/c/YKREVfCX/630-lesspainfulformatter-should-depend-on-syntax-1-2-0
   gem.add_runtime_dependency 'syntax', '~>1.0.0'
