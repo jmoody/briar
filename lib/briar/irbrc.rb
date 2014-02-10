@@ -2,6 +2,8 @@ require 'rubygems'
 require 'irb/completion'
 require 'irb/ext/save-history'
 require 'awesome_print'
+require 'pry'
+
 AwesomePrint.irb!
 
 require 'require_relative'
