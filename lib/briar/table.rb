@@ -1,3 +1,5 @@
+require 'calabash-cucumber'
+
 module Briar
   #noinspection ALL
   module Table
@@ -23,18 +25,6 @@ module Briar
       table_id == nil ?
             'tableView' :
             "tableView marked:'#{table_id}'"
-    end
-
-    def table_has_calabash_additions
-      success_value = '1'
-      res = query('tableView', [{hasCalabashAdditions: success_value}])
-      screenshot_and_raise 'table is not visible' if res.empty?
-      res.first.eql? success_value
-    end
-
-    #noinspection RubyUnusedLocalVariable
-    def row_exists? (row_id, table_id = nil)
-      pending "deprecated 0.0.8 - use 'row_visible?' instead"
     end
 
     def row_visible? (row_id, table_id = nil)
@@ -86,8 +76,8 @@ module Briar
       timeout = options[:timeout] || BRIAR_WAIT_TIMEOUT
       msg = "waited for '#{timeout}' seconds but did not see row '#{query_str}' with query '#{query_str}'"
       wait_for(:timeout => timeout,
-               :retry_frequency => BRIAR_RETRY_FREQ,
-               :post_timeout => BRIAR_POST_TIMEOUT,
+               :retry_frequency => BRIAR_WAIT_RETRY_FREQ,
+               :post_timeout => BRIAR_WAIT_STEP_PAUSE,
                :timeout_message => msg) do
         row_visible? row_id, table_id
       end
@@ -144,7 +134,7 @@ module Briar
 
     def briar_scroll_to_row (row_id, table_id=nil)
       unless table_id.nil?
-        should_see_table row_id
+        should_see_table table_id
       end
 
       query_str = query_str_for_table table_id
@@ -160,12 +150,25 @@ module Briar
       step_pause
     end
 
-    def briar_scroll_to_row_and_touch (row_id, wait_for_view=nil)
-      briar_scroll_to_row(row_id)
-      if wait_for_view.nil?
+    def briar_scroll_to_row_and_touch (row_id, opts={})
+      if (not opts.is_a?(Hash)) and (not opts.nil?)
+        warn "WARN: deprecated 0.1.3 - you should no longer pass a view_id '#{opts}' as an arg, pass opts hash instead"
+        opts = {:wait_for_id => opts}
+      end
+
+      default_opts = {:wait_for_id => nil,
+                      :table_id => nil,
+                      :timeout => BRIAR_WAIT_TIMEOUT}
+      opts = default_opts.merge(opts)
+      table_id = opts[:table_id]
+      wait_for_id = opts[:wait_for_id]
+      timeout = opts[:timeout]
+      briar_scroll_to_row(row_id, table_id)
+      if wait_for_id.nil?
         touch_row row_id
       else
-        touch_row_and_wait_to_see row_id, wait_for_view
+        touch_row_and_wait_to_see row_id, wait_for_id, {:timeout => timeout,
+                                                        :table_id => table_id}
       end
     end
 
@@ -196,10 +199,20 @@ module Briar
     end
 
 
-    def touch_row_and_wait_to_see(row_id, view, table_id = nil)
-      should_see_row row_id, table_id
-      touch_row row_id, table_id
-      wait_for_view view, 3.0
+    def touch_row_and_wait_to_see(row_id, view, opts={})
+      if (not opts.is_a?(Hash)) and (not opts.nil?)
+        _deprecated('0.1.3',
+                   "you should no longer pass a table_id '#{opts}' as an arg, pass opts hash instead",
+                   :warn)
+        opts = {:table_id => opts}
+      end
+
+      default_opts = {:table_id => nil,
+                      :timeout => BRIAR_WAIT_TIMEOUT}
+      opts = default_opts.merge(opts)
+      should_see_row row_id, opts[:table_id]
+      touch_row row_id, opts[:table_id]
+      wait_for_view view, opts[:timeout]
     end
 
     def table_exists? (table_name)
@@ -221,7 +234,7 @@ module Briar
     end
 
     def swipe_on_row (dir, row_id, table_id=nil)
-      if device.ios7? and device.simulator?
+      if ios7? and simulator?
         pending('swiping on rows is not available on iOS 7 because of a bug in Xcode 5 simulator')
       end
       wait_for_row row_id, {:table_id => table_id}
@@ -240,7 +253,11 @@ module Briar
     end
 
     def query_str_for_confirm_delete_in_row(row_id, table_id=nil)
-      mark = device.ios7? ? 'Delete' : 'Confirm Deletion'
+      if ios5?
+        # it is not either of those...
+        pending 'cannot detect the confirm delete button (yet) in iOS 5'
+      end
+      mark = ios7? ? 'Delete' : 'Confirm Deletion'
       "#{query_str_for_row row_id, table_id} descendant control marked:'#{mark}'"
     end
 
@@ -249,8 +266,8 @@ module Briar
       timeout = 5
       msg = "waited for '#{timeout}' seconds but did not see 'Delete' confirmation in row '#{row_id}'"
       wait_for(:timeout => timeout,
-               :retry_frequency => BRIAR_RETRY_FREQ,
-               :post_timeout => BRIAR_POST_TIMEOUT,
+               :retry_frequency => BRIAR_WAIT_RETRY_FREQ,
+               :post_timeout => BRIAR_WAIT_STEP_PAUSE,
                :timeout_message => msg) do
         element_exists query_str
       end
@@ -315,7 +332,9 @@ module Briar
     def should_see_switch_in_row_with_state (switch_id, row_id, state, opts={})
 
       if (not opts.is_a?(Hash)) and (not opts.nil?)
-        warn "WARN: deprecated 0.1.1 - you should no longer pass a table_id '#{table_id}' at an arg, pass opts hash instead"
+        _deprecated('0.1.1',
+                   "you should no longer pass a table_id '#{opts}' as an arg, pass opts hash instead",
+                   :warn)
         opts = {:table_id => opts}
       end
 
@@ -381,9 +400,11 @@ module Briar
     end
 
     def touch_switch_in_row (switch_id, row_id, opts={})
-      if (not opts.is_a?(Hash)) and (not table_id.nil?)
-        warn "WARN: deprecated 0.1.1 - passing a table_id '#{table_id}' has been deprecated pass a hash instead"
-        opts = {:table_id => table_id}
+      if (not opts.is_a?(Hash)) and (not opts.nil?)
+        _deprecated('0.1.1',
+                   "you should no longer pass a table_id '#{opts}' pass a hash instead",
+                   :warn)
+        opts = {:table_id => opts}
       end
 
       default_opts = {:table_id => nil,

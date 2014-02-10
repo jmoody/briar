@@ -26,7 +26,7 @@ module Briar
     def touch_tabbar_item(name, wait_for_view_id=nil)
       sleep(0.2)
       wait_for(:timeout => BRIAR_WAIT_TIMEOUT,
-               :retry_frequency => BRIAR_RETRY_FREQ) do
+               :retry_frequency => BRIAR_WAIT_RETRY_FREQ) do
         index_of_tabbar_item(name) != nil
       end
       should_see_tabbar

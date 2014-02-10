@@ -1,25 +1,44 @@
 # -*- encoding: utf-8 -*-
+
+# ==> require_relative 'lib/briar/version' <==
+# bundler on 1.9.3 complains
+# 'Does it try to require a relative path? That's been removed in Ruby 1.9'
+# 
+# this is the current _best_ solution
 $:.push File.expand_path('../lib', __FILE__)
-#lib = File.expand_path('../lib', __FILE__)
-#$LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require 'briar/version'
 
+# experimental
+# not yet
+# $:.push File.expand_path("../features", __FILE__)
+
 Gem::Specification.new do |gem|
-  gem.name          = 'briar'
-  gem.version       = Briar::VERSION
-  gem.authors       = ['Joshua Moody']
-  gem.email         = ['joshuajmoody@gmail.com']
-  gem.description   = 'extends calabash-ios steps'
-  gem.summary       = "briar-#{gem.version}"
-  gem.homepage      = 'https://github.com/jmoody/briar'
-  gem.license       = 'MIT'
+  gem.name = 'briar'
+  gem.version = Briar::VERSION
+  gem.authors = ['Joshua Moody']
+  gem.email = ['joshuajmoody@gmail.com']
+  gem.description = 'extends calabash-ios steps'
+  gem.summary = "briar-#{gem.version}"
+  gem.homepage = 'https://github.com/jmoody/briar'
+  gem.license = 'MIT'
 
-  gem.add_runtime_dependency 'calabash-cucumber'
-  gem.add_runtime_dependency 'rake'
-  gem.add_runtime_dependency 'syntax' 
+  gem.platform = Gem::Platform::RUBY
+  gem.required_ruby_version = '>= 1.8.7'
 
-  gem.files         = `git ls-files`.split($/)
-  gem.executables   = 'briar'
-  gem.test_files    = gem.files.grep(%r{^(test|spec|features)/})
-  gem.require_paths = ['lib']
+  gem.add_runtime_dependency 'rbx-require-relative', '~> 0.0.9'
+  gem.add_runtime_dependency 'calabash-cucumber', '>= 0.9.166'
+  gem.add_runtime_dependency 'rake', '~>10.1'
+  gem.add_runtime_dependency 'dotenv', '~> 0.9.0'
+  gem.add_runtime_dependency 'ansi', '~> 1.4.3'
+  gem.add_runtime_dependency 'rainbow', '~> 1.99.0'
+  gem.add_runtime_dependency 'pry', '~> 0.9.12.6'
+
+  # downgrading to 1.0.0 from 1.2.0
+  # https://trello.com/c/YKREVfCX/630-lesspainfulformatter-should-depend-on-syntax-1-2-0
+  gem.add_runtime_dependency 'syntax', '~>1.0.0'
+
+  gem.files = `git ls-files`.split("\n") - ['.gitignore']
+  gem.executables = 'briar'
+  gem.test_files = gem.files.grep(%r{^(test|spec)/})
+  gem.require_paths = ['lib', 'features']
 end

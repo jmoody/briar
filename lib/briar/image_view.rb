@@ -23,8 +23,8 @@ module Briar
     def wait_for_image_view(iv_id, timeout=BRIAR_WAIT_TIMEOUT)
       msg = "waited for '#{timeout}' seconds but did not see image view marked: '#{iv_id}'"
       options = {:timeout => timeout,
-                 :retry_frequency => BRIAR_RETRY_FREQ,
-                 :post_timeout => BRIAR_POST_TIMEOUT,
+                 :retry_frequency => BRIAR_WAIT_RETRY_FREQ,
+                 :post_timeout => BRIAR_WAIT_STEP_PAUSE,
                  :timeout_message => msg}
       wait_for(options) do
         image_view_exists? iv_id
@@ -34,8 +34,8 @@ module Briar
     def wait_for_image_view_to_disappear(iv_id, timeout=BRIAR_WAIT_TIMEOUT)
       msg = "waited for '#{timeout}' seconds but i still see image view marked: '#{iv_id}'"
       options = {:timeout => timeout,
-                 :retry_frequency => BRIAR_RETRY_FREQ,
-                 :post_timeout => BRIAR_POST_TIMEOUT,
+                 :retry_frequency => BRIAR_WAIT_RETRY_FREQ,
+                 :post_timeout => BRIAR_WAIT_STEP_PAUSE,
                  :timeout_message => msg}
       wait_for(options) do
         not image_view_exists? iv_id

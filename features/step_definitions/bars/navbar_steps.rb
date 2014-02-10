@@ -1,5 +1,3 @@
-#include Briar::Bars
-
 # navigation back item, distinct from left bar button item
 Then /^I should see navbar back button$/ do
   should_see_navbar_back_button
@@ -73,8 +71,8 @@ end
 When /^I go back, I should see the "([^"]*)" view$/ do |view_id|
   touch_transition('navigationItemButtonView first',
                    "view marked:'#{view_id}'",
-                   {:timeout=>TOUCH_TRANSITION_TIMEOUT,
-                    :retry_frequency=>TOUCH_TRANSITION_RETRY_FREQ})
+                   {:timeout => TOUCH_TRANSITION_TIMEOUT,
+                    :retry_frequency => TOUCH_TRANSITION_RETRY_FREQ})
 end
 
 Then /^I should see today's date in the navbar$/ do

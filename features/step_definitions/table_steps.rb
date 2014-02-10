@@ -7,17 +7,6 @@ Then(/^I scroll to the "([^"]*)" row$/) do |row_id|
   briar_scroll_to_row row_id
 end
 
-#noinspection RubyUnusedLocalVariable
-Then /^I scroll (left|right|up|down) until I see the "([^\"]*)" row limit (\d+)$/ do |dir, row_id, limit|
-  pending "deprecated 0.0.6 - use 'Then I scroll to the \"#{row_id}\" row'"
-end
-
-
-#noinspection RubyUnusedLocalVariable
-Then /^I scroll (left|right|up|down) until I see (?:the|an?) "([^\"]*)" row$/ do |dir, row_id|
-  pending "deprecated 0.0.8 - use 'Then I scroll to the \"#{row_id}\" row'"
-end
-
 Then /^I touch (?:the) "([^"]*)" row and wait for (?:the) "([^"]*)" view to appear$/ do |row_id, view_id|
   wait_for_row row_id
   step_pause
@@ -96,7 +85,7 @@ Then /^I should see that the text I just entered is in the "([^"]*)" row "([^"]*
 end
 
 Then /^I move the "([^"]*)" row (up|down) (\d+) times? using the reorder edit control$/ do |row_id, dir, n|
-  if device.ios7?
+  if ios7?
     pending 'reordering on iOS 7 (more specifically playback) is not supported'
   end
 
@@ -139,7 +128,7 @@ Then /^I should see a detail disclosure chevron in the "([^"]*)" row$/ do |row_i
 end
 
 Then /^I touch the "([^"]*)" switch in the "([^"]*)" row$/ do |switch_id, row_id|
-  warn 'WARN: deprecated 0.1.1 - write a custom step'
+  _deprecated('0.1.1', 'write a custom step', :warn)
   touch_switch_in_row switch_id, row_id
 end
 

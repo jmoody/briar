@@ -1,7 +1,7 @@
+require 'calabash-cucumber'
+
 module Briar
   module Keyboard
-    # dismiss the keyboard on iPad
-    # send_uia_command command:"uia.keyboard().buttons()['Hide keyboard'].tap()"
 
     UITextAutocapitalizationTypeNone = 0
     UITextAutocapitalizationTypeWords = 1
@@ -21,8 +21,8 @@ module Briar
     def should_see_keyboard (timeout=BRIAR_WAIT_TIMEOUT)
       msg = "waited for '#{timeout}' seconds but did not see keyboard"
       wait_for(:timeout => timeout,
-               :retry_frequency => BRIAR_RETRY_FREQ,
-               :post_timeout => BRIAR_POST_TIMEOUT,
+               :retry_frequency => BRIAR_WAIT_RETRY_FREQ,
+               :post_timeout => BRIAR_WAIT_STEP_PAUSE,
                :timeout_message => msg) do
         element_exists('keyboardAutomatic')
       end
@@ -31,8 +31,8 @@ module Briar
     def should_not_see_keyboard (timeout=BRIAR_WAIT_TIMEOUT)
       msg = "waited for '#{timeout}' seconds but keyboard did not disappear"
       wait_for(:timeout => timeout,
-               :retry_frequency => BRIAR_RETRY_FREQ,
-               :post_timeout => BRIAR_POST_TIMEOUT,
+               :retry_frequency => BRIAR_WAIT_RETRY_FREQ,
+               :post_timeout => BRIAR_WAIT_STEP_PAUSE,
                :timeout_message => msg) do
         element_does_not_exist 'keyboardAutomatic'
       end
@@ -47,7 +47,7 @@ module Briar
 
 
     # is it possible to find what view the keyboard is responding to?
-    def autocapitalization_type ()
+    def autocapitalization_type
       if !query('textView index:0').empty?
         query('textView index:0', :autocapitalizationType).first.to_i
       elsif !query('textField index:0').empty?
@@ -57,7 +57,7 @@ module Briar
       end
     end
 
-    def auto_correct_type()
+    def auto_correct_type
       if !query('textView index:0').empty?
         query('textView index:0', :autocorrectionType).first.to_i
       elsif !query('textField index:0').empty?
@@ -68,8 +68,9 @@ module Briar
     end
 
 
+    #noinspection RubyUnusedLocalVariable
     def briar_clear_text(view_id, timeout=5)
-      warn("deprecated 0.1.1 - will remove 'timeout' argument in a future release")
+      _deprecated('0.1.1', "will remove 'timeout' argument in a future release", :warn)
       clear_text("view marked:'#{view_id}'")
 
       # i really wanted this to work, but there are too many issues with the
@@ -88,8 +89,9 @@ module Briar
 
     ### deprecated ###
 
+    #noinspection RubyUnusedLocalVariable
     def set_autocapitalization (type)
-      pending('deprecated 0.1.1 - does not work')
+      _deprecated('0.1.1', 'does not work', :pending)
       #if !query('textView index:0').empty?
       #  query('textView index:0', [{setAutocapitalizationType: type}])
       #elsif !query('textField index:0').empty?
@@ -100,12 +102,13 @@ module Briar
     end
 
     def turn_autocapitalization_off
-      pending('deprecated 0.1.1 - does not work')
+      _deprecated('0.1.1', 'does not work', :pending)
       #set_autocapitalization UITextAutocapitalizationTypeNone
     end
 
+    #noinspection RubyUnusedLocalVariable
     def set_autocorrect (type)
-      pending('deprecated 0.1.1 - does not work')
+      _deprecated('0.1.1', 'does not work', :pending)
       #if !query('textView index:0').empty?
       #  query('textView index:0', [{setAutocorrectionType: type}])
       #elsif !query('textField index:0').empty?
@@ -116,12 +119,12 @@ module Briar
     end
 
     def turn_autocorrect_off
-      pending('deprecated 0.1.1 - does not work')
+      _deprecated('0.1.1', 'does not work', :pending)
       # set_autocorrect UITextAutocorrectionTypeNo
     end
 
     def turn_spell_correct_off
-      pending('deprecated 0.1.1 - does not work')
+      _deprecated('0.1.1', 'does not work', :pending)
       #if !query('textView index:0').empty?
       #  query('textView index:0', [{setSpellCheckingType: UITextSpellCheckingTypeNo}])
       #elsif !query('textField index:0').empty?

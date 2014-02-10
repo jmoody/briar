@@ -1,3 +1,4 @@
+require 'calabash-cucumber'
 =begin
 
 examples
@@ -22,9 +23,6 @@ examples
 module Briar
   module Picker
     module DateSteps
-      include Briar::Picker::DateCore
-      include Briar::Picker::DateManipulation
-
       def should_see_label_has_time_i_just_entered (label_id)
         should_see_label label_id
         query_str = "label marked:'#{label_id}'"
@@ -48,7 +46,7 @@ module Briar
 
       def change_minute_interval_on_picker (target_interval, picker_id=nil)
         query_str = should_see_date_picker picker_id
-        res = query(query_str, [{setMinuteInterval: target_interval.to_i}])
+        res = query(query_str, [{:setMinuteInterval => target_interval.to_i}])
         if res.empty?
           screenshot_and_raise "could not change the minute interval with query '#{query_str}'"
         end

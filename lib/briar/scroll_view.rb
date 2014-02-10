@@ -1,4 +1,4 @@
-require "calabash-cucumber"
+require 'calabash-cucumber'
 
 module Briar
   module ScrollView

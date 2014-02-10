@@ -24,11 +24,16 @@ module Briar
       ht = query("textField marked:'#{text_field_id}' child button child imageView", :frame).first
       return false if ht.nil?
 
-      if device.ios7?
+      if ios7?
         ht['X'] == 2.5 and ht['Y'] == 2.5 and ht['Width'] == 14 and ht['Height'] == 14
       else
         ht['X'] == 0 and ht['Y'] == 0 and ht['Width'] == 19 and ht['Height'] == 19
       end
+    end
+
+    def clear_text_field_with_button(text_field_id)
+      should_see_clear_button_in_text_field text_field_id
+      touch("textField marked:'#{text_field_id}' child button")
     end
 
     def should_see_clear_button_in_text_field (text_field_id)

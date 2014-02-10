@@ -70,7 +70,10 @@ def briar_resign(args)
     puts "will resign with identity '#{signing_id}'"
   end
 
-  resign_ipa({ipa:ipa, provision:mobile_prov, id:signing_id, wildcard:wildcard})
+  resign_ipa({:ipa => ipa,
+              :provision => mobile_prov,
+              :id => signing_id,
+              :wildcard => wildcard})
 
 end
 

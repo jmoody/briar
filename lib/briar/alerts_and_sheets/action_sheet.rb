@@ -1,3 +1,4 @@
+require 'calabash-cucumber'
 module Briar
   module Alerts_and_Sheets
 
@@ -9,12 +10,12 @@ module Briar
       end
     end
 
-    def sheet_exists? (sheet_id)
+    def sheet_exists?(sheet_id)
       !query(query_str_for_sheet sheet_id).empty?
     end
 
-    def should_see_sheet (sheet_id, button_titles=nil, sheet_title=nil)
-      unless sheet_exists? (sheet_id)
+    def should_see_sheet(sheet_id, button_titles=nil, sheet_title=nil)
+      unless sheet_exists?(sheet_id)
         screenshot_and_raise "should see sheet marked '#{sheet_id}'"
       end
 
@@ -28,7 +29,7 @@ module Briar
     end
 
     def should_not_see_sheet(sheet_id)
-      if sheet_exists? (sheet_id)
+      if sheet_exists?(sheet_id)
         screenshot_and_raise "should not see sheet marked '#{sheet_id}'"
       end
     end
@@ -36,9 +37,9 @@ module Briar
     def wait_for_sheet (sheet_id, timeout=BRIAR_WAIT_TIMEOUT)
       msg = "waited for '#{timeout}' seconds but did not see '#{sheet_id}'"
       wait_for(:timeout => timeout,
-               :retry_frequency => BRIAR_RETRY_FREQ,
-               :post_timeout => BRIAR_POST_TIMEOUT,
-               :timeout_message => msg ) do
+               :retry_frequency => BRIAR_WAIT_RETRY_FREQ,
+               :post_timeout => BRIAR_WAIT_STEP_PAUSE,
+               :timeout_message => msg) do
         sheet_exists? sheet_id
       end
     end
@@ -46,8 +47,8 @@ module Briar
     def wait_for_sheet_to_disappear(sheet_id, timeout=BRIAR_WAIT_TIMEOUT)
       msg = "waited for '#{timeout}' seconds for '#{sheet_id}' to disappear but it is still visible"
       options = {:timeout => timeout,
-                 :retry_frequency => BRIAR_RETRY_FREQ,
-                 :post_timeout => BRIAR_POST_TIMEOUT,
+                 :retry_frequency => BRIAR_WAIT_RETRY_FREQ,
+                 :post_timeout => BRIAR_WAIT_STEP_PAUSE,
                  :timeout_message => msg}
       wait_for(options) do
         not sheet_exists? sheet_id

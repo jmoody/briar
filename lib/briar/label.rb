@@ -1,3 +1,5 @@
+require 'calabash-cucumber'
+
 module Briar
   module Label
     def label_exists? (name)
@@ -5,7 +7,7 @@ module Briar
     end
 
     def should_see_label (name)
-      res = label_exists? (name)
+      res = label_exists?(name)
       unless res
         screenshot_and_raise "i could not find label with access id #{name}"
       end
@@ -32,9 +34,9 @@ module Briar
     def wait_for_label (label_id, timeout=BRIAR_WAIT_TIMEOUT)
       msg = "waited for '#{timeout}' seconds but did not see label '#{label_id}'"
       wait_for(:timeout => timeout,
-               :retry_frequency => BRIAR_RETRY_FREQ,
-               :post_timeout => BRIAR_POST_TIMEOUT,
-               :timeout_message => msg ) do
+               :retry_frequency => BRIAR_WAIT_RETRY_FREQ,
+               :post_timeout => BRIAR_WAIT_STEP_PAUSE,
+               :timeout_message => msg) do
         label_exists? label_id
       end
     end

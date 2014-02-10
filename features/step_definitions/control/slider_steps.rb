@@ -1,5 +1,3 @@
-#include Briar::Control::Slider
-
 When /^I change the "([^"]*)" slider to (\d+)$/ do |slider_id, value|
   wait_for_query("slider marked:'#{slider_id}'")
   change_slider_value_to slider_id, value

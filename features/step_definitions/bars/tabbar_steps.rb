@@ -1,15 +1,3 @@
-
-Given /^that the tabbar is visible$/ do
-  pending "deprecated 0.0.5 - use 'Then I should see the tabbar'"
-  should_see_tabbar
-end
-
-Then /^the tabbar is visible$/ do
-  pending "deprecated 0.0.5 - use 'Then I should see the tabbar'"
-  should_see_tabbar
-end
-
-
 Then /^I should( not)? see the (?:tabbar|tab bar)$/ do |visibility|
   visibility ? should_not_see_tabbar : should_see_tabbar
 end

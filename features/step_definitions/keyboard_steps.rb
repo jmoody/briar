@@ -1,4 +1,3 @@
-
 Then /^I should see the keyboard$/ do
   should_see_keyboard
 end
@@ -18,13 +17,12 @@ When /^I touch the done button the keyboard disappears$/ do
   should_not_see_keyboard
 end
 
-
 Then /^I touch the delete key$/ do
   keyboard_enter_char 'Delete'
 end
 
 Then(/^I turn off spell checking and capitalization$/) do
-  pending('deprecated 0.1.1 - not working')
+  _deprecated('0.1.1', 'not working', :pending)
   #should_see_keyboard
   #turn_autocapitalization_off
   #turn_autocorrect_off

@@ -3,7 +3,6 @@ require 'calabash-cucumber'
 module Briar
   module Control
     module Button
-      include Briar::Core
       def button_exists? (button_id)
         res = query("button marked:'#{button_id}'", :alpha)
         if res.empty?
@@ -54,9 +53,9 @@ module Briar
       def wait_for_button (button_id, timeout=BRIAR_WAIT_TIMEOUT)
         msg = "waited for '#{timeout}' seconds but did not see button '#{button_id}'"
         wait_for(:timeout => timeout,
-                 :retry_frequency => BRIAR_RETRY_FREQ,
-                 :post_timeout => BRIAR_POST_TIMEOUT,
-                 :timeout_message => msg ) do
+                 :retry_frequency => BRIAR_WAIT_RETRY_FREQ,
+                 :post_timeout => BRIAR_WAIT_STEP_PAUSE,
+                 :timeout_message => msg) do
           button_exists? button_id
         end
       end
@@ -64,13 +63,22 @@ module Briar
       def wait_for_button_with_title (button_id, title, timeout=BRIAR_WAIT_TIMEOUT)
         msg = "waited for '#{timeout}' seconds but did not see button '#{button_id}' with title '#{title}'"
         wait_for(:timeout => timeout,
-                 :retry_frequency => BRIAR_RETRY_FREQ,
-                 :post_timeout => BRIAR_POST_TIMEOUT,
-                 :timeout_message => msg ) do
+                 :retry_frequency => BRIAR_WAIT_RETRY_FREQ,
+                 :post_timeout => BRIAR_WAIT_STEP_PAUSE,
+                 :timeout_message => msg) do
           button_exists? button_id
         end
-        should_see_button_with_title(button_id, title)
+        res = query("button descendant view {text LIKE '#{title}'")
+        if res.empty?
+          screenshot_and_raise "expected button '#{button_id}' to have title '#{title}'"
+        end
       end
+
+      def touch_button_with_title(button_id, title, timeout=BRIAR_WAIT_TIMEOUT)
+        wait_for_button_with_title button_id, title, timeout
+        touch("button marked:'#{button_id}'")
+      end
+
     end
   end
 end

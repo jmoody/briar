@@ -1,5 +1,3 @@
-#include Briar::Picker
-
 # may only work on circular pickers - does _not_ work on non-circular pickers
 # because the visible titles do _not_ follow the selected index
 Then /^I should see picker "([^"]*)" with row "([^"]*)" selected$/ do |picker_name, row_named|
