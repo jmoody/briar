@@ -15,7 +15,7 @@ module Briar
 
       end
       # use the apple localization codes
-      BRIAR_IPAD_1X_2X_BUTTON_LABELS = {
+      IPAD_1X_2X_BUTTON_LABELS = {
             :en => {:emulated_1x => 'Switch to full screen mode',
                     :emulated_2x => 'Switch to normal mode'}
       }
@@ -36,7 +36,7 @@ module Briar
 
 
       def ipad_1x_2x_labels_hash(lang_code)
-        ht = BRIAR_IPAD_1X_2X_BUTTON_LABELS[lang_code]
+        ht = IPAD_1X_2X_BUTTON_LABELS[lang_code]
         if ht.nil?
           screenshot_and_raise "did not recognize language code '#{lang_code}'"
         end
