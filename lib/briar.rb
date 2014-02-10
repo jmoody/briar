@@ -90,4 +90,12 @@ if RUBY_VERSION.start_with?('1.8')
     end
 
   end
+
+  class String
+
+    def ord
+      self[0]
+    end
+
+  end
 end
