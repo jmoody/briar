@@ -1,141 +1,110 @@
 #!/usr/bin/env ruby
 #http://tech.natemurray.com/2007/03/ruby-shell-commands.html
 require 'find'
+require 'rainbow'
+require 'require_relative'
+require 'ansi/logger'
+
+@log = ANSI::Logger.new(STDOUT)
+
+require 'dotenv'
+Dotenv.load
+
+require_relative './briar_help'
+require_relative './briar_resign'
+require_relative './briar_install'
+require_relative './briar_console'
+require_relative './briar_rm'
+require_relative './briar_xtc'
+require_relative './briar_report'
+require_relative './briar_sim'
+
+num_args = ARGV.length
 
 
-require File.join(File.dirname(__FILE__), 'briar_helpers')
-require File.join(File.dirname(__FILE__), 'briar_resign')
+def briar_version
+  Briar::VERSION
+end
 
-if ARGV.length == 0
+if num_args == 0
   print_usage
   exit 0
 end
 
-if ARGV.length == 2
-  arg1 = ARGV[0]
-  unless arg1 == BRIAR_CMD_INSTALL
-    print_usage
+if num_args == 1 and (ARGV[0] == 'help' or ARGV[0] == 'version')
+  command = ARGV[0]
+  case command
+    when 'help'
+      print_usage
+    when 'version'
+      briar_version
+    else
+      @log.error{"'#{command}' is not defined"}
+      @log.error('can you try something else?')
+      exit 1
+  end
+  exit 0
+end
+
+if num_args == 2 and ARGV[0] == 'help'
+  command = ARGV[1]
+  case command
+    when 'console'
+      print_console_help
+    when 'cucumber-reports'
+      print_cucumber_reports_help
+    when 'install'
+      print_install_help
+    when 'resign'
+      print_resign_help
+    when 'report'
+      print_report_help
+    when 'rm'
+      print_rm_help
+    when 'sim'
+      print_sim_help
+    when 'version'
+      print_version_help
+    when '.xamarin'
+      print_dot_xamarin_help
+    when 'xtc'
+      print_xtc_help
+    when 'xtc-profiles'
+      print_xtc_profiles_help
+    else
+      @log.error("'#{command}' is not defined, so there is no help for you")
+      exit 1
+  end
+  exit 0
+end
+
+
+
+command = ARGV[0]
+args = ARGV.drop(1)
+case command
+  when 'console'
+    briar_console(args)
+  when 'install'
+    briar_install(args)
+  when 'report'
+    briar_report(args)
+  when 'resign'
+    briar_resign(args)
+  when 'rm'
+    briar_rm(args)
+  when 'sim'
+    briar_sim(args)
+  when 'xtc'
+    briar_xtc(args)
+
+  # deprecated
+  when BRIAR_RM_CAL_TARGETS
+    puts Rainbow('DEPRECATED 0.1.3 - replaced with $ briar rm sim-targets').yellow
+    briar_rm(['sim-targets'])
+  else
+    @log.error{"'#{command}' is not defined"}
+    @log.error('can you try something else?')
     exit 1
-  end
-  allowed =  [BRIAR_INSTALL_GEM, BRIAR_INSTALL_CALABASH_GEM, BRIAR_INSTALL_CALABASH_SERVER]
-  arg2 = ARGV[1]
-  unless allowed.include?(arg2)
-    print_usage
-    exit 1
-  end
-
-  if arg2 == BRIAR_INSTALL_GEM
-
-    puts 'will install briar gem'
-    gem_dir = "#{ENV['HOME']}/git/briar"
-    unless File.exists?(gem_dir)
-      puts "expected gem '#{gem_dir}' - cannot install the briar gem"
-      exit 1
-    end
-    system("cd #{gem_dir}; rake install")
-    exit 0
-  elsif arg2 == BRIAR_INSTALL_CALABASH_GEM
-
-    puts 'will install calabash-cucumber gem'
-    gem_dir = "#{ENV['HOME']}/git/calabash-ios/calabash-cucumber"
-    unless File.exists?(gem_dir)
-      puts "expected gem '#{gem_dir}' - cannot install the calabash-cucumber gem"
-      exit 1
-    end
-    system("cd #{gem_dir}; rake install")
-    exit 0
-  elsif arg2 == BRIAR_INSTALL_CALABASH_SERVER
-
-    puts 'will install calabash-ios server'
-    cal_framework = 'calabash.framework'
-    unless File.exists?(cal_framework)
-      puts "expected '#{cal_framework}' to be in the local directory."
-      puts "run this command in the directory that contins '#{cal_framework}'"
-      exit 1
-    end
-
-    gem_dir = "#{ENV['HOME']}/git/calabash-ios/calabash-cucumber"
-    unless File.exists?(gem_dir)
-      puts "expected gem '#{gem_dir}' - cannot install the calabash server"
-      exit 1
-    end
-
-    server_dir = "#{ENV['HOME']}/git/calabash-ios-server"
-    unless File.exists?(server_dir)
-      puts "expected calabash-ios server to be in dir '#{server_dir}'"
-      puts "will not be able run '#{gem_dir}/rake build_server'"
-      exit 1
-    end
-
-    version_file = File.read("#{server_dir}/calabash/Classes/FranklyServer/Routes/LPVersionRoute.h")
-    tokens = version_file.split(/define kLPCALABASHVERSION/)
-    line = tokens[1].split("\n").first
-    version = line.tr('^A-Za-z0-9.\-\_', '')
-
-    puts "building calabash server using 'rake build_server'"
-    system("cd #{gem_dir}; rake build_server")
-    puts 'remove old cal simulator targets'
-    system('briar rm-cal-targets')
-    puts 'copying new framework to ./'
-    system("cp #{gem_dir}/staticlib/#{cal_framework}.zip ./")
-    puts 'removing old framework'
-    system("rm -rf #{cal_framework}")
-    puts 'unzipping new framework'
-    system("unzip #{cal_framework}.zip")
-    puts 'cleaning up'
-    system("rm -rf #{cal_framework}.zip")
-    puts "installed new server version '#{version}'"
-
-    exit 0
-  end
-  puts 'fell through install conditional'
-  exit 1
 end
-
-cmd = ARGV.shift
-if cmd == 'help'
-  print_usage
-  exit 0
-elsif cmd == BRIAR_VERSION_CMD
-  puts "#{Briar::VERSION}"
-elsif cmd == BRIAR_RM_CAL_TARGETS
-  puts 'quiting the simulator'
-  `/usr/bin/osascript -e 'tell application "iPhone Simulator" to quit'`
-  sim_dir="#{ENV['HOME']}/Library/Application Support/iPhone Simulator"
-
- # `find "#{sim_dir}" -type d -name '*-cal.app' | sed 's#\(.*\)/.*#\1#' | xargs -I{} rm -rf {}`
-  cal_targets = []
-  Find.find(sim_dir) do |path|
-    if path =~  /.*\-cal.app/
-      puts "found '#{File.basename(path)}' in '#{File.dirname(path)}'"
-      cal_targets << File.dirname(path)
-      Find.prune
-    end
-  end
-
-  if cal_targets.empty?
-    puts "found no *-cal.app targets in '#{sim_dir}'"
-    exit 0
-  end
-
-  cal_targets.each do |path|
-    FileUtils.rm_r path
-  end
-
-elsif cmd == BRIAR_INSTALL_CALABASH_GEM
-  puts "use 'briar install calabash-gem'"
-  exit 1
-elsif cmd == BRIAR_INSTALL_GEM
-  puts "use 'briar install gem'"
-  exit 1
-elsif cmd == BRIAR_INSTALL_CALABASH_SERVER
-  puts "use 'briar install calabash-server'"
-  exit 1
-elsif cmd == BRIAR_RESIGN_IPA
-  puts 'will resign'
-  briar_resign(ARGV)
-  exit 0
-else
-  print_usage
-  exit 1
-end
+exit 0
