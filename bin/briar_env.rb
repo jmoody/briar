@@ -27,6 +27,7 @@ def expect_ideviceinstaller
     @log.fatal{ "expected it here '#{bin_path}'"}
     exit 1
   end
+  bin_path
 end
 
 def expect_ipa(ipa_path)

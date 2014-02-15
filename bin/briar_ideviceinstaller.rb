@@ -2,6 +2,7 @@ require_relative './briar_dot_xamarin'
 require_relative './briar_rm'
 require_relative './briar_env'
 
+require 'rainbow'
 require 'ansi/logger'
 
 @log = ANSI::Logger.new(STDOUT)
@@ -10,7 +11,7 @@ def ideviceinstaller(device, cmd, opts={})
   default_opts = {:build_script => ENV['IPA_BUILD_SCRIPT'],
                   :ipa => ENV['IPA'],
                   :bundle_id => expect_bundle_id(),
-                  :ideviceinstaller => expect_ideviceinstaller()}
+                  :idevice_installer => expect_ideviceinstaller()}
   opts = default_opts.merge(opts)
 
   cmds = [:install, :uninstall, :reinstall]
@@ -23,17 +24,25 @@ def ideviceinstaller(device, cmd, opts={})
 
   udid =  read_device_info(device, :udid)
 
+  bin_path = opts[:idevice_installer]
+
   if cmd == :install
     if build_script
       system "#{build_script}"
       briar_remove_derived_data_dups
     end
+
     ipa = opts[:ipa]
     expect_ipa(ipa)
 
-    system "#{bin_path} -u #{udid} --install #{ipa}"
+    cmd = "#{bin_path} -u #{udid} --install #{ipa}"
+    puts "#{Rainbow(cmd).green}"
+    system cmd
   elsif cmd == :uninstall
-    system "#{bin_path} -u #{udid} --uninstall #{bundle_id}"
+    bundle_id = opts[:bundle_id]
+    cmd = "#{bin_path} -u #{udid} --uninstall #{bundle_id}"
+    puts "#{Rainbow(cmd).green}"
+    system cmd
   else
     ideviceinstaller(device, :uninstall)
     ideviceinstaller(device, :install)
