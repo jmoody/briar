@@ -23,7 +23,7 @@ num_args = ARGV.length
 
 
 def briar_version
-  Briar::VERSION
+  puts "#{Briar::VERSION}"
 end
 
 if num_args == 0
