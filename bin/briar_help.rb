@@ -74,7 +74,6 @@ def help_see_xtc_profiles_help
   "see #{Rainbow('$ briar help xtc-profiles').yellow} for details"
 end
 
-
 def help_customize
   Rainbow('CUSTOMIZATION').green
 end
@@ -354,18 +353,29 @@ command, set the #{Rainbow('XTC_PROFILES').cyan} variable to your xtc-profiles.y
 EOF
 end
 
+def print_tags_help
+  puts <<EOF
+#{help_command('tags')} #{help_experimental}
+ generates a cucumber tag report
+
+ requires list_tags.rb in features/support/ directory
+
+EOF
+end
+
 def print_usage
   puts <<EOF
 #{Rainbow("Welcome to briar #{Briar::VERSION}!").cyan}
 
 briar help { command } for more information a command
 
- console { sim6 [simulator version] | sim7 [simulator version] | <device-name> }
+ console { sim6 [simulator version] | sim7 [simulator version] | <device-name> } #{help_experimental}
  install { calabash-server | <device-name> }
   report [device]
   resign #{help_experimental}
       rm { sim-targets | dups [project-name] }
-     sim [{quit | <simulator version>}]
+     sim [{quit | <simulator version>}] #{help_experimental}
+    tags #{help_experimental}
  version
      xtc [<device-set> [profile]] #{help_experimental} #{help_nyi}
 
