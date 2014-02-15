@@ -13,19 +13,18 @@ def briar_remove_cal_targets
   cal_targets = []
   Find.find(sim_dir) do |path|
     if path =~  /.*\-cal.app/
-      @log.fatal { "found '#{File.basename(path)}' in '#{File.dirname(path)}'" }
+      @log.info { "found '#{File.basename(path)}' in '#{File.dirname(path)}'" }
       cal_targets << File.dirname(path)
       Find.prune
     end
   end
 
   if cal_targets.empty?
-    @log.fatal { "found no *-cal.app targets in '#{sim_dir}'" }
-    exit 0
-  end
-
-  cal_targets.each do |path|
-    FileUtils.rm_r path
+    @log.info { "found no *-cal.app targets in '#{sim_dir}'" }
+  else
+    cal_targets.each do |path|
+      FileUtils.rm_r path
+    end
   end
 end
 
