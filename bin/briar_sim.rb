@@ -53,6 +53,8 @@ def set_default_simulator(device_key)
     raise "#{device_key} was not one of '#{hash.keys}'"
   end
 
+  kill_simulator
+
   open_simulator
   current_device = default_simulated_device()
   unless current_device.eql?(device_key)
