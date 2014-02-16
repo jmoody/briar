@@ -1,6 +1,7 @@
 require_relative './briar_dot_xamarin'
 require_relative './briar_env'
 
+
 require 'ansi/logger'
 @log = ANSI::Logger.new(STDOUT)
 
@@ -34,16 +35,19 @@ def screenshot_path
   path
 end
 
+#noinspection RubyStringKeysInHashInspection
 def logging_level
   {'DEBUG' => ENV['DEBUG'] || '1',
    'CALABASH_FULL_CONSOLE_OUTPUT' => ENV['CALABASH_FULL_CONSOLE_OUTPUT'] || '1'}
 end
 
+#noinspection RubyStringKeysInHashInspection
 def simulator_variables(sdk_version)
   {'DEVICE_TARGET' => 'simulator',
    'SKD_VERSION' => sdk_version}
 end
 
+#noinspection RubyStringKeysInHashInspection
 def device_variables(device)
   {'DEVICE_TARGET' => read_device_info(device, :udid),
    'DEVICE_ENDPOINT' => read_device_info(device, :ip),
