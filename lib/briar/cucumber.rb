@@ -5,7 +5,7 @@ require_relative '../briar'
 World(Briar)
 World(Briar::Core)
 World(Briar::UIA)
-World(Briar::UIA::IPadEmulation)
+#World(Briar::UIA::IPadEmulation)
 World(Briar::Alerts_and_Sheets)
 World(Briar::Bars)
 World(Briar::Control::Button)

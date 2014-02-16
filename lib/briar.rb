@@ -42,7 +42,6 @@ require 'calabash-cucumber'
 require 'briar/version'
 require 'briar/briar_core'
 require 'briar/uia/briar_uia'
-require 'briar/uia/briar_ipad_emulation'
 
 require 'briar/alerts_and_sheets/alert_view'
 require 'briar/alerts_and_sheets/action_sheet'
