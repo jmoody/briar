@@ -39,7 +39,12 @@ def briar_xtc_submit(device_set, profile, opts={})
   default_opts = {:build_script => ENV['IPA_BUILD_SCRIPT'],
                   :ipa => ENV['IPA'],
                   :profiles => ENV['XTC_PROFILES'],
-                  :account => expect_xtc_account()}
+                  :account => expect_xtc_account(),
+                  :other_gems => ENV['XTC_OTHER_GEMS_FILE'],
+                  :briar_dev => ENV['XTC_BRIAR_GEM_DEV'],
+                  :calabash_dev => ENV['XTC_CALABASH_GEM_DEV'],
+                  :rebuild => true}
+
 
   opts = default_opts.merge(opts)
 
@@ -47,25 +52,71 @@ def briar_xtc_submit(device_set, profile, opts={})
 
   if build_script
     expect_build_script(build_script)
-    system "#{build_script}"
+    if opts[:rebuild]
+      cmd = "#{build_script}"
+    else
+      cmd = "#{build_script} -"
+    end
+    system cmd
     briar_remove_derived_data_dups
   end
 
-  xtc_gemfile = './xamarin/Gemfile'
-
-  briar_path = `bundle show briar`.strip
-  calabash_path = `bundle show calabash-cucumber`.strip
-
-  File.open(xtc_gemfile, 'w') { |file|
-    file.write("source 'https://rubygems.org'\n")
-    file.write("gem 'calabash-cucumber', :path => '#{calabash_path}'\n")
-    file.write("gem 'briar', :path => '#{briar_path}'\n")
-    file.write("gem 'faker'\n")
-  }
-  
   account = opts[:account]
   api_key = read_api_token(account)
 
+  if opts[:briar_dev] == '1'
+    briar_path = `bundle show briar`.strip
+    system('gem uninstall briar --no-executables --ignore-dependencies --quiet',
+           :err => '/dev/null')
+    Dir.chdir(File.expand_path(briar_path)) do
+      system 'rake install'
+    end
+  end
+
+  if opts[:calabash_dev] == '1'
+    calabash_path = `bundle show calabash-cucumber`.strip
+    system('gem uninstall calabash-cucumber --no-executables --ignore-dependencies --quiet',
+           :err => '/dev/null')
+
+    Dir.chdir(File.expand_path(calabash_path)) do
+      system 'rake install'
+    end
+  end
+
+  other_gems = []
+  if opts[:other_gems]
+    path = File.expand_path(opts[:other_gems])
+    File.read(path).split("\n").each do |line|
+      # stay 1.8.7 compat
+      next if line.strip.length == 0 or line.chars.to_a.first.eql?('#')
+      other_gems << line.strip
+    end
+  end
+
+  if opts[:briar_dev] == '1' or opts[:calabash_dev] == '1'
+
+    xtc_gemfile = './xamarin/Gemfile'
+
+    File.open(xtc_gemfile, 'w') do |file|
+      file.write("source 'https://rubygems.org'\n")
+      if opts[:calabash_dev]
+        calabash_version = `bundle exec calabash-ios version`.strip
+        file.write("gem 'calabash-cucumber', '#{calabash_version}'\n")
+      end
+
+      if opts[:briar_dev]
+        briar_version = `bundle exec briar version`.strip
+        file.write("gem 'briar', '#{briar_version}'\n")
+      else
+        file.write("gem 'briar'")
+      end
+
+      other_gems.each do |gem|
+        file.write("#{gem}\n")
+      end
+    end
+
+  end
 
   sets = read_device_sets
   if sets[device_set]
@@ -76,15 +127,10 @@ def briar_xtc_submit(device_set, profile, opts={})
 
   ipa = File.basename(File.expand_path(expect_ipa(opts[:ipa])))
 
-  cmd = "bundle exec test-cloud submit #{ipa} #{api_key} -d #{device_set} -c cucumber.yml -p #{profile}"
+  cmd = "test-cloud submit #{ipa} #{api_key} -d #{device_set} -c cucumber.yml -p #{profile}"
   puts Rainbow("cd xamarin; #{cmd}").green
-  begin
-    Dir.chdir('./xamarin') do
-      system cmd
-    end
-  rescue
-    # probably useless
-    @log.fatal{ 'could not submit job' }
+  Dir.chdir('./xamarin') do
+    exec cmd
   end
 end
 
@@ -99,10 +145,22 @@ def briar_xtc(args)
   device_set = args[0]
   profile = arg_len == 1 ? nil : args[1]
 
-  if arg_len > 2
-    @log.warn{ "expected at most 2 args by found '#{args}' - ignoring extra input" }
+
+  if arg_len == 3
+    rebuild_arg = args[2]
+    unless rebuild_arg == '-'
+      @log.fatal { "unknown optional argument '#{rebuild_arg}' expected '-'" }
+      exit 1
+    end
+    opts = {:rebuild => false}
+  else
+    opts = {:rebuild => true}
   end
 
-  briar_xtc_submit(device_set, profile)
+  if arg_len > 3
+    @log.warn{ "expected at most 3 args by found '#{args}' - ignoring extra input" }
+  end
+
+  briar_xtc_submit(device_set, profile, opts)
 end
 
