@@ -94,12 +94,16 @@ def console(device, opts={})
   # do not be tempted to use IRB.start
   # this can cause some terrible problems at > exit
   ##################
-
-default_opts = default_console_opts()
+  default_opts = default_console_opts()
   opts = default_opts.merge(opts)
   cmd = ios_console_cmd(device, opts)
   puts Rainbow(cmd).green
-  exec cmd
+
+  if RUBY_VERSION.start_with?('1.8')
+    raise 'not supported in ruby 1.8'
+  else
+    exec cmd
+  end
 end
 
 

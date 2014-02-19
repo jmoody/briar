@@ -26,6 +26,10 @@ def help_experimental
   Rainbow('EXPERIMENTAL').underline.magenta
 end
 
+def help_not_available_ruby18
+  Rainbow('RUBY > 1.8').underline.magenta
+end
+
 def help_deprecated(version, msg)
   ANSI.cyan { "DEPRECATED #{version} - #{msg}" }
 end
@@ -206,6 +210,7 @@ def print_console_help
 #{help_env_var('                       IRBRC', 'location of custom .irbrc file - defaults to ./.irbrc')}
 #{help_env_var('                 BUNDLE_EXEC', 'start console with bundle exec - defaults to 0')}
 
+#{help_not_available_ruby18}
 EOF
 end
 
