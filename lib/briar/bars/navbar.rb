@@ -19,7 +19,18 @@ module Briar
     end
 
     def navbar_has_back_button?
-      !query('navigationItemButtonView').empty?
+      res = query('navigationItemButtonView')
+      return false if res.empty?
+
+      # sometime the back button is there, but has zero rect
+      frame = res.first['frame']
+
+      ['x', 'y', 'width', 'height'].each { |key|
+        if frame[key] != 0
+          return true
+        end
+      }
+      false
     end
 
     def should_see_navbar_back_button
@@ -74,21 +85,33 @@ module Briar
     end
 
 
-    def should_not_see_navbar_button (name, is_ui_button=false)
-      if is_ui_button
-        qstr = "buttonLabel marked:'#{name}' parent navigationBar"
-        timeout = 1.0
-        msg = "waited for '#{timeout}' seconds but i still see '#{name}' in navigation bar"
+    # todo convert args to hash and mirror the should_see_navbar_button
+    #is_ui_button=false)
+    def should_not_see_navbar_button (mark, opts={})
+      if (not opts.is_a?(Hash)) and (not opts.nil?)
+        warn "\nWARN: deprecated 0.1.4 - you should no longer pass a Boolean '#{opts}' as an arg, pass opts hash instead"
+        button_type = opts ? :button : :bar_item
+        opts = {:bar_button_type => button_type}
+      end
+      default_opts = {:bar_button_type => :bar_item,
+                      :timeout => BRIAR_WAIT_TIMEOUT}
+      opts = default_opts.merge(opts)
+      if opts[:bar_button_type] == :button
+        queries = ["buttonLabel marked:'#{mark}' parent navigationBar",
+                   "button marked:'#{mark}' parent navigationBar"]
+        timeout = opts[:timeout]
+        msg = "waited for '#{timeout}' seconds but i still see '#{mark}' in navigation bar"
         wait_for(:timeout => timeout,
                  :retry_frequency => BRIAR_WAIT_RETRY_FREQ,
                  :post_timeout => BRIAR_WAIT_STEP_PAUSE,
                  :timeout_message => msg) do
-          element_does_not_exist qstr
+          queries.all? { |query| element_does_not_exist query }
         end
       else
-        idx = index_of_navbar_button name
+        idx = index_of_navbar_button mark
         unless idx.nil?
-          screenshot_and_raise "i should not see a navbar button named #{name}"
+          # check to see if it is a ui button
+          should_not_see_navbar_button mark, {:bar_button_type => :button}
         end
       end
     end
