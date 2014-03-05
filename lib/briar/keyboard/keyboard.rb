@@ -69,8 +69,10 @@ module Briar
 
 
     #noinspection RubyUnusedLocalVariable
-    def briar_clear_text(view_id, timeout=5)
-      _deprecated('0.1.1', "will remove 'timeout' argument in a future release", :warn)
+    def briar_clear_text(view_id, timeout=nil)
+      unless timeout.nil?
+        _deprecated('0.1.1', "will remove 'timeout' argument in a future release", :warn)
+      end
       clear_text("view marked:'#{view_id}'")
 
       # i really wanted this to work, but there are too many issues with the
