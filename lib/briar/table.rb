@@ -152,7 +152,9 @@ module Briar
 
     def briar_scroll_to_row_and_touch (row_id, opts={})
       if (not opts.is_a?(Hash)) and (not opts.nil?)
-        warn "WARN: deprecated 0.1.3 - you should no longer pass a view_id '#{opts}' as an arg, pass opts hash instead"
+        _deprecated('0.1.3',
+                    "you should no longer pass a view_id '#{opts}' as an arg, pass opts hash instead",
+                    :warn)
         opts = {:wait_for_id => opts}
       end
 
