@@ -97,4 +97,12 @@ if RUBY_VERSION.start_with?('1.8')
     end
 
   end
+
+  class Array
+
+    def sample(*args)
+      self.choice(args)
+    end
+
+  end
 end
