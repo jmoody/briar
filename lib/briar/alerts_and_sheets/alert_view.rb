@@ -60,8 +60,8 @@ module Briar
     end
 
     def should_see_alert_with_message (message, timeout=BRIAR_WAIT_TIMEOUT)
-      if ios7?
-        warn 'WARN: cannot distinguish between alert titles and messages'
+      if uia_available?
+        warn '\nWARN: cannot distinguish between alert titles and messages'
         should_see_alert
         if uia_query(:view, {:marked => "#{message}"}).empty?
           screenshot_and_raise "expected to see alert with title '#{message}'"
