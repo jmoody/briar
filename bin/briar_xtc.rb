@@ -41,8 +41,8 @@ def briar_xtc_submit(device_set, profile, opts={})
                   :profiles => ENV['XTC_PROFILES'],
                   :account => expect_xtc_account(),
                   :other_gems => ENV['XTC_OTHER_GEMS_FILE'],
-                  :briar_dev => ENV['XTC_BRIAR_GEM_DEV'],
-                  :calabash_dev => ENV['XTC_CALABASH_GEM_DEV'],
+                  :briar_dev => ENV['XTC_BRIAR_GEM_DEV'] == '1',
+                  :calabash_dev => ENV['XTC_CALABASH_GEM_DEV'] == '1',
                   :rebuild => true}
 
 
@@ -64,7 +64,7 @@ def briar_xtc_submit(device_set, profile, opts={})
   account = opts[:account]
   api_key = read_api_token(account)
 
-  if opts[:briar_dev] == '1'
+  if opts[:briar_dev]
     briar_path = `bundle show briar`.strip
     system('gem uninstall briar --no-executables --ignore-dependencies --quiet',
            :err => '/dev/null')
@@ -73,7 +73,7 @@ def briar_xtc_submit(device_set, profile, opts={})
     end
   end
 
-  if opts[:calabash_dev] == '1'
+  if opts[:calabash_dev]
     calabash_path = `bundle show calabash-cucumber`.strip
     system('gem uninstall calabash-cucumber --no-executables --ignore-dependencies --quiet',
            :err => '/dev/null')
@@ -84,7 +84,7 @@ def briar_xtc_submit(device_set, profile, opts={})
   end
 
   other_gems = []
-  if opts[:other_gems]
+  if opts[:other_gems] != ''
     path = File.expand_path(opts[:other_gems])
     File.read(path).split("\n").each do |line|
       # stay 1.8.7 compat
@@ -93,7 +93,7 @@ def briar_xtc_submit(device_set, profile, opts={})
     end
   end
 
-  if opts[:briar_dev] == '1' or opts[:calabash_dev] == '1'
+  if opts[:briar_dev] or opts[:calabash_dev]
 
     xtc_gemfile = './xamarin/Gemfile'
 
@@ -102,13 +102,15 @@ def briar_xtc_submit(device_set, profile, opts={})
       if opts[:calabash_dev]
         calabash_version = `bundle exec calabash-ios version`.strip
         file.write("gem 'calabash-cucumber', '#{calabash_version}'\n")
+      else
+        file.write("gem 'calabash-cucumber'\n")
       end
 
       if opts[:briar_dev]
         briar_version = `bundle exec briar version`.strip
         file.write("gem 'briar', '#{briar_version}'\n")
       else
-        file.write("gem 'briar'")
+        file.write("gem 'briar'\n")
       end
 
       other_gems.each do |gem|
@@ -127,7 +129,7 @@ def briar_xtc_submit(device_set, profile, opts={})
 
   ipa = File.basename(File.expand_path(expect_ipa(opts[:ipa])))
 
-  cmd = "test-cloud submit #{ipa} #{api_key} -d #{device_set} -c cucumber.yml -p #{profile}"
+  cmd = "DEBUG=0 test-cloud submit #{ipa} #{api_key} -d #{device_set} -c cucumber.yml -p #{profile}"
   puts Rainbow("cd xamarin; #{cmd}").green
   Dir.chdir('./xamarin') do
     exec cmd
