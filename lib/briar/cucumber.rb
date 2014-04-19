@@ -40,7 +40,7 @@ World(Briar::Page::Helpers)
 # XTC job submission.
 #
 # see the xamarin-build.sh script
-unless ENV['XAMARIN_TEST_CLOUD'] == '1'
+unless ENV['XAMARIN_TEST_CLOUD'] == '1' or ENV['NO_BRIAR_PREDEFINED_STEPS'] == '1'
   require_relative '../../features/step_definitions/alerts_and_sheets/action_sheet_steps'
   require_relative '../../features/step_definitions/alerts_and_sheets/alert_view_steps'
 
