@@ -32,6 +32,7 @@ Gem::Specification.new do |gem|
   gem.add_runtime_dependency 'ansi', '~> 1.4'
   gem.add_runtime_dependency 'rainbow', '~> 1.99'
   gem.add_runtime_dependency 'pry', '~> 0.9'
+  gem.add_runtime_dependency 'rspec'
 
   # downgrading to 1.0.0 from 1.2.0
   # https://github.com/xamarin/test-cloud-command-line/issues/3
