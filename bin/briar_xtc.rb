@@ -41,6 +41,7 @@ def briar_xtc_submit(device_set, profile, opts={})
                   :profiles => ENV['XTC_PROFILES'],
                   :account => expect_xtc_account(),
                   :other_gems => ENV['XTC_OTHER_GEMS_FILE'],
+                  :xtc_staging_dir => expect_xtc_staging_dir(),
                   :briar_dev => ENV['XTC_BRIAR_GEM_DEV'] == '1',
                   :calabash_dev => ENV['XTC_CALABASH_GEM_DEV'] == '1',
                   :rebuild => true}
@@ -127,7 +128,7 @@ def briar_xtc_submit(device_set, profile, opts={})
 
   cmd = "DEBUG=0 test-cloud submit #{ipa} #{api_key} -d #{device_set} -c cucumber.yml -p #{profile}"
   puts Rainbow("cd xamarin; #{cmd}").green
-  Dir.chdir('./xamarin') do
+  Dir.chdir(opts[:xtc_staging_dir]) do
     exec cmd
   end
 end
@@ -161,4 +162,3 @@ def briar_xtc(args)
 
   briar_xtc_submit(device_set, profile, opts)
 end
-

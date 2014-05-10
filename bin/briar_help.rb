@@ -333,6 +333,7 @@ def print_xtc_help
   #{help_env_var(' XTC_OTHER_GEMS_FILE', 'path to a file describing other gems that should be installed on the XTC')}
   #{help_env_var('   XTC_BRIAR_GEM_DEV', "set to '1' to ensure the local version of briar will be uploaded to the XTC'")}
   #{help_env_var('XTC_CALABASH_GEM_DEV', "set to '1' to ensure the local version of calabash will be uploaded to the XTC'")}
+  #{help_env_var('     XTC_STAGING_DIR', 'path to the directory where XTC files will be staged')}
 
 EOF
 end
