@@ -24,16 +24,21 @@ def default_simulated_device
   raise "could not find '#{res}' in hash values '#{simulator_hash()}'"
 end
 
+# returns the xcode developer dir using xcode-select
+def xcode_developer_dir
+  `xcode-select --print-path`.chomp
+end
+
 # kills the simulator if it is running
 #
 # uses Apple Script
 def kill_simulator
-  dev_dir = ENV['DEVELOPER_DIR']
+  dev_dir = xcode_developer_dir
   system "/usr/bin/osascript -e 'tell application \"#{dev_dir}/Platforms/iPhoneSimulator.platform/Developer/Applications/iPhone Simulator.app\" to quit'"
 end
 
 def open_simulator
-  dev_dir = ENV['DEVELOPER_DIR']
+  dev_dir = xcode_developer_dir
   system "/usr/bin/osascript -e 'tell application \"#{dev_dir}/Platforms/iPhoneSimulator.platform/Developer/Applications/iPhone Simulator.app\" to activate'"
 end
 
@@ -52,6 +57,8 @@ def set_default_simulator(device_key)
   unless hash[device_key]
     raise "#{device_key} was not one of '#{hash.keys}'"
   end
+
+  kill_simulator
 
   open_simulator
   current_device = default_simulated_device()

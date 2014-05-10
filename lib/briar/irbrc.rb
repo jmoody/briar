@@ -31,13 +31,16 @@ require 'calabash-cucumber'
 #noinspection RubyResolve
 require 'calabash-cucumber/operations'
 #noinspection RubyResolve
-require 'calabash-cucumber/launch/simulator_helper'
+require 'calabash-cucumber/launch/simulator_launcher'
 #noinspection RubyResolve
 require 'calabash-cucumber/launcher'
+#noinspection RubyResolve
+require 'calabash-cucumber/uia'
 
-SIM=Calabash::Cucumber::SimulatorHelper
+SIM=Calabash::Cucumber::SimulatorLauncher
 
 extend Calabash::Cucumber::Operations
+include Calabash::Cucumber::IPad
 
 #noinspection RubyUnusedLocalVariable
 def embed(x,y=nil,z=nil)
@@ -58,7 +61,6 @@ include Briar::Picker::DateManipulation
 include Briar::Picker::DateSteps
 include Briar::Core
 include Briar::UIA
-include Briar::UIA::IPadEmulation
 include Briar::Table
 include Briar::ImageView
 include Briar::Label

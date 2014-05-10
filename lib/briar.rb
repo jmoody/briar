@@ -42,7 +42,6 @@ require 'calabash-cucumber'
 require 'briar/version'
 require 'briar/briar_core'
 require 'briar/uia/briar_uia'
-require 'briar/uia/briar_ipad_emulation'
 
 require 'briar/alerts_and_sheets/alert_view'
 require 'briar/alerts_and_sheets/action_sheet'
@@ -95,6 +94,14 @@ if RUBY_VERSION.start_with?('1.8')
 
     def ord
       self[0]
+    end
+
+  end
+
+  class Array
+
+    def sample(*args)
+      self.choice(args)
     end
 
   end

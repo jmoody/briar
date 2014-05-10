@@ -18,12 +18,13 @@ require_relative './briar_rm'
 require_relative './briar_xtc'
 require_relative './briar_report'
 require_relative './briar_sim'
+require_relative './briar_tags'
 
 num_args = ARGV.length
 
 
 def briar_version
-  Briar::VERSION
+  puts "#{Briar::VERSION}"
 end
 
 if num_args == 0
@@ -63,6 +64,8 @@ if num_args == 2 and ARGV[0] == 'help'
       print_rm_help
     when 'sim'
       print_sim_help
+    when 'tags'
+      print_tags_help
     when 'version'
       print_version_help
     when '.xamarin'
@@ -95,6 +98,8 @@ case command
     briar_rm(args)
   when 'sim'
     briar_sim(args)
+  when 'tags'
+    briar_tags(args)
   when 'xtc'
     briar_xtc(args)
 

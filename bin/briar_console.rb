@@ -1,6 +1,7 @@
 require_relative './briar_dot_xamarin'
 require_relative './briar_env'
 
+
 require 'ansi/logger'
 @log = ANSI::Logger.new(STDOUT)
 
@@ -34,16 +35,19 @@ def screenshot_path
   path
 end
 
+#noinspection RubyStringKeysInHashInspection
 def logging_level
   {'DEBUG' => ENV['DEBUG'] || '1',
    'CALABASH_FULL_CONSOLE_OUTPUT' => ENV['CALABASH_FULL_CONSOLE_OUTPUT'] || '1'}
 end
 
+#noinspection RubyStringKeysInHashInspection
 def simulator_variables(sdk_version)
   {'DEVICE_TARGET' => 'simulator',
    'SKD_VERSION' => sdk_version}
 end
 
+#noinspection RubyStringKeysInHashInspection
 def device_variables(device)
   {'DEVICE_TARGET' => read_device_info(device, :udid),
    'DEVICE_ENDPOINT' => read_device_info(device, :ip),
@@ -90,12 +94,16 @@ def console(device, opts={})
   # do not be tempted to use IRB.start
   # this can cause some terrible problems at > exit
   ##################
-
-default_opts = default_console_opts()
+  default_opts = default_console_opts()
   opts = default_opts.merge(opts)
   cmd = ios_console_cmd(device, opts)
   puts Rainbow(cmd).green
-  exec cmd
+
+  if RUBY_VERSION.start_with?('1.8')
+    raise 'not supported in ruby 1.8'
+  else
+    exec cmd
+  end
 end
 
 

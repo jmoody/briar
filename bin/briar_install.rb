@@ -1,6 +1,7 @@
 require_relative 'briar_help'
 require_relative 'briar_dot_xamarin'
 require_relative 'briar_ideviceinstaller'
+require 'pry'
 
 require 'ansi/logger'
 @log = ANSI::Logger.new(STDOUT)
@@ -71,7 +72,8 @@ def briar_install_calabash_server
   version_file = File.read("#{server_dir}/calabash/Classes/FranklyServer/Routes/LPVersionRoute.h")
   tokens = version_file.split(/define kLPCALABASHVERSION/)
   line = tokens[1].split("\n").first
-  version = line.tr('^A-Za-z0-9.\-\_', '')
+  version_part = line.split(' ').last
+  version = version_part.tr('^A-Za-z0-9.\-\_', '')
 
   puts "building calabash server using 'rake build_server'"
   system("cd #{gem_dir}; rake build_server")

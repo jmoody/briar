@@ -82,20 +82,20 @@ module Briar
 
     def should_see_mail_view (opts = {:timeout => BRIAR_WAIT_TIMEOUT,
                                       :email_view_mark => 'compose email'})
-
-      {:timeout => BRIAR_WAIT_TIMEOUT, :email_view_mark => 'compose email'}.merge!(opts)
-
+      default_opts = {:timeout => BRIAR_WAIT_TIMEOUT,
+                      :email_view_mark => 'compose email'}
+      merged = default_opts.merge(opts)
 
       if email_not_testable?
         warn_about_no_ios5_email_view
         return
       end
 
-      timeout = opts[:timeout]
+      timeout = merged[:timeout]
       msg = "waited for '#{timeout}' seconds but did not see email compose view"
       #noinspection RubyParenthesesAfterMethodCallInspection
 
-      email_view_mark = opts[:email_view_mark]
+      email_view_mark = merged[:email_view_mark]
       wait_for(:timeout => timeout,
                :retry_frequency => BRIAR_WAIT_RETRY_FREQ,
                :post_timeout => BRIAR_WAIT_STEP_PAUSE,

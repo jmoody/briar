@@ -26,6 +26,10 @@ def help_experimental
   Rainbow('EXPERIMENTAL').underline.magenta
 end
 
+def help_not_available_ruby18
+  Rainbow('RUBY > 1.8').underline.magenta
+end
+
 def help_deprecated(version, msg)
   ANSI.cyan { "DEPRECATED #{version} - #{msg}" }
 end
@@ -73,7 +77,6 @@ end
 def help_see_xtc_profiles_help
   "see #{Rainbow('$ briar help xtc-profiles').yellow} for details"
 end
-
 
 def help_customize
   Rainbow('CUSTOMIZATION').green
@@ -207,6 +210,7 @@ def print_console_help
 #{help_env_var('                       IRBRC', 'location of custom .irbrc file - defaults to ./.irbrc')}
 #{help_env_var('                 BUNDLE_EXEC', 'start console with bundle exec - defaults to 0')}
 
+#{help_not_available_ruby18}
 EOF
 end
 
@@ -309,17 +313,27 @@ def print_xtc_help
 #{help_command('xtc')}
   prints the available XTC device sets
 
-#{help_command('xtc <device-set> [profile]')} #{help_experimental} #{help_nyi}
-  submits a job to the XTC targeting devices specified in < device-set >
 
+#{help_command('xtc <device-set> [profile]')} #{help_experimental}
+  submits a job to the XTC targeting devices specified in < device-set >
   if no profile is set, the 'default' profile in the xtc-cucumber.yml will be used
 
+#{help_command('xtc <device-set> <profile> [build args]')} #{help_experimental}
+  submits a job to the XTC targeting devices specified in < device-set > using
+  the cucumber profile specified by < profile >.  you can optionally pass build
+  arguments to to control your xamarin build script.
+
   #{help_requires_env_vars}
-  #{help_env_var('             IPA', 'path to the .ipa you submitting')}
-  #{help_env_var('    XTC_PROFILES', 'cucumber profiles for the XTC')}
-  #{help_env_var('     XTC_ACCOUNT', 'name of a directory in ~/.xamarin/test-cloud/<account> that contains the api token')}
+  #{help_env_var('                 IPA', 'path to the .ipa you submitting')}
+  #{help_env_var('        XTC_PROFILES', 'cucumber profiles for the XTC')}
+  #{help_env_var('         XTC_ACCOUNT', 'name of a directory in ~/.xamarin/test-cloud/<account> that contains the api token')}
   #{help_example_comment('if a build script is defined, the .ipa will be built before submission')}
-  #{help_env_var('IPA_BUILD_SCRIPT', '(optional) script that generates the IPA')}
+  #{help_env_var('    IPA_BUILD_SCRIPT', '(optional) script that generates the IPA')}
+  #{help_example_comment('if you require other gems besides briar')}
+  #{help_env_var(' XTC_OTHER_GEMS_FILE', 'path to a file describing other gems that should be installed on the XTC')}
+  #{help_env_var('   XTC_BRIAR_GEM_DEV', "set to '1' to ensure the local version of briar will be uploaded to the XTC'")}
+  #{help_env_var('XTC_CALABASH_GEM_DEV', "set to '1' to ensure the local version of calabash will be uploaded to the XTC'")}
+  #{help_env_var('     XTC_STAGING_DIR', 'path to the directory where XTC files will be staged')}
 
 EOF
 end
@@ -354,20 +368,31 @@ command, set the #{Rainbow('XTC_PROFILES').cyan} variable to your xtc-profiles.y
 EOF
 end
 
+def print_tags_help
+  puts <<EOF
+#{help_command('tags')} #{help_experimental}
+ generates a cucumber tag report
+
+ requires list_tags.rb in features/support/ directory
+
+EOF
+end
+
 def print_usage
   puts <<EOF
 #{Rainbow("Welcome to briar #{Briar::VERSION}!").cyan}
 
 briar help { command } for more information a command
 
- console { sim6 [simulator version] | sim7 [simulator version] | <device-name> }
+ console { sim6 [simulator version] | sim7 [simulator version] | <device-name> } #{help_experimental}
  install { calabash-server | <device-name> }
   report [device]
   resign #{help_experimental}
       rm { sim-targets | dups [project-name] }
-     sim [{quit | <simulator version>}]
+     sim [{quit | <simulator version>}] #{help_experimental}
+    tags #{help_experimental}
  version
-     xtc [<device-set> [profile]] #{help_experimental} #{help_nyi}
+     xtc { [<device-set> [profile]] | [<device-set> <profile> [build args] } #{help_experimental}
 
 #{Rainbow('ADDITIONAL HELP TOPICS').green}
      help .xamarin

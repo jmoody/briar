@@ -27,6 +27,7 @@ def expect_ideviceinstaller
     @log.fatal{ "expected it here '#{bin_path}'"}
     exit 1
   end
+  bin_path
 end
 
 def expect_ipa(ipa_path)
@@ -47,5 +48,11 @@ def expect_xtc_account
   account
 end
 
-
-
+def expect_xtc_staging_dir
+  dir = ENV['XTC_STAGING_DIR']
+  unless dir
+    @log.fatal{ 'XTC_STAGING_DIR must be set' }
+    exit 1
+  end
+  dir
+end
