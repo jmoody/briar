@@ -93,31 +93,27 @@ def briar_xtc_submit(device_set, profile, opts={})
     end
   end
 
-  if opts[:briar_dev] or opts[:calabash_dev]
+  xtc_gemfile = "#{opts[:xtc_staging_dir]}/Gemfile"
 
-    xtc_gemfile = './xamarin/Gemfile'
-
-    File.open(xtc_gemfile, 'w') do |file|
-      file.write("source 'https://rubygems.org'\n")
-      if opts[:calabash_dev]
-        calabash_version = `bundle exec calabash-ios version`.strip
-        file.write("gem 'calabash-cucumber', '#{calabash_version}'\n")
-      else
-        file.write("gem 'calabash-cucumber'\n")
-      end
-
-      if opts[:briar_dev]
-        briar_version = `bundle exec briar version`.strip
-        file.write("gem 'briar', '#{briar_version}'\n")
-      else
-        file.write("gem 'briar'\n")
-      end
-
-      other_gems.each do |gem|
-        file.write("#{gem}\n")
-      end
+  File.open(xtc_gemfile, 'w') do |file|
+    file.write("source 'https://rubygems.org'\n")
+    if opts[:briar_dev]
+      briar_version = `bundle exec briar version`.strip
+      file.write("gem 'briar', '#{briar_version}'\n")
+    else
+      file.write("gem 'briar'\n")
     end
 
+    if opts[:calabash_dev]
+      calabash_version = `bundle exec calabash-ios version`.strip
+      file.write("gem 'calabash-cucumber', '#{calabash_version}'\n")
+    elsif not opts[:briar_dev]
+      file.write("gem 'calabash-cucumber'\n")
+    end
+
+    other_gems.each do |gem|
+      file.write("#{gem}\n")
+    end
   end
 
   sets = read_device_sets
