@@ -31,13 +31,13 @@ require 'calabash-cucumber'
 #noinspection RubyResolve
 require 'calabash-cucumber/operations'
 #noinspection RubyResolve
-require 'calabash-cucumber/launch/simulator_helper'
+require 'calabash-cucumber/launch/simulator_launcher'
 #noinspection RubyResolve
 require 'calabash-cucumber/launcher'
 #noinspection RubyResolve
 require 'calabash-cucumber/uia'
 
-SIM=Calabash::Cucumber::SimulatorHelper
+SIM=Calabash::Cucumber::SimulatorLauncher
 
 extend Calabash::Cucumber::Operations
 include Calabash::Cucumber::IPad
