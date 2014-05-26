@@ -44,6 +44,7 @@ def briar_xtc_submit(device_set, profile, opts={})
                   :xtc_staging_dir => expect_xtc_staging_dir(),
                   :briar_dev => ENV['XTC_BRIAR_GEM_DEV'] == '1',
                   :calabash_dev => ENV['XTC_CALABASH_GEM_DEV'] == '1',
+                  :async_submit => ENV['XTC_WAIT_FOR_RESULTS'] == '0',
                   :rebuild => true}
 
 
@@ -124,9 +125,15 @@ def briar_xtc_submit(device_set, profile, opts={})
 
   profile = 'default' if profile.nil?
 
+  if opts[:async_submit]
+    wait = '--async'
+  else
+    wait = '--no-async'
+  end
+
   ipa = File.basename(File.expand_path(expect_ipa(opts[:ipa])))
 
-  cmd = "DEBUG=0 test-cloud submit #{ipa} #{api_key} -d #{device_set} -c cucumber.yml -p #{profile}"
+  cmd = "DEBUG=0 test-cloud submit #{ipa} #{api_key} -d #{device_set} -c cucumber.yml -p #{profile} #{wait}"
   puts Rainbow("cd xamarin; #{cmd}").green
   Dir.chdir(opts[:xtc_staging_dir]) do
     exec cmd
