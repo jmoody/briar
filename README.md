@@ -4,7 +4,7 @@ Briar Extends the steps defined in [calabash-ios](https://github.com/calabash/ca
 
 ### WARNING: briar is not trying to provide steps that will work for every project
 
-Every project should cultivate its own [venacular](http://en.wikipedia.org/wiki/Vernacular) - 
+Every project should cultivate its own [vernacular](http://en.wikipedia.org/wiki/Vernacular) - 
 a shared language between developers, clients, and users.  The [steps that briar provides](features/step_definitions) are not meant to be dropped into into your projects (although they can be).  Briar provides a library of ruby methods to build application-specific steps from.  The steps in the features directory are meant to be examples of what briar can offer.
 
 To see briar in action, take a look at https://github.com/jmoody/briar-ios-example
