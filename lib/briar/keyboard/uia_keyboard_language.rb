@@ -9,6 +9,8 @@ module Briar
       BRIAR_LANGUAGE_KEYS = {
             :en => 'space',
             :de => 'Leerzeichen',
+            :da => 'mellemrum',
+            :th => 'วรรค',
             # could not decide what the language code should be (alt was ja-JP)
             :ja => '空白'
       }
