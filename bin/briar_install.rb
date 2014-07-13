@@ -6,6 +6,8 @@ require 'pry'
 require 'ansi/logger'
 @log = ANSI::Logger.new(STDOUT)
 
+include Briar::IDEVICEINSTALLER
+
 def briar_install_gem
   warn_deprecated('0.1.3', 'will be removed')
   puts 'will install briar gem'
@@ -120,5 +122,5 @@ def briar_install(args)
 end
 
 def briar_device_install(device)
-  ideviceinstaller(device, :reinstall)
+  ideviceinstaller(device, :install)
 end
