@@ -71,7 +71,7 @@ def briar_xtc_submit(device_set, profile, opts={})
     system('gem uninstall briar --no-executables --ignore-dependencies --quiet',
            :err => '/dev/null')
     Dir.chdir(File.expand_path(briar_path)) do
-      system 'rake install'
+      system 'bundle exec rake install'
     end
   end
 
@@ -81,7 +81,7 @@ def briar_xtc_submit(device_set, profile, opts={})
            :err => '/dev/null')
 
     Dir.chdir(File.expand_path(calabash_path)) do
-      system 'rake install'
+      system 'bundle exec rake install'
     end
   end
 
@@ -95,7 +95,13 @@ def briar_xtc_submit(device_set, profile, opts={})
     end
   end
 
-  xtc_gemfile = "#{opts[:xtc_staging_dir]}/Gemfile"
+  staging_dir = opts[:xtc_staging_dir]
+  unless File.exists?(File.expand_path(staging_dir))
+    @log.fatal{ "XTC_STAGING_DIR => '#{staging_dir}' does not exist" }
+    exit 1
+  end
+
+  xtc_gemfile = "#{staging_dir}/Gemfile"
 
   File.open(xtc_gemfile, 'w') do |file|
     file.write("source 'https://rubygems.org'\n")
@@ -133,9 +139,11 @@ def briar_xtc_submit(device_set, profile, opts={})
 
   ipa = File.basename(File.expand_path(expect_ipa(opts[:ipa])))
 
-  cmd = "DEBUG=0 test-cloud submit #{ipa} #{api_key} -d #{device_set} -c cucumber.yml -p #{profile} #{wait}"
-  puts Rainbow("cd xamarin; #{cmd}").green
-  Dir.chdir(opts[:xtc_staging_dir]) do
+  cmd = "bundle exec test-cloud submit #{ipa} #{api_key} -d #{device_set} -c cucumber.yml -p #{profile} #{wait}"
+
+  puts Rainbow("cd #{staging_dir}; #{cmd}").green
+  Dir.chdir(staging_dir) do
+    system 'bundle install'
     exec cmd
   end
 end
