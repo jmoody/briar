@@ -3,7 +3,7 @@
 # ==> require_relative 'lib/briar/version' <==
 # bundler on 1.9.3 complains
 # 'Does it try to require a relative path? That's been removed in Ruby 1.9'
-# 
+#
 # this is the current _best_ solution
 $:.push File.expand_path('../lib', __FILE__)
 require 'briar/version'
@@ -26,17 +26,21 @@ Gem::Specification.new do |gem|
   gem.required_ruby_version = '>= 1.8.7'
 
   gem.add_runtime_dependency 'rbx-require-relative', '~> 0.0'
-  gem.add_runtime_dependency 'calabash-cucumber', '~> 0.10.0.pre1'
-  gem.add_runtime_dependency 'rake', '~>10.1'
+  gem.add_runtime_dependency 'calabash-cucumber', '~> 0.9.169'
   gem.add_runtime_dependency 'dotenv', '~> 0.9'
   gem.add_runtime_dependency 'ansi', '~> 1.4'
   gem.add_runtime_dependency 'rainbow', '~> 1.99'
-  gem.add_runtime_dependency 'pry', '~> 0.9'
-  gem.add_runtime_dependency 'rspec'
+  gem.add_runtime_dependency 'xcpretty', '~> 0.1'
+  # downgrade
+  gem.add_runtime_dependency 'retriable', '~> 1.3'
 
   # downgrading to 1.0.0 from 1.2.0
   # https://github.com/xamarin/test-cloud-command-line/issues/3
-  gem.add_runtime_dependency 'syntax', '~>1.0.0'
+  gem.add_runtime_dependency 'syntax', '~>1.0'
+
+  gem.add_runtime_dependency 'pry', '~> 0.10'
+  gem.add_development_dependency('yard', '~> 0.8')
+  gem.add_development_dependency('rake', '~> 10.3')
 
   gem.files = `git ls-files`.split("\n") - ['.gitignore']
   gem.executables = 'briar'
