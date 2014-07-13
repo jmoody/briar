@@ -31,8 +31,10 @@ Gem::Specification.new do |gem|
   gem.add_runtime_dependency 'ansi', '~> 1.4'
   gem.add_runtime_dependency 'rainbow', '~> 1.99'
   gem.add_runtime_dependency 'xcpretty', '~> 0.1'
-  # downgrade
+  # downgrade because of xtc gem
   gem.add_runtime_dependency 'retriable', '~> 1.3'
+  gem.add_runtime_dependency 'bundler', '~> 1.6'
+
 
   # downgrading to 1.0.0 from 1.2.0
   # https://github.com/xamarin/test-cloud-command-line/issues/3
