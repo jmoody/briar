@@ -45,6 +45,7 @@ def briar_xtc_submit(device_set, profile, opts={})
                   :briar_dev => ENV['XTC_BRIAR_GEM_DEV'] == '1',
                   :calabash_dev => ENV['XTC_CALABASH_GEM_DEV'] == '1',
                   :async_submit => ENV['XTC_WAIT_FOR_RESULTS'] == '0',
+                  :series => ENV['XTC_SERIES'],
                   :rebuild => true}
 
 
@@ -135,6 +136,12 @@ def briar_xtc_submit(device_set, profile, opts={})
     wait = '--async'
   else
     wait = '--no-async'
+  end
+
+  if opts[:series]
+    series = "--series #{opts[:series]}"
+  else
+    series = ''
   end
 
   ipa = File.basename(File.expand_path(expect_ipa(opts[:ipa])))

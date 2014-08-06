@@ -313,7 +313,6 @@ def print_xtc_help
 #{help_command('xtc')}
   prints the available XTC device sets
 
-
 #{help_command('xtc <device-set> [profile]')} #{help_experimental}
   submits a job to the XTC targeting devices specified in < device-set >
   if no profile is set, the 'default' profile in the xtc-cucumber.yml will be used
@@ -334,6 +333,7 @@ def print_xtc_help
   #{help_env_var('   XTC_BRIAR_GEM_DEV', "set to '1' to ensure the local version of briar will be uploaded to the XTC'")}
   #{help_env_var('XTC_CALABASH_GEM_DEV', "set to '1' to ensure the local version of calabash will be uploaded to the XTC'")}
   #{help_env_var('     XTC_STAGING_DIR', 'path to the directory where XTC files will be staged')}
+  #{help_env_var('     XTC_SERIES', '(optional) the XTC series the test results should be displayed in')}
 
 EOF
 end
