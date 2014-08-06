@@ -26,7 +26,7 @@ Gem::Specification.new do |gem|
   gem.required_ruby_version = '>= 1.9.3'
 
   gem.add_runtime_dependency 'rbx-require-relative', '~> 0.0'
-  gem.add_runtime_dependency 'calabash-cucumber', '~> 0.10', '> 0.9.169'
+  gem.add_runtime_dependency 'calabash-cucumber', '< 0.11', '> 0.9.169'
   gem.add_runtime_dependency 'dotenv', '~> 0.9'
   gem.add_runtime_dependency 'ansi', '~> 1.4'
   gem.add_runtime_dependency 'rainbow', '~> 2.0'
