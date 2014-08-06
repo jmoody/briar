@@ -313,7 +313,6 @@ def print_xtc_help
 #{help_command('xtc')}
   prints the available XTC device sets
 
-
 #{help_command('xtc <device-set> [profile]')} #{help_experimental}
   submits a job to the XTC targeting devices specified in < device-set >
   if no profile is set, the 'default' profile in the xtc-cucumber.yml will be used
@@ -331,9 +330,14 @@ def print_xtc_help
   #{help_env_var('    IPA_BUILD_SCRIPT', '(optional) script that generates the IPA')}
   #{help_example_comment('if you require other gems besides briar')}
   #{help_env_var(' XTC_OTHER_GEMS_FILE', 'path to a file describing other gems that should be installed on the XTC')}
-  #{help_env_var('   XTC_BRIAR_GEM_DEV', "set to '1' to ensure the local version of briar will be uploaded to the XTC'")}
-  #{help_env_var('XTC_CALABASH_GEM_DEV', "set to '1' to ensure the local version of calabash will be uploaded to the XTC'")}
+  #{help_example_comment("only useful if you are briar developer - defaults to '0'")}
+  #{help_env_var('   XTC_BRIAR_GEM_DEV', "(optional) set to '1' to ensure the local version of briar will be uploaded to the XTC'")}
+  #{help_example_comment("only useful if you are calabash developer - defaults to '0'")}
+  #{help_env_var('XTC_CALABASH_GEM_DEV', "(optional) set to '1' to ensure the local version of calabash will be uploaded to the XTC'")}
   #{help_env_var('     XTC_STAGING_DIR', 'path to the directory where XTC files will be staged')}
+  #{help_env_var('     XTC_SERIES', '(optional) the XTC series the test results should be displayed in')}
+  #{help_example_comment("defaults to '1' - set to '0' if you want to wait for the XTC to finish (for example in a CI environment)")}
+  #{help_env_var('XTC_WAIT_FOR_RESULTS', '(optional) should briar xtc wait for the XTC job to finish before exiting')}
 
 EOF
 end

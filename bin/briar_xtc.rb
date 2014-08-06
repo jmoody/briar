@@ -42,9 +42,10 @@ def briar_xtc_submit(device_set, profile, opts={})
                   :account => expect_xtc_account(),
                   :other_gems => ENV['XTC_OTHER_GEMS_FILE'],
                   :xtc_staging_dir => expect_xtc_staging_dir(),
-                  :briar_dev => ENV['XTC_BRIAR_GEM_DEV'] == '1',
-                  :calabash_dev => ENV['XTC_CALABASH_GEM_DEV'] == '1',
+                  :briar_dev => ENV['XTC_BRIAR_GEM_DEV'] == '0',
+                  :calabash_dev => ENV['XTC_CALABASH_GEM_DEV'] == '0',
                   :async_submit => ENV['XTC_WAIT_FOR_RESULTS'] == '0',
+                  :series => ENV['XTC_SERIES'],
                   :rebuild => true}
 
 
@@ -68,7 +69,7 @@ def briar_xtc_submit(device_set, profile, opts={})
 
   if opts[:briar_dev]
     briar_path = `bundle show briar`.strip
-    system('gem uninstall briar --no-executables --ignore-dependencies --quiet',
+    system('gem uninstall -Vax --force --no-abort-on-dependent briar',
            :err => '/dev/null')
     Dir.chdir(File.expand_path(briar_path)) do
       system 'bundle exec rake install'
@@ -77,7 +78,7 @@ def briar_xtc_submit(device_set, profile, opts={})
 
   if opts[:calabash_dev]
     calabash_path = `bundle show calabash-cucumber`.strip
-    system('gem uninstall calabash-cucumber --no-executables --ignore-dependencies --quiet',
+    system('gem uninstall -Vax --force --no-abort-on-dependent calabash-cucumber',
            :err => '/dev/null')
 
     Dir.chdir(File.expand_path(calabash_path)) do
@@ -137,13 +138,18 @@ def briar_xtc_submit(device_set, profile, opts={})
     wait = '--no-async'
   end
 
+  if opts[:series]
+    series = "--series #{opts[:series]}"
+  else
+    series = ''
+  end
+
   ipa = File.basename(File.expand_path(expect_ipa(opts[:ipa])))
 
-  cmd = "bundle exec test-cloud submit #{ipa} #{api_key} -d #{device_set} -c cucumber.yml -p #{profile} #{wait}"
+  cmd = "bundle exec test-cloud submit #{ipa} #{api_key} -d #{device_set} -c cucumber.yml -p #{profile} #{wait} #{series}"
 
   puts Rainbow("cd #{staging_dir}; #{cmd}").green
   Dir.chdir(staging_dir) do
-    system 'bundle install'
     exec cmd
   end
 end
