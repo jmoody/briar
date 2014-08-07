@@ -146,7 +146,7 @@ def briar_xtc_submit(device_set, profile, opts={})
 
   ipa = File.basename(File.expand_path(expect_ipa(opts[:ipa])))
 
-  cmd = "bundle exec test-cloud submit #{ipa} #{api_key} -d #{device_set} -c cucumber.yml -p #{profile} #{wait} #{series}"
+  cmd = "test-cloud submit #{ipa} #{api_key} -d #{device_set} -c cucumber.yml -p #{profile} #{wait} #{series}"
 
   puts Rainbow("cd #{staging_dir}; #{cmd}").green
   Dir.chdir(staging_dir) do
