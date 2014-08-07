@@ -72,7 +72,7 @@ def briar_xtc_submit(device_set, profile, opts={})
     system('gem uninstall -Vax --force --no-abort-on-dependent briar',
            :err => '/dev/null')
     Dir.chdir(File.expand_path(briar_path)) do
-      system 'bundle exec rake install'
+      system 'rake install'
     end
   end
 
@@ -82,7 +82,7 @@ def briar_xtc_submit(device_set, profile, opts={})
            :err => '/dev/null')
 
     Dir.chdir(File.expand_path(calabash_path)) do
-      system 'bundle exec rake install'
+      system 'rake install'
     end
   end
 
