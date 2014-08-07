@@ -67,14 +67,17 @@ def briar_xtc_submit(device_set, profile, opts={})
   account = opts[:account]
   api_key = read_api_token(account)
 
-  if opts[:briar_dev]
-    briar_path = `bundle show briar`.strip
-    system('gem uninstall -Vax --force --no-abort-on-dependent briar',
-           :err => '/dev/null')
-    Dir.chdir(File.expand_path(briar_path)) do
-      system 'rake install'
-    end
-  end
+  # ugh.  it works, then it doesn't
+  # i think the real solution is to pull the bin/tools out of the gem and into
+  # (yet) another gem.
+  # if opts[:briar_dev]
+  #   briar_path = `bundle show briar`.strip
+  #   # system('gem uninstall -Vax --force --no-abort-on-dependent briar',
+  #   #        :err => '/dev/null')
+  #   Dir.chdir(File.expand_path(briar_path)) do
+  #     system 'gem rake install'
+  #   end
+  # end
 
   if opts[:calabash_dev]
     calabash_path = `bundle show calabash-cucumber`.strip
