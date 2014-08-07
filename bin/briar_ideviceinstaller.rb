@@ -40,7 +40,7 @@ module Briar
             briar_remove_derived_data_dups
           end
 
-          ipa = merged[:ipa]
+          ipa = File.expand_path(merged[:ipa])
           expect_ipa(ipa)
 
           Retriable.retriable do
