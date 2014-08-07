@@ -6,35 +6,6 @@ require 'ansi/logger'
 
 @log = ANSI::Logger.new(STDOUT)
 
-# not yet - maybe never
-##use <tt>rake install</tt> to install a gem at +path_to_gemspec+
-## returns the version of the gem installed
-#def rake_install_gem(path_to_gemspec)
-#
-#  #out = `"cd #{path_to_gemspec}; rake install"`
-#
-#  out = nil
-#  Dir.chdir(File.expand_path(path_to_gemspec)) do
-#    system 'rake install'
-#  end
-#
-#
-#  #cmd = "cd #{path_to_gemspec} ; rake install"
-#  #output = []
-#  #IO.popen(cmd).each do |line|
-#  #  p line.chomp
-#  #  output << line.chomp
-#  #end
-#
-#  puts "out = '#{out}'"
-#  exit 1
-#  tokens = out.split(' ')
-#  gem = tokens[0]
-#  version = tokens[1]
-#  @log.info { "installed #{gem} #{version}" }
-#  version
-#end
-
 def briar_xtc_submit(device_set, profile, opts={})
   default_opts = {:build_script => ENV['IPA_BUILD_SCRIPT'],
                   :ipa => ENV['IPA'],
@@ -47,7 +18,6 @@ def briar_xtc_submit(device_set, profile, opts={})
                   :async_submit => ENV['XTC_WAIT_FOR_RESULTS'] == '0',
                   :series => ENV['XTC_SERIES'],
                   :rebuild => true}
-
 
   opts = default_opts.merge(opts)
 
@@ -83,7 +53,6 @@ def briar_xtc_submit(device_set, profile, opts={})
     calabash_path = `bundle show calabash-cucumber`.strip
     system('gem uninstall -Vax --force --no-abort-on-dependent calabash-cucumber',
            :err => '/dev/null')
-
     Dir.chdir(File.expand_path(calabash_path)) do
       system 'rake install'
     end
