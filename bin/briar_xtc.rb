@@ -6,35 +6,6 @@ require 'ansi/logger'
 
 @log = ANSI::Logger.new(STDOUT)
 
-# not yet - maybe never
-##use <tt>rake install</tt> to install a gem at +path_to_gemspec+
-## returns the version of the gem installed
-#def rake_install_gem(path_to_gemspec)
-#
-#  #out = `"cd #{path_to_gemspec}; rake install"`
-#
-#  out = nil
-#  Dir.chdir(File.expand_path(path_to_gemspec)) do
-#    system 'rake install'
-#  end
-#
-#
-#  #cmd = "cd #{path_to_gemspec} ; rake install"
-#  #output = []
-#  #IO.popen(cmd).each do |line|
-#  #  p line.chomp
-#  #  output << line.chomp
-#  #end
-#
-#  puts "out = '#{out}'"
-#  exit 1
-#  tokens = out.split(' ')
-#  gem = tokens[0]
-#  version = tokens[1]
-#  @log.info { "installed #{gem} #{version}" }
-#  version
-#end
-
 def briar_xtc_submit(device_set, profile, opts={})
   default_opts = {:build_script => ENV['IPA_BUILD_SCRIPT'],
                   :ipa => ENV['IPA'],
@@ -42,12 +13,11 @@ def briar_xtc_submit(device_set, profile, opts={})
                   :account => expect_xtc_account(),
                   :other_gems => ENV['XTC_OTHER_GEMS_FILE'],
                   :xtc_staging_dir => expect_xtc_staging_dir(),
-                  :briar_dev => ENV['XTC_BRIAR_GEM_DEV'] == '0',
-                  :calabash_dev => ENV['XTC_CALABASH_GEM_DEV'] == '0',
+                  :briar_dev => ENV['XTC_BRIAR_GEM_DEV'] == '1',
+                  :calabash_dev => ENV['XTC_CALABASH_GEM_DEV'] == '1',
                   :async_submit => ENV['XTC_WAIT_FOR_RESULTS'] == '0',
                   :series => ENV['XTC_SERIES'],
                   :rebuild => true}
-
 
   opts = default_opts.merge(opts)
 
@@ -67,22 +37,24 @@ def briar_xtc_submit(device_set, profile, opts={})
   account = opts[:account]
   api_key = read_api_token(account)
 
-  if opts[:briar_dev]
-    briar_path = `bundle show briar`.strip
-    system('gem uninstall -Vax --force --no-abort-on-dependent briar',
-           :err => '/dev/null')
-    Dir.chdir(File.expand_path(briar_path)) do
-      system 'bundle exec rake install'
-    end
-  end
+  # ugh.  it works, then it doesn't
+  # i think the real solution is to pull the bin/tools out of the gem and into
+  # (yet) another gem.
+  # if opts[:briar_dev]
+  #   briar_path = `bundle show briar`.strip
+  #   # system('gem uninstall -Vax --force --no-abort-on-dependent briar',
+  #   #        :err => '/dev/null')
+  #   Dir.chdir(File.expand_path(briar_path)) do
+  #     system 'gem rake install'
+  #   end
+  # end
 
   if opts[:calabash_dev]
     calabash_path = `bundle show calabash-cucumber`.strip
     system('gem uninstall -Vax --force --no-abort-on-dependent calabash-cucumber',
            :err => '/dev/null')
-
     Dir.chdir(File.expand_path(calabash_path)) do
-      system 'bundle exec rake install'
+      system 'rake install'
     end
   end
 
@@ -146,7 +118,7 @@ def briar_xtc_submit(device_set, profile, opts={})
 
   ipa = File.basename(File.expand_path(expect_ipa(opts[:ipa])))
 
-  cmd = "bundle exec test-cloud submit #{ipa} #{api_key} -d #{device_set} -c cucumber.yml -p #{profile} #{wait} #{series}"
+  cmd = "test-cloud submit #{ipa} #{api_key} -d #{device_set} -c cucumber.yml -p #{profile} #{wait} #{series}"
 
   puts Rainbow("cd #{staging_dir}; #{cmd}").green
   Dir.chdir(staging_dir) do

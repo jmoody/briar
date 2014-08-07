@@ -1,7 +1,7 @@
 require_relative 'briar_help'
 require_relative 'briar_dot_xamarin'
 require_relative 'briar_ideviceinstaller'
-require 'pry'
+
 
 require 'ansi/logger'
 @log = ANSI::Logger.new(STDOUT)

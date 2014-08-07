@@ -40,7 +40,7 @@ module Briar
             briar_remove_derived_data_dups
           end
 
-          ipa = merged[:ipa]
+          ipa = File.expand_path(merged[:ipa])
           expect_ipa(ipa)
 
           Retriable.retriable do
@@ -63,7 +63,8 @@ module Briar
 
     def bundle_installed?(udid, bundle_id, installer)
       cmd = "#{installer} -u #{udid} -l"
-      puts "#{Rainbow(cmd).green}"
+      info = "EXEC: #{cmd}"
+      puts "#{Rainbow(info).cyan}"
       `#{cmd}`.strip.split(/\s/).include? bundle_id
     end
 
@@ -74,6 +75,8 @@ module Briar
       end
 
       cmd = "#{installer} -u #{udid} --install #{ipa}"
+      info = "EXEC: #{cmd}"
+      puts "#{Rainbow(info).cyan}"
       system cmd
       unless bundle_installed?(udid, bundle_id, installer)
         raise "could not install '#{ipa}' on '#{udid}' with '#{bundle_id}'"
@@ -87,6 +90,8 @@ module Briar
         return true
       end
       cmd = "#{installer} -u #{udid} --uninstall #{bundle_id}"
+      info = "EXEC: #{cmd}"
+      puts "#{Rainbow(info).cyan}"
       system cmd
       if bundle_installed?(udid, bundle_id, installer)
         raise "could not uninstall '#{bundle_id}' on '#{udid}'"
