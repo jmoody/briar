@@ -25,13 +25,17 @@ Requires ruby >= 1.9.3; ruby 2.1.2 is recommended.
 In your Gemfile:
 
 ```
-gem 'briar', '~>1.1'
+gem 'briar', '~> 1.1.2'
+
+# to use the briar XTC developer tools, include rake
+gem 'rake', '~> 10.3'
 ```
 
 In your `features/support/env.rb` file:
 
 ```
 require 'calabash-cucumber/cucumber'
+ENV['NO_BRIAR_PREDEFINED_STEPS'] = '1'
 require 'briar/cucumber'
 
 # optional
@@ -80,21 +84,27 @@ $ briar rm sim-targets
 $ briar rm dups 
 $ briar rm dups briar-ios-example 
 
-# change the simulator version
+# change the simulator version (will be deprecated soon)
 $ briar sim ipad_r
 $ briar sim iphone_4in
 ```
 
 ## Xamarin Test Cloud
 
-There is currently an issue with using briar predefined steps on the XTC:
+Requires adopting the .xamarin convention and a .env file.  See the help for `.xamarin` and `xtc`.
 
 ```
-# fails validation step 
-Then I touch the "time" row
+# list the currently cached device in ~/.xamarin/test-cloud/ios-sets.csv
+$ briar xtc
+
+# submit a job to the iPads device set
+$ briar xtc iPads
+
+# submit a job to the iPhones device set with the meal_log profile
+$ briar xtc iPhones meal_log
 ```
 
-## version numbers
+## Version Numbers
 
 I will try my best to follow Semantic Versioning [1] when naming the versions.
 
@@ -111,14 +121,12 @@ _"But returning to the practical: No release version of SemVer is compatible wit
 * http://en.wikipedia.org/wiki/Smoking_pipe_(tobacco)#Calabash
 * http://en.wikipedia.org/wiki/Smoking_pipe_(tobacco)#Briar
 
-## Road Map
-
-I am thinking of dropping all the of predefined steps!  Beware!  You have been warned!
-
 ## Contributing
 
 1. Fork it
-2. Create your feature branch (`git checkout -b my-new-feature`)
+2. Create your feature branch (`git checkout -b feature/my-new-feature`)
 3. Commit your changes (`git commit -am 'Add some feature'`)
-4. Push to the branch (`git push origin my-new-feature`)
+4. Push to the branch (`git push -u origin feature/my-new-feature`)
 5. Create new Pull Request
+
+Please do not change the version number.
