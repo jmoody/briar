@@ -65,9 +65,10 @@ module Briar
       addrs.include? address
     end
 
+    # @todo replace sleep with a wait_*
     def should_see_recipients (addresses)
       should_see_mail_view
-      wait_for_animation
+      sleep(0.4)
       addrs = addresses.split(/, ?/)
       addrs.each do |expected|
         unless email_to_contains? expected.strip
