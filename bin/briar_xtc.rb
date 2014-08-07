@@ -42,8 +42,8 @@ def briar_xtc_submit(device_set, profile, opts={})
                   :account => expect_xtc_account(),
                   :other_gems => ENV['XTC_OTHER_GEMS_FILE'],
                   :xtc_staging_dir => expect_xtc_staging_dir(),
-                  :briar_dev => ENV['XTC_BRIAR_GEM_DEV'] == '0',
-                  :calabash_dev => ENV['XTC_CALABASH_GEM_DEV'] == '0',
+                  :briar_dev => ENV['XTC_BRIAR_GEM_DEV'] == '1',
+                  :calabash_dev => ENV['XTC_CALABASH_GEM_DEV'] == '1',
                   :async_submit => ENV['XTC_WAIT_FOR_RESULTS'] == '0',
                   :series => ENV['XTC_SERIES'],
                   :rebuild => true}
