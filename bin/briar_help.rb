@@ -19,7 +19,7 @@ def warn_deprecated(version, msg)
 end
 
 def help_warn_destructive
-  Rainbow('# These is are destructive operations! You have been warned.').red.underline
+  Rainbow('# These are destructive operations! You have been warned.').red.underline
 end
 
 def help_experimental
