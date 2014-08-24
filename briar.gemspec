@@ -30,14 +30,14 @@ Gem::Specification.new do |gem|
   gem.required_ruby_version = '>= 1.9.3'
 
   gem.add_runtime_dependency 'rbx-require-relative', '~> 0.0'
-  gem.add_runtime_dependency 'calabash-cucumber', '>= 0.9.168'
+  gem.add_runtime_dependency 'calabash-cucumber', '<= 0.11.0.pre', '>= 0.9.168'
   gem.add_runtime_dependency 'dotenv', '~> 0.9'
   gem.add_runtime_dependency 'ansi', '~> 1.4'
   gem.add_runtime_dependency 'rainbow', '~> 2.0'
-  # downgrade because of xtc gem - wants ~> 1.4
+  # downgrade because of xtc gem - wants ~> 1.3.3.1
   gem.add_runtime_dependency 'retriable', '< 1.5', '>= 1.3'
-  # test cloud requires 1.3.5, we want ~> 1.6
-  gem.add_runtime_dependency 'bundler', '< 1.7', '>= 1.3.5'
+  # test cloud requires 1.3.5
+  gem.add_runtime_dependency 'bundler', '< 2.0', '>= 1.3.5'
   gem.add_runtime_dependency 'xamarin-test-cloud', '< 1.0', '>= 0.9.35'
   gem.add_runtime_dependency 'rake', '~> 10.3'
 
