@@ -13,9 +13,9 @@ def msg(title, &block)
 end
 
 def briar_resign(args)
-  if args.length != 4
+  if args.length < 4
     msg('Usage') do
-      puts 'briar resign </path/to/your.ipa> </path/to/your.mobileprovision> <wildcard-prefix> <signing-identity>'
+      puts 'briar resign </path/to/your.ipa> </path/to/your.mobileprovision> <wildcard-prefix> <signing-identity> <optional-application-id>'
     end
     exit 1
   end
@@ -70,10 +70,18 @@ def briar_resign(args)
     puts "will resign with identity '#{signing_id}'"
   end
 
-  resign_ipa({:ipa => ipa,
-              :provision => mobile_prov,
-              :id => signing_id,
-              :wildcard => wildcard})
+  options = {:ipa => ipa,
+             :provision => mobile_prov,
+             :id => signing_id,
+             :wildcard => wildcard}
+
+  if args.length == 5
+    app_id = args[4]
+    puts "INFO: will resign with a new application id '#{app_id}'"
+    options[:app_id] = app_id
+  end
+
+  resign_ipa(options)
 
 end
 
@@ -174,8 +182,7 @@ def resign_ipa(options)
 
   puts "INFO: parsed plist at '#{info_plist_path}'"
 
-  app_id = data['CFBundleIdentifier']
-
+  app_id = options[:app_id] ? options[:app_id] : data['CFBundleIdentifier']
   unless app_id
     msg 'error' do
       puts "Unable to find CFBundleIdentifier in plist '#{data}'"
@@ -184,6 +191,14 @@ def resign_ipa(options)
   end
 
   puts "INFO: found bundle identifier '#{app_id}'"
+  # Save changes to plist
+  unless data['CFBundleIdentifier'] == app_id
+    puts "INFO: saving the new bundle identifier '#{app_id}' to plist file"
+    data['CFBundleIdentifier'] = app_id
+    plist.value = CFPropertyList.guess(data)
+    plist.save(info_plist_path, CFPropertyList::List::FORMAT_XML)
+  end
+
 
 
   bundle_exec = data['CFBundleExecutable']
