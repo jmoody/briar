@@ -5,7 +5,7 @@
 
 ## Briar
 
-Briar Extends the steps defined in [calabash-ios](https://github.com/calabash/calabash-ios.git) to help you write cucumber Scenarios that interact with complex UI elements like tables, pickers, and sliders.
+Briar extends the [Calabash iOS](https://github.com/calabash/calabash-ios.git) API to help you write cucumber Scenarios that interact with complex UI elements like tables, pickers, and sliders.
 
 ### Briar is not trying to provide steps that will work for every project.
 
