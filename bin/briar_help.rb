@@ -219,7 +219,7 @@ def print_resign_help
 
 #{help_experimental}
 
-#{help_command('resign </path/to/your.ipa> </path/to/your.mobileprovision> <wildcard-prefix> <signing-identity>')}
+#{help_command('resign </path/to/your.ipa> </path/to/your.mobileprovision> <wildcard-prefix> <signing-identity> [new-bundle-identifier]')}
 
 #{help_env_var('BRIAR_DONT_OPEN_ON_RESIGN', "Set this to 1 if you don't want to open the resigning directory in the Finder")}
 

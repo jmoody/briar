@@ -15,7 +15,7 @@ end
 def briar_resign(args)
   if args.length < 4
     msg('Usage') do
-      puts 'briar resign </path/to/your.ipa> </path/to/your.mobileprovision> <wildcard-prefix> <signing-identity> <optional-application-id>'
+      puts 'briar resign </path/to/your.ipa> </path/to/your.mobileprovision> <wildcard-prefix> <signing-identity> [new-bundle-identifier]'
     end
     exit 1
   end
@@ -76,9 +76,9 @@ def briar_resign(args)
              :wildcard => wildcard}
 
   if args.length == 5
-    app_id = args[4]
-    puts "INFO: will resign with a new application id '#{app_id}'"
-    options[:app_id] = app_id
+    bundle_identifier = args[4]
+    puts "INFO: will resign with a new application id '#{bundle_identifier}'"
+    options[:bundle_identifier] = bundle_identifier
   end
 
   resign_ipa(options)
@@ -182,19 +182,19 @@ def resign_ipa(options)
 
   puts "INFO: parsed plist at '#{info_plist_path}'"
 
-  app_id = options[:app_id] ? options[:app_id] : data['CFBundleIdentifier']
-  unless app_id
+  bundle_identifier = options[:bundle_identifier] ? options[:bundle_identifier] : data['CFBundleIdentifier']
+  unless bundle_identifier
     msg 'error' do
       puts "Unable to find CFBundleIdentifier in plist '#{data}'"
     end
     exit 1
   end
 
-  puts "INFO: found bundle identifier '#{app_id}'"
+  puts "INFO: found bundle identifier '#{bundle_identifier}'"
   # Save changes to plist
-  unless data['CFBundleIdentifier'] == app_id
-    puts "INFO: saving the new bundle identifier '#{app_id}' to plist file"
-    data['CFBundleIdentifier'] = app_id
+  unless data['CFBundleIdentifier'] == bundle_identifier
+    puts "INFO: saving the new bundle identifier '#{bundle_identifier}' to plist file"
+    data['CFBundleIdentifier'] = bundle_identifier
     plist.value = CFPropertyList.guess(data)
     plist.save(info_plist_path, CFPropertyList::List::FORMAT_XML)
   end
@@ -202,14 +202,14 @@ def resign_ipa(options)
 
 
   bundle_exec = data['CFBundleExecutable']
-  
+
   unless bundle_exec
     msg 'error' do
       puts "unable to find CFBundleExecutable in plist '#{data}'"
     end
     exit 1
   end
-  
+
   puts "INFO: found bundle executable '#{bundle_exec}'"
 
   appname = app_path.split('.app')[0]
@@ -225,10 +225,10 @@ def resign_ipa(options)
     file.puts "<plist version=\"1.0\">"
     file.puts '<dict>'
     file.puts '  <key>application-identifier</key>'
-    file.puts "    <string>#{wildcard}.#{app_id}</string>"
+    file.puts "    <string>#{wildcard}.#{bundle_identifier}</string>"
     file.puts '  <key>keychain-access-groups</key>'
     file.puts '    <array>'
-    file.puts "      <string>#{wildcard}.#{app_id}</string>"
+    file.puts "      <string>#{wildcard}.#{bundle_identifier}</string>"
     file.puts '    </array>'
     file.puts '  <key>get-task-allow</key>'
     file.puts '    <true/>'
