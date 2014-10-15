@@ -267,7 +267,9 @@ def resign_ipa(options)
   puts "INFO: finished signing '#{ipa}'"
 
 
-  system("open #{work_dir}")
+  unless ENV['BRIAR_DONT_OPEN_ON_RESIGN']
+    system("open #{work_dir}")
+  end
 
 
 end
