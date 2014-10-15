@@ -15,7 +15,7 @@ end
 def briar_resign(args)
   if args.length < 4
     msg('Usage') do
-      puts 'briar resign </path/to/your.ipa> </path/to/your.mobileprovision> <wildcard-prefix> <signing-identity> <optional-application-id>'
+      puts 'briar resign </path/to/your.ipa> </path/to/your.mobileprovision> <wildcard-prefix> <signing-identity> [optional-application-id]'
     end
     exit 1
   end
