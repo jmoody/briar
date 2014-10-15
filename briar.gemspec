@@ -31,7 +31,7 @@ Gem::Specification.new do |gem|
 
   gem.add_runtime_dependency 'rbx-require-relative', '~> 0.0'
   gem.add_runtime_dependency 'calabash-cucumber', '>= 0.9.168'
-  gem.add_runtime_dependency 'dotenv', '~> 0.9'
+  gem.add_runtime_dependency 'dotenv', '~> 1.0.2'
   gem.add_runtime_dependency 'ansi', '~> 1.4'
   gem.add_runtime_dependency 'rainbow', '~> 2.0'
   # downgrade because of xtc gem - wants ~> 1.3.3.1
