@@ -48,6 +48,8 @@ Gem::Specification.new do |gem|
 
   gem.add_development_dependency 'travis', '~> 1.7'
   gem.add_development_dependency 'yard', '~> 0.8'
+
+  # Version 0.1.7 causes problems on the XTC.
   gem.add_development_dependency 'xcpretty', '0.1.6'
 
   gem.add_development_dependency('rspec', '~> 3.0')
