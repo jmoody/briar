@@ -1,4 +1,4 @@
-[![Dependency Status](https://gemnasium.com/jmoody/briar.svg)](https://gemnasium.com/jmoody/briar)
+[![Build Status](https://travis-ci.org/jmoody/briar.svg)](https://travis-ci.org/jmoody/briar) [![Dependency Status](https://gemnasium.com/jmoody/briar.svg)](https://gemnasium.com/jmoody/briar)
 [![License](https://go-shields.herokuapp.com/license-MIT-blue.png)](http://opensource.org/licenses/MIT)
 
 ====
