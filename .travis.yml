@@ -2,7 +2,7 @@ language: objective-c
 cache: bundle
 
 before_script:
-  - scripts/ci/travis/instruments-auth.sh
+  - script/ci/travis/instruments-auth.sh
 
 script:
   - bundle update
