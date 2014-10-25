@@ -105,7 +105,9 @@ module Briar
 
     def touch_alert_button(button_title)
       should_see_alert
-      if ios7?
+      if ios8?
+        touch("view marked:'#{button_title}' parent view:'_UIAlertControllerCollectionViewCell'")
+      elsif ios7?
         touch("view marked:'#{button_title}'")
       else
         touch("alertView child button marked:'#{button_title}'")
