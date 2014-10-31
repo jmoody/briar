@@ -138,14 +138,17 @@ module Briar
         step_pause
         touch_sheet_button_and_wait_for_view 'Delete Draft', view_id
       else
-        sbo = status_bar_orientation.to_sym
 
-        if sbo.eql?(:left) or sbo.eql?(:right)
-          pending "iOS > 5 detected AND orientation '#{sbo}' - there is a bug in UIAutomation that prohibits touching the cancel button"
-        end
+        if ios6? or ios7?
+          sbo = status_bar_orientation.to_sym
 
-        if sbo.eql?(:up) and ipad?
-          pending "iOS > 5 detected AND orientation '#{sbo}' AND ipad - there is a bug in UIAutomation prohibits touching the cancel button"
+          if sbo.eql?(:left) or sbo.eql?(:right)
+            pending "5 < iOS < 8 detected AND orientation '#{sbo}' - there is a bug in UIAutomation that prohibits touching the cancel button"
+          end
+
+          if sbo.eql?(:up) and ipad?
+            pending "5 < iOS < 8 detected AND orientation '#{sbo}' AND ipad - there is a bug in UIAutomation prohibits touching the cancel button"
+          end
         end
 
         timeout = BRIAR_WAIT_TIMEOUT
