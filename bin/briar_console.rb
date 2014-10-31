@@ -44,7 +44,7 @@ end
 #noinspection RubyStringKeysInHashInspection
 def simulator_variables(sdk_version)
   {'DEVICE_TARGET' => 'simulator',
-   'SKD_VERSION' => sdk_version}
+   'SDK_VERSION' => sdk_version}
 end
 
 #noinspection RubyStringKeysInHashInspection

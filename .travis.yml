@@ -1,0 +1,20 @@
+language: objective-c
+cache: bundle
+
+before_script:
+  - script/ci/travis/instruments-auth.sh
+
+script:
+  - bundle update
+  - bundle exec rake spec
+
+rvm:
+  - 1.9.3
+  - 2.1.2
+
+notifications:
+  email:
+    recipients:
+      - joshuajmoody@gmail.com
+    on_success: change
+    on_failure: always

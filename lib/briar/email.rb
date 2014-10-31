@@ -138,14 +138,17 @@ module Briar
         step_pause
         touch_sheet_button_and_wait_for_view 'Delete Draft', view_id
       else
-        sbo = status_bar_orientation.to_sym
 
-        if sbo.eql?(:left) or sbo.eql?(:right)
-          pending "iOS > 5 detected AND orientation '#{sbo}' - there is a bug in UIAutomation that prohibits touching the cancel button"
-        end
+        if ios6? or ios7?
+          sbo = status_bar_orientation.to_sym
 
-        if sbo.eql?(:up) and ipad?
-          pending "iOS > 5 detected AND orientation '#{sbo}' AND ipad - there is a bug in UIAutomation prohibits touching the cancel button"
+          if sbo.eql?(:left) or sbo.eql?(:right)
+            pending "5 < iOS < 8 detected AND orientation '#{sbo}' - there is a bug in UIAutomation that prohibits touching the cancel button"
+          end
+
+          if sbo.eql?(:up) and ipad?
+            pending "5 < iOS < 8 detected AND orientation '#{sbo}' AND ipad - there is a bug in UIAutomation prohibits touching the cancel button"
+          end
         end
 
         timeout = BRIAR_WAIT_TIMEOUT
@@ -158,17 +161,23 @@ module Briar
         end
 
         uia_tap_mark('Cancel')
-        msg = "waited for '#{timeout}' seconds but did not see dismiss email action sheet"
-        wait_for(:timeout => timeout,
-                 :retry_frequency => BRIAR_WAIT_RETRY_FREQ,
-                 :post_timeout => BRIAR_WAIT_STEP_PAUSE,
-                 :timeout_message => msg) do
+
+        # In iOS 8, there is no 'Delete Draft' action sheet, the email compose
+        # view animates off.
+        unless ios8?
+          msg = "waited for '#{timeout}' seconds but did not see dismiss email action sheet"
+          wait_for(:timeout => timeout,
+                   :retry_frequency => BRIAR_WAIT_RETRY_FREQ,
+                   :post_timeout => BRIAR_WAIT_STEP_PAUSE,
+                   :timeout_message => msg) do
             uia_element_exists?(:view, {:marked => 'Delete Draft'})
+          end
+
+          uia_tap_mark('Delete Draft')
         end
 
-        uia_tap_mark('Delete Draft')
-
-        wait_for_view_to_disappear 'compose email'
+        wait_for_view_to_disappear default_opts[:email_view_mark]
+        wait_for_view view_id
       end
       step_pause
     end

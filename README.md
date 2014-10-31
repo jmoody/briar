@@ -1,4 +1,4 @@
-[![Dependency Status](https://gemnasium.com/jmoody/briar.svg)](https://gemnasium.com/jmoody/briar)
+[![Build Status](https://travis-ci.org/jmoody/briar.svg)](https://travis-ci.org/jmoody/briar) [![Dependency Status](https://gemnasium.com/jmoody/briar.svg)](https://gemnasium.com/jmoody/briar)
 [![License](https://go-shields.herokuapp.com/license-MIT-blue.png)](http://opensource.org/licenses/MIT)
 
 ====
@@ -14,9 +14,9 @@ a shared language between developers, clients, and users.  The [steps that briar
 
 To see briar in action, take a look at https://github.com/jmoody/briar-ios-example
 
-### motivation
+### Motivation
 
-DRY: I have several iOS projects that use calabash-cucumber and I found I was rewriting lots of supporting code.
+DRY: I have many iOS projects that use Calabash and I found I was rewriting a lot of supporting code.
 
 ## Installation 
 
@@ -27,7 +27,7 @@ In your Gemfile:
 ```
 gem 'briar', '~> 1.1.2'
 
-# to use the briar XTC developer tools, include rake
+# To use the briar XTC developer tools, include rake
 gem 'rake', '~> 10.3'
 ```
 
@@ -38,7 +38,7 @@ require 'calabash-cucumber/cucumber'
 ENV['NO_BRIAR_PREDEFINED_STEPS'] = '1'
 require 'briar/cucumber'
 
-# optional
+# Optional
 I18n.enforce_available_locales = false
 ```
 
@@ -115,18 +115,17 @@ _"But returning to the practical: No release version of SemVer is compatible wit
 - [1] http://semver.org/
 - [2] http://gravitext.com/2012/07/22/versioning.html
 
-
-## Why call it briar? 
+## Why call it briar?
 
 * http://en.wikipedia.org/wiki/Smoking_pipe_(tobacco)#Calabash
 * http://en.wikipedia.org/wiki/Smoking_pipe_(tobacco)#Briar
 
 ## Contributing
 
-1. Fork it
-2. Create your feature branch (`git checkout -b feature/my-new-feature`)
-3. Commit your changes (`git commit -am 'Add some feature'`)
-4. Push to the branch (`git push -u origin feature/my-new-feature`)
-5. Create new Pull Request
+All pull requests should be based off the `develop` branch.
 
-Please do not change the version number.
+For more details see the [CONTRIBUTING.md](CONTRIBUTING.md) document.
+
+Please do not change the version number. :)
+
+
