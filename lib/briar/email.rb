@@ -177,6 +177,7 @@ module Briar
         end
 
         wait_for_view_to_disappear default_opts[:email_view_mark]
+        wait_for_view view_id
       end
       step_pause
     end
