@@ -41,13 +41,18 @@ module Briar
     end
 
     def should_see_alert_with_title (title, timeout=BRIAR_WAIT_TIMEOUT)
-      if ios7?
-        warn 'WARN: cannot distinguish between alert titles and messages'
-        should_see_alert
-        msg = "waited for '#{timeout}' but did not see an alert"
-        opts = wait_opts(msg, timeout)
-        wait_for(opts) do
-          not uia_query(:view, {:marked => "#{title}"}).empty?
+      should_see_alert
+      if uia_available?
+        msg = "expected to see alert with title '#{message}'"
+        wait_for(:timeout => timeout,
+                 :retry_frequency => BRIAR_WAIT_RETRY_FREQ,
+                 :post_timeout => BRIAR_WAIT_STEP_PAUSE,
+                 :timeout_message => msg) do
+          if ios8?
+            not query("view:'_UIAlertControllerView' marked:'#{message}'").empty?
+          else
+            not uia_query(:view, {:marked => "#{message}"}).empty?
+          end
         end
       else
         qstr = 'alertView child label'
@@ -60,11 +65,18 @@ module Briar
     end
 
     def should_see_alert_with_message (message, timeout=BRIAR_WAIT_TIMEOUT)
+      should_see_alert
       if uia_available?
-        warn '\nWARN: cannot distinguish between alert titles and messages'
-        should_see_alert
-        if uia_query(:view, {:marked => "#{message}"}).empty?
-          screenshot_and_raise "expected to see alert with title '#{message}'"
+        msg = "expected to see alert with title '#{message}'"
+        wait_for(:timeout => timeout,
+                 :retry_frequency => BRIAR_WAIT_RETRY_FREQ,
+                 :post_timeout => BRIAR_WAIT_STEP_PAUSE,
+                 :timeout_message => msg) do
+          if ios8?
+            not query("view:'_UIAlertControllerView' marked:'#{message}'").empty?
+          else
+            not uia_query(:view, {:marked => "#{message}"}).empty?
+          end
         end
       else
         qstr = 'alertView child label'
