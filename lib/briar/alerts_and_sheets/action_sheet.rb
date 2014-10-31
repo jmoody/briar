@@ -3,6 +3,8 @@ module Briar
   module Alerts_and_Sheets
 
     def query_str_for_sheet(sheet_id)
+      # Ignoring argument because iOS 8 sheets do not retain their accessibilityIdentifier
+      return "view:'_UIAlertControllerView'" if ios8?
       if sheet_id
         "actionSheet marked:'#{sheet_id}'"
       else
@@ -35,7 +37,11 @@ module Briar
     end
 
     def wait_for_sheet (sheet_id, timeout=BRIAR_WAIT_TIMEOUT)
-      msg = "waited for '#{timeout}' seconds but did not see '#{sheet_id}'"
+      if sheet_id
+        msg = "waited for '#{timeout}' seconds but did not see '#{sheet_id}'"
+      else
+        msg = "waited for '#{timeout}' seconds but did not see UIActionSheet"
+      end
       wait_for(:timeout => timeout,
                :retry_frequency => BRIAR_WAIT_RETRY_FREQ,
                :post_timeout => BRIAR_WAIT_STEP_PAUSE,
@@ -63,7 +69,11 @@ module Briar
 
     def sheet_button_exists? (button_title, sheet_id=nil)
       sheet_query = query_str_for_sheet sheet_id
-      query("#{sheet_query} child button child label", :text).include?(button_title)
+      if ios8?
+        query("#{query_str_for_sheet sheet_id} descendant view:'_UIAlertControllerActionView'  marked:'#{button_title}'")
+      else
+        query("#{sheet_query} child button child label", :text).include?(button_title)
+      end
     end
 
     def should_see_button_on_sheet(button_title, sheet_id=nil)
@@ -89,7 +99,11 @@ module Briar
     def touch_sheet_button (button_title, sheet_id=nil)
       sheet_query = query_str_for_sheet sheet_id
       should_see_button_on_sheet button_title, sheet_id
-      touch("#{sheet_query} child button child label marked:'#{button_title}'")
+      if ios8?
+        touch("#{query_str_for_sheet sheet_id} descendant view:'_UIAlertControllerActionView'  marked:'#{button_title}'")
+      else
+        touch("#{sheet_query} child button child label marked:'#{button_title}'")
+      end
     end
 
     def touch_sheet_button_and_wait_for_view(button_title, view_id, sheet_id=nil)
