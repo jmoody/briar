@@ -161,15 +161,20 @@ module Briar
         end
 
         uia_tap_mark('Cancel')
-        msg = "waited for '#{timeout}' seconds but did not see dismiss email action sheet"
-        wait_for(:timeout => timeout,
-                 :retry_frequency => BRIAR_WAIT_RETRY_FREQ,
-                 :post_timeout => BRIAR_WAIT_STEP_PAUSE,
-                 :timeout_message => msg) do
-            uia_element_exists?(:view, {:marked => 'Delete Draft'})
-        end
 
-        uia_tap_mark('Delete Draft')
+        # In iOS 8, there is no 'Delete Draft' action sheet, the email compose
+        # view animates off.
+        unless ios8?
+          msg = "waited for '#{timeout}' seconds but did not see dismiss email action sheet"
+          wait_for(:timeout => timeout,
+                   :retry_frequency => BRIAR_WAIT_RETRY_FREQ,
+                   :post_timeout => BRIAR_WAIT_STEP_PAUSE,
+                   :timeout_message => msg) do
+            uia_element_exists?(:view, {:marked => 'Delete Draft'})
+          end
+
+          uia_tap_mark('Delete Draft')
+        end
 
         wait_for_view_to_disappear 'compose email'
       end
