@@ -176,7 +176,7 @@ module Briar
           uia_tap_mark('Delete Draft')
         end
 
-        wait_for_view_to_disappear 'compose email'
+        wait_for_view_to_disappear default_opts[:email_view_mark]
       end
       step_pause
     end
