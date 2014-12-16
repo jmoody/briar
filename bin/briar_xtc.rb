@@ -115,7 +115,7 @@ def briar_xtc_submit(device_set, profile, opts={})
     series = ''
   end
 
-  ipa = File.basename(File.expand_path(expect_ipa(opts[:ipa])))
+  ipa = File.expand_path(expect_ipa(opts[:ipa]))
 
   cmd = "test-cloud submit #{ipa} #{api_key} -d #{device_set} -c cucumber.yml -p #{profile} #{wait} #{series}"
 
