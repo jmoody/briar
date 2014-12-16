@@ -32,14 +32,16 @@ module Briar
       def should_see_segment_with_selected_state (control_id, segment_id, selected_state)
         @segment_id = segment_id
         @control_id = control_id
-        res = query("segmentedControl marked:'#{control_id}' child segment marked:'#{segment_id}'",
-                    :isSelected)
+        qstr = "segmentedControl marked:'#{control_id}' child segment marked:'#{segment_id}'"
+        res = query(qstr, :isSelected)
+
         if res.empty?
           screenshot_and_raise "expected to see segmented control '#{control_id}' with segment '#{segment_id}'"
         end
 
-        unless res.first.to_i == selected_state
-          screenshot_and_raise "expected to see segment '#{segment_id}' in '#{control_id}' with selection state '#{selected_state}' but found '#{res.to_i}'"
+        actual_state = res.first
+        unless actual_state == selected_state
+          screenshot_and_raise "expected to see segment '#{segment_id}' in '#{control_id}' with selection state '#{selected_state}' but found '#{actual_state}'"
         end
       end
 
