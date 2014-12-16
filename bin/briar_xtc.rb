@@ -31,7 +31,6 @@ def briar_xtc_submit(device_set, profile, opts={})
       cmd = "#{build_script} -"
     end
     system cmd
-    briar_remove_derived_data_dups
   end
 
   account = opts[:account]
