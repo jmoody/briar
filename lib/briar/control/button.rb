@@ -4,12 +4,7 @@ module Briar
   module Control
     module Button
       def button_exists? (button_id)
-        res = query("button marked:'#{button_id}'", :alpha)
-        if res.empty?
-          false
-        else
-          res.first.to_i != 0
-        end
+        not query("button marked:'#{button_id}'").empty?
       end
 
       def should_see_button (button_id)
