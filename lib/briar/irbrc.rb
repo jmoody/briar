@@ -184,7 +184,11 @@ end
 def puts_calabash_environment
 
   puts ''
-  puts "loaded #{File.expand_path(ENV['IRBRC'])}"
+  begin
+    puts "Loaded IRBRC: #{File.expand_path(ENV['IRBRC'])}"
+  rescue Exception => _
+    puts 'No IRBRC defined; loading the local .irbrc'
+  end
   puts ''
   puts "             DEVICE_ENDPOINT => '#{ENV['DEVICE_ENDPOINT']}'"
   puts "               DEVICE_TARGET => '#{ENV['DEVICE_TARGET']}'"
