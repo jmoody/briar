@@ -1,6 +1,7 @@
 $LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
 $LOAD_PATH.unshift File.expand_path('bin', __FILE__)
 require 'awesome_print'
+require 'briar'
 
 # monkey patch for AwesomePrint + objects that implement '=='
 module AwesomePrint
