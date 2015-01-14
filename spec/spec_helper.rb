@@ -4,6 +4,8 @@ require 'awesome_print'
 require 'briar'
 
 # monkey patch for AwesomePrint + objects that implement '=='
+# Can remove once we are using awesome-print 1.6, which means updating
+# calabash-ios to > 0.12.0.
 module AwesomePrint
   class Formatter
     def awesome_self(object, type)
