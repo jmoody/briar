@@ -5,6 +5,9 @@ require 'CFPropertyList'
 require 'rexml/document'
 require 'tmpdir'
 require 'find'
+require 'open3'
+require 'briar/environment'
+require 'dotenv'
 
 def msg(title, &block)
   puts "\n" + '-'*10 + title + '-'*10
@@ -13,9 +16,11 @@ def msg(title, &block)
 end
 
 def briar_resign(args)
-  if args.length < 4
+  Dotenv.load
+
+  if args.length < 1
     msg('Usage') do
-      puts 'briar resign </path/to/your.ipa> </path/to/your.mobileprovision> <wildcard-prefix> <signing-identity> [new-bundle-identifier]'
+      puts 'briar resign /path/to/your.ipa {/path/to/your.mobileprovision | BRIAR_MOBILE_PROFILE} {team-identifier | BRIAR_TEAM_IDENTIFIER} {signing-identity | BRIAR_SIGNING_IDENTITY} [new-bundle-identifier]'
     end
     exit 1
   end
@@ -35,7 +40,7 @@ def briar_resign(args)
     exit 1
   end
 
-  mobile_prov = args[1]
+  mobile_prov = args[1] || Briar::Environment.variable('BRIAR_MOBILE_PROFILE')
   unless mobile_prov.end_with?('.mobileprovision')
     msg('Error') do
       puts 'second arg must be a path to a mobileprovision'
@@ -50,7 +55,7 @@ def briar_resign(args)
     exit 1
   end
 
-  wildcard = args[2]
+  wildcard = args[2] || Briar::Environment.variable('BRIAR_TEAM_IDENTIFIER')
   unless wildcard.length == 10
     msg 'error' do
       puts "'#{wildcard}' must have 10 characters eg 'RWTD8QPG2C'"
@@ -65,7 +70,7 @@ def briar_resign(args)
     exit 1
   end
 
-  signing_id = args[3]
+  signing_id = args[3] || Briar::Environment.variable('BRIAR_SIGNING_IDENTITY')
   msg ('Info') do
     puts "will resign with identity '#{signing_id}'"
   end
@@ -236,27 +241,28 @@ def resign_ipa(options)
     file.puts '</plist>'
   end
 
-  # did _not_ work
-  #entitlements = CFPropertyList::List.new(:file => ios_entitlements_path)
-  #data = CFPropertyList.native_types(entitlements.value)
-  #data['application-identifier']= "#{wildcard}.#{app_id}"
-  #data['keychain-access-groups']=["#{wildcard}.#{app_id}"]
-  #data['get-task-allow'] = true
-  #
-  #
-  #plist = CFPropertyList::List.new
-  #plist.value = CFPropertyList.guess(data)
-  #plist.save(ios_entitlements_path, CFPropertyList::List::FORMAT_XML)
-  #puts "INFO: saved new entitlements to '#{ios_entitlements_path}'"
-
-  sign_cmd = "codesign -f -s \"#{options[:id]}\" -vv \"#{abs_app_path}\" --entitlements \"#{ios_entitlements_path}\""
-  puts "INFO: signing with '#{sign_cmd}'"
-
-  unless system(sign_cmd)
-    msg 'error' do
-      puts 'could not sign application'
+  Dir.glob("#{abs_app_path}/**/*").each do |file|
+    unless File.directory?(file)
+      cmd = "xcrun otool -h \"#{file}\""
+      Open3.popen3(cmd) do |_, stderr, _, _|
+        err = stderr.read.strip
+        unless err[/is not an object file/,0]
+          sign_cmd = "xcrun codesign --verbose=4 --deep -f -s \"#{options[:id]}\" \"#{file}\" --entitlements \"#{ios_entitlements_path}\""
+          puts "INFO: signing with '#{sign_cmd}'"
+          Open3.popen3(sign_cmd) do |_, stdout, stderr, wait_thr|
+            out = stdout.read.strip
+            err = stderr.read.strip
+            puts out
+            exit_status = wait_thr.value
+            if exit_status == 0
+            else
+              puts err
+              exit 1
+            end
+          end
+        end
+      end
     end
-    exit 1
   end
 
   unless system("rm -rf '#{ipa}'")
@@ -270,9 +276,15 @@ def resign_ipa(options)
 
   FileUtils.cd(work_dir) do
 
-    unless system("zip -qr #{File.basename(options[:ipa])} Payload")
+    if Dir.exist?(File.join(work_dir, 'SwiftSupport'))
+      zip_input = 'Payload SwiftSupport'
+    else
+      zip_input = 'Payload'
+    end
+
+    unless system("zip -qr #{File.basename(options[:ipa])} #{zip_input}")
       msg 'error' do
-        puts "could not zip '#{File.basename(options[:ipa])}' from 'Payload'"
+        puts "could not zip '#{File.basename(options[:ipa])}' from '#{zip_input}'"
       end
       exit 1
     end

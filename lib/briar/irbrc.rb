@@ -47,6 +47,7 @@ end
 
 puts 'loaded calabash'
 
+include Briar::Environment
 include Briar::Bars
 include Briar::Alerts_and_Sheets
 include Briar::Control::Button
