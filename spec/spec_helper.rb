@@ -1,8 +1,11 @@
 $LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
 $LOAD_PATH.unshift File.expand_path('bin', __FILE__)
 require 'awesome_print'
+require 'briar'
 
 # monkey patch for AwesomePrint + objects that implement '=='
+# Can remove once we are using awesome-print 1.6, which means updating
+# calabash-ios to > 0.12.0.
 module AwesomePrint
   class Formatter
     def awesome_self(object, type)

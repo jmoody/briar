@@ -1,5 +1,5 @@
 --color
---warnings
+#--warnings
 #--backtrace
 --format documentation
 --require spec_helper
