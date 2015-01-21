@@ -1,3 +1,7 @@
+### 1.1.6
+
+* Tracking issues on pivotal: https://www.pivotaltracker.com/n/projects/1255750
+* #36 briar resign can resign .ipas with swift dylibs
 
 ### 1.1.5
 
