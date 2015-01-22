@@ -1,4 +1,8 @@
-### 1.1.6
+### 1.1.9
+
+* Fix errant include in lib/irbrc.rb
+
+### 1.1.8
 
 * Tracking issues on pivotal: https://www.pivotaltracker.com/n/projects/1255750
 * #36 briar resign can resign .ipas with swift dylibs
