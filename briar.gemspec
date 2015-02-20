@@ -32,7 +32,7 @@ Gem::Specification.new do |gem|
   gem.add_runtime_dependency 'rbx-require-relative', '~> 0.0'
   gem.add_runtime_dependency 'calabash-cucumber', '>= 0.12', '< 1.0'
   gem.add_runtime_dependency 'dotenv', '~> 1.0'
-  gem.add_runtime_dependency 'ansi', '~> 1.4'
+  gem.add_runtime_dependency 'ansi', '~> 1.5'
   gem.add_runtime_dependency 'rainbow', '~> 2.0'
   gem.add_runtime_dependency 'retriable'
   gem.add_runtime_dependency 'bundler'
