@@ -17,6 +17,7 @@ def briar_xtc_submit(device_set, profile, opts={})
                   :calabash_dev => ENV['XTC_CALABASH_GEM_DEV'] == '1',
                   :async_submit => ENV['XTC_WAIT_FOR_RESULTS'] == '0',
                   :series => ENV['XTC_SERIES'],
+                  :user => ENV['XTC_USER'],
                   :rebuild => true}
 
   opts = default_opts.merge(opts)
@@ -109,19 +110,45 @@ def briar_xtc_submit(device_set, profile, opts={})
     wait = '--no-async'
   end
 
-  if opts[:series]
-    series = "--series #{opts[:series]}"
-  else
-    series = ''
-  end
-
   ipa = File.expand_path(expect_ipa(opts[:ipa]))
 
-  cmd = "test-cloud submit #{ipa} #{api_key} -d #{device_set} -c cucumber.yml -p #{profile} #{wait} #{series}"
+  args = [
+        'submit',
+        ipa,
+        api_key,
+        '-d', device_set,
+        '-c', 'cucumber.yml',
+        '-p', profile,
+        wait
+  ]
 
-  puts Rainbow("cd #{staging_dir}; #{cmd}").green
+  user = opts[:user]
+  if user
+    args << '--user'
+    args << user
+  end
+
+  if opts[:series]
+    args << '--series'
+    args << opts[:series]
+  end
+
+  print_args = args.dup
+
+  obscured_key = "#{api_key[0,1]}***#{api_key[api_key.length-1,1]}"
+  print_args[args.index(api_key)] = obscured_key
+
+  if user
+    obscured_user = "#{user[0,1]}***#{user[user.length-1,1]}"
+    print_args[args.index(user)] = obscured_user
+  end
+
+  puts Rainbow("EXEC: cd #{staging_dir}").cyan
+  puts Rainbow("EXEC: test-cloud version => #{`test-cloud version`.strip}").cyan
+  puts Rainbow("EXEC: test-cloud #{print_args.join(' ')}").cyan
+
   Dir.chdir(staging_dir) do
-    exec cmd
+    exec('test-cloud', *args)
   end
 end
 
