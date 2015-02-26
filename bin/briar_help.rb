@@ -328,6 +328,7 @@ def print_xtc_help
   #{help_env_var('                 IPA', 'path to the .ipa you submitting')}
   #{help_env_var('        XTC_PROFILES', 'cucumber profiles for the XTC')}
   #{help_env_var('         XTC_ACCOUNT', 'name of a directory in ~/.xamarin/test-cloud/<account> that contains the api token')}
+  #{help_env_var('         XTC_USER', 'your XTC email address')}
   #{help_example_comment('if a build script is defined, the .ipa will be built before submission')}
   #{help_env_var('    IPA_BUILD_SCRIPT', '(optional) script that generates the IPA')}
   #{help_example_comment('if you require other gems besides briar')}

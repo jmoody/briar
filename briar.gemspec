@@ -36,7 +36,7 @@ Gem::Specification.new do |gem|
   gem.add_runtime_dependency 'rainbow', '~> 2.0'
   gem.add_runtime_dependency 'retriable'
   gem.add_runtime_dependency 'bundler'
-  gem.add_runtime_dependency 'xamarin-test-cloud'
+  gem.add_runtime_dependency 'xamarin-test-cloud', '~> 1.0'
   gem.add_runtime_dependency 'rake'
 
   gem.add_development_dependency 'travis', '~> 1.7'
