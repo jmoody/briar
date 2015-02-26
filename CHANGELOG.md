@@ -1,3 +1,9 @@
+### 1.2.0
+
+* Requires xamarin-test-cloud ~> 1.0; use 1.1.9 for older versions
+* Support for XTC teams and organizations
+* Obscure XTC API token and user name when logging
+
 ### 1.1.9
 
 * Fix errant include in lib/irbrc.rb
