@@ -37,7 +37,6 @@ module Briar
         when :install
           if build_script
             system "#{build_script}"
-            briar_remove_derived_data_dups
           end
 
           ipa = File.expand_path(merged[:ipa])
