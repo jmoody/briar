@@ -1,3 +1,7 @@
+### 1.2.1
+
+* briar install < device > no longer tries to remove duplicate derived data directories
+
 ### 1.2.0
 
 * Requires xamarin-test-cloud ~> 1.0; use 1.1.9 for older versions
