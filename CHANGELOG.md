@@ -1,3 +1,7 @@
+### 1.2.2
+
+* resigning accepts TEAM, WILDCARD, or APP\_PREFIX identifier
+
 ### 1.2.1
 
 * briar install < device > no longer tries to remove duplicate derived data directories
