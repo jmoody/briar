@@ -55,7 +55,7 @@ def briar_resign(args)
     exit 1
   end
 
-  wildcard = args[2] || Briar::Environment.variable('BRIAR_TEAM_IDENTIFIER')
+  wildcard = args[2] || Briar::Environment.variable('BRIAR_WILDCARD_IDENTIFIER')
   unless wildcard.length == 10
     msg 'error' do
       puts "'#{wildcard}' must have 10 characters eg 'RWTD8QPG2C'"
