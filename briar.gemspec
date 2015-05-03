@@ -2,7 +2,21 @@
 
 Gem::Specification.new do |gem|
   gem.name = 'briar'
-  gem.version = Briar::VERSION
+  gem.version = lambda {
+    briar_gem_version = nil
+    version_file = File.join(File.dirname(__FILE__), 'lib', 'briar', 'version.rb')
+    lines = File.readlines(version_file)
+    lines.each do |line|
+      regex = /(\d+)\.(\d+)\.(\d+)\.?(pre\d*)?/
+      match = line.match(regex)
+      unless match.nil?
+        briar_gem_version = match[0]
+        break
+      end
+    end
+    briar_gem_version
+  }.call
+
   gem.authors = ['Joshua Moody']
   gem.email = ['joshuajmoody@gmail.com']
   gem.description = 'extends calabash-ios steps'
