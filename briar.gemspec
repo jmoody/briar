@@ -1,20 +1,22 @@
 # -*- encoding: utf-8 -*-
 
-# ==> require_relative 'lib/briar/version' <==
-# bundler on 1.9.3 complains
-# 'Does it try to require a relative path? That's been removed in Ruby 1.9'
-#
-# this is the current _best_ solution
-$:.push File.expand_path('../lib', __FILE__)
-require 'briar/version'
-
-# experimental
-# not yet
-# $:.push File.expand_path("../features", __FILE__)
-
 Gem::Specification.new do |gem|
   gem.name = 'briar'
-  gem.version = Briar::VERSION
+  gem.version = lambda {
+    briar_gem_version = nil
+    version_file = File.join(File.dirname(__FILE__), 'lib', 'briar', 'version.rb')
+    lines = File.readlines(version_file)
+    lines.each do |line|
+      regex = /(\d+)\.(\d+)\.(\d+)\.?(pre\d*)?/
+      match = line.match(regex)
+      unless match.nil?
+        briar_gem_version = match[0]
+        break
+      end
+    end
+    briar_gem_version
+  }.call
+
   gem.authors = ['Joshua Moody']
   gem.email = ['joshuajmoody@gmail.com']
   gem.description = 'extends calabash-ios steps'
@@ -31,7 +33,7 @@ Gem::Specification.new do |gem|
 
   gem.add_runtime_dependency 'rbx-require-relative', '~> 0.0'
   gem.add_runtime_dependency 'calabash-cucumber', '>= 0.12', '< 1.0'
-  gem.add_runtime_dependency 'dotenv', '~> 1.0'
+  gem.add_runtime_dependency 'dotenv'
   gem.add_runtime_dependency 'ansi', '~> 1.5'
   gem.add_runtime_dependency 'rainbow', '~> 2.0'
   gem.add_runtime_dependency 'retriable'
