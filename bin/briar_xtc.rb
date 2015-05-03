@@ -161,7 +161,7 @@ def briar_xtc(args)
   end
 
   device_set = args[0]
-  profile = arg_len == 1 ? nil : args[1]
+  profile = arg_len == 1 ? 'default' : args[1]
 
 
   if arg_len == 3
