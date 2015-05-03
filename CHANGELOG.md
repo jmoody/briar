@@ -1,3 +1,9 @@
+### 1.3.0
+
+* Stop munging the load path #51
+* Remove dotenv version dependencies; any will do #50
+* XTC command should use default profile #49
+
 ### 1.2.2
 
 * resigning accepts TEAM, WILDCARD, or APP\_PREFIX identifier
