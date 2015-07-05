@@ -1,3 +1,7 @@
+### 1.3.1
+
+* $ briar install calabash-server only installs the framework
+
 ### 1.3.0
 
 * Stop munging the load path #51
