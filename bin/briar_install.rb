@@ -68,28 +68,19 @@ def briar_install_calabash_server
     exit 1
   end
 
-  gem_dir = expect_calabash_gem_path
   server_dir = expect_calabash_server_path
 
-  version_file = File.read("#{server_dir}/calabash/Classes/FranklyServer/Routes/LPVersionRoute.h")
-  tokens = version_file.split(/define kLPCALABASHVERSION/)
-  line = tokens[1].split("\n").first
-  version_part = line.split(' ').last
-  version = version_part.tr('^A-Za-z0-9.\-\_', '')
+  Dir.chdir(server_dir) do
+    system('make', 'framework')
+  end
 
-  puts "building calabash server using 'rake build_server'"
-  system("cd #{gem_dir}; rake build_server")
-  puts 'remove old cal simulator targets'
-  briar_rm(['sim-targets'])
-  puts 'copying new framework to ./'
-  system("cp #{gem_dir}/staticlib/#{cal_framework}.zip ./")
-  puts 'removing old framework'
-  system("rm -rf #{cal_framework}")
-  puts 'unzipping new framework'
-  system("unzip #{cal_framework}.zip")
-  puts 'cleaning up'
-  system("rm -rf #{cal_framework}.zip")
-  puts "installed new server version '#{version}'"
+  puts 'Removing the old framework'
+  system('rm', *['-rf', cal_framework])
+
+  puts 'Moving the new framework into place'
+  system('mv', *[File.join(server_dir, 'calabash.framework'), './'])
+
+  puts "Installed #{`calabash.framework/Resources/version`.strip}"
 end
 
 
