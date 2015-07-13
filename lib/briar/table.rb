@@ -236,8 +236,8 @@ module Briar
     end
 
     def swipe_on_row (dir, row_id, table_id=nil)
-      if ios7? and simulator?
-        pending('swiping on rows is not available on iOS 7 because of a bug in Xcode 5 simulator')
+      if (ios7? || ios8?) and simulator?
+        pending('Apple bug on iOS > 6 Simulators - swiping does not work.')
       end
       wait_for_row row_id, {:table_id => table_id}
       query_str = query_str_for_row row_id, table_id

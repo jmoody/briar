@@ -180,6 +180,10 @@ def resign_ipa(options)
     exit 1
   end
 
+  Dir.glob("#{abs_app_path}/**/*.xcent").each do |existing_xcent|
+    puts "INFO: deleting the existing: '#{existing_xcent}'"
+    FileUtils.rm_rf(existing_xcent)
+  end
 
   plist = CFPropertyList::List.new(:file => info_plist_path)
   data = CFPropertyList.native_types(plist.value)
