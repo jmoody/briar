@@ -1,3 +1,8 @@
+### 1.3.2
+
+* Resigning needs to remove existing .xcent #56
+* Support XTC\_DSYM for uploading dSYMs #55
+
 ### 1.3.1
 
 * $ briar install calabash-server only installs the framework
