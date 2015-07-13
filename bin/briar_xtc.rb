@@ -18,6 +18,7 @@ def briar_xtc_submit(device_set, profile, opts={})
                   :async_submit => ENV['XTC_WAIT_FOR_RESULTS'] == '0',
                   :series => ENV['XTC_SERIES'],
                   :user => ENV['XTC_USER'],
+                  :dsym => ENV['XTC_DSYM'],
                   :rebuild => true}
 
   opts = default_opts.merge(opts)
@@ -131,6 +132,11 @@ def briar_xtc_submit(device_set, profile, opts={})
   if opts[:series]
     args << '--series'
     args << opts[:series]
+  end
+
+  if opts[:dsym]
+    args << '--dsym-file'
+    args << opts[:dsym]
   end
 
   print_args = args.dup
