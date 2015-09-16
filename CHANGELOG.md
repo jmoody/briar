@@ -1,3 +1,9 @@
+### 1.4.0
+
+* Treat iOS 8 as iOS 9 for alerts && sheets #58
+* Resigning needs to remove existing .xcent #56
+* Support XTC_DSYM for uploading dSYMs #55
+
 ### 1.3.2
 
 * Resigning needs to remove existing .xcent #56
