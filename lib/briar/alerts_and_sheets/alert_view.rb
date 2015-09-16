@@ -48,7 +48,7 @@ module Briar
                  :retry_frequency => BRIAR_WAIT_RETRY_FREQ,
                  :post_timeout => BRIAR_WAIT_STEP_PAUSE,
                  :timeout_message => msg) do
-          if ios8?
+          if ios8? || ios9?
             not query("view:'_UIAlertControllerView' marked:'#{message}'").empty?
           else
             not uia_query(:view, {:marked => "#{message}"}).empty?
@@ -72,7 +72,7 @@ module Briar
                  :retry_frequency => BRIAR_WAIT_RETRY_FREQ,
                  :post_timeout => BRIAR_WAIT_STEP_PAUSE,
                  :timeout_message => msg) do
-          if ios8?
+          if ios8? || ios9?
             not query("view:'_UIAlertControllerView' marked:'#{message}'").empty?
           else
             not uia_query(:view, {:marked => "#{message}"}).empty?
@@ -117,7 +117,7 @@ module Briar
 
     def touch_alert_button(button_title)
       should_see_alert
-      if ios8?
+      if ios8? || ios9?
         touch("view marked:'#{button_title}' parent view:'_UIAlertControllerCollectionViewCell'")
       elsif ios7?
         touch("view marked:'#{button_title}'")

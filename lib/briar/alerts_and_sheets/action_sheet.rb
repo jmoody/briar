@@ -4,7 +4,7 @@ module Briar
 
     def query_str_for_sheet(sheet_id)
       # Ignoring argument because iOS 8 sheets do not retain their accessibilityIdentifier
-      return "view:'_UIAlertControllerView'" if ios8?
+      return "view:'_UIAlertControllerView'" if ios8? or ios9?
       if sheet_id
         "actionSheet marked:'#{sheet_id}'"
       else
@@ -69,7 +69,7 @@ module Briar
 
     def sheet_button_exists? (button_title, sheet_id=nil)
       sheet_query = query_str_for_sheet sheet_id
-      if ios8?
+      if ios8? || ios9?
         query("#{query_str_for_sheet sheet_id} descendant view:'_UIAlertControllerActionView'  marked:'#{button_title}'")
       else
         query("#{sheet_query} child button child label", :text).include?(button_title)
@@ -99,7 +99,7 @@ module Briar
     def touch_sheet_button (button_title, sheet_id=nil)
       sheet_query = query_str_for_sheet sheet_id
       should_see_button_on_sheet button_title, sheet_id
-      if ios8?
+      if ios8? || ios9?
         touch("#{query_str_for_sheet sheet_id} descendant view:'_UIAlertControllerActionView'  marked:'#{button_title}'")
       else
         touch("#{sheet_query} child button child label marked:'#{button_title}'")
