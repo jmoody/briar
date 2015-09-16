@@ -164,7 +164,7 @@ module Briar
 
         # In iOS 8, there is no 'Delete Draft' action sheet, the email compose
         # view animates off.
-        unless ios8?
+        if !(ios8? || ios9?)
           msg = "waited for '#{timeout}' seconds but did not see dismiss email action sheet"
           wait_for(:timeout => timeout,
                    :retry_frequency => BRIAR_WAIT_RETRY_FREQ,
