@@ -136,7 +136,7 @@ def briar_xtc_submit(device_set, profile, opts={})
 
   if opts[:dsym]
     args << '--dsym-file'
-    args << opts[:dsym]
+    args << File.expand_path(opts[:dsym])
   end
 
   print_args = args.dup
