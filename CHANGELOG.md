@@ -1,4 +1,4 @@
-### 1.4.0
+### 1.4.1
 
 * Treat iOS 8 as iOS 9 for alerts && sheets #58
 * Resigning needs to remove existing .xcent #56
