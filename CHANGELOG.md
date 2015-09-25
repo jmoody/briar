@@ -1,3 +1,8 @@
+### 1.4.2
+
+* Allow priority option for xtc #63
+* Allow run-loop gem dev on xtc #62
+
 ### 1.4.1
 
 * Treat iOS 8 as iOS 9 for alerts && sheets #58

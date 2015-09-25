@@ -15,10 +15,12 @@ def briar_xtc_submit(device_set, profile, opts={})
                   :xtc_staging_dir => expect_xtc_staging_dir(),
                   :briar_dev => ENV['XTC_BRIAR_GEM_DEV'] == '1',
                   :calabash_dev => ENV['XTC_CALABASH_GEM_DEV'] == '1',
+                  :run_loop_dev => ENV['XTC_RUN_LOOP_GEM_DEV'] == '1',
                   :async_submit => ENV['XTC_WAIT_FOR_RESULTS'] == '0',
                   :series => ENV['XTC_SERIES'],
                   :user => ENV['XTC_USER'],
                   :dsym => ENV['XTC_DSYM'],
+                  :priority => ENV['XTC_HIGH_PRIORITY'] == '1',
                   :rebuild => true}
 
   opts = default_opts.merge(opts)
@@ -51,11 +53,34 @@ def briar_xtc_submit(device_set, profile, opts={})
   # end
 
   if opts[:calabash_dev]
-    calabash_path = `bundle show calabash-cucumber`.strip
-    system('gem uninstall -Vax --force --no-abort-on-dependent calabash-cucumber',
-           :err => '/dev/null')
+    cmd = 'bundle show calabash-cucumber'
+    puts Rainbow("EXEC: #{cmd}").cyan
+    calabash_path = `#{cmd}`.strip
+
+    cmd = 'gem uninstall -Vax --force --no-abort-on-dependent calabash-cucumber'
+    puts Rainbow("EXEC: #{cmd}").cyan
+    system(*cmd.split(' '),  :err => '/dev/null')
+    puts Rainbow("EXEC: cd #{calabash_path}").cyan
+
     Dir.chdir(File.expand_path(calabash_path)) do
-      system 'rake install'
+      puts Rainbow('EXEC: rake install').cyan
+      system('rake', 'install')
+    end
+  end
+
+  if opts[:run_loop_dev]
+    cmd = 'bundle show run_loop'
+    puts Rainbow("EXEC: #{cmd}").cyan
+    run_loop_path = `#{cmd}`.strip
+
+    cmd = 'gem uninstall -Vax --force --no-abort-on-dependent run_loop'
+    system(*cmd.split(' '), :err => '/dev/null')
+    puts Rainbow("EXEC: #{cmd}").cyan
+
+    puts Rainbow("EXEC: cd #{run_loop_path}").cyan
+    Dir.chdir(File.expand_path(run_loop_path)) do
+      puts Rainbow('EXEC: rake install').cyan
+      system('rake', 'install')
     end
   end
 
@@ -111,6 +136,11 @@ def briar_xtc_submit(device_set, profile, opts={})
     wait = '--no-async'
   end
 
+  priority = nil
+  if opts[:priority]
+    priority = '--priority'
+  end
+
   ipa = File.expand_path(expect_ipa(opts[:ipa]))
 
   args = [
@@ -120,8 +150,12 @@ def briar_xtc_submit(device_set, profile, opts={})
         '-d', device_set,
         '-c', 'cucumber.yml',
         '-p', profile,
-        wait
+        wait,
   ]
+
+  if priority
+    args << priority
+  end
 
   user = opts[:user]
   if user

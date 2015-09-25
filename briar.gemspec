@@ -51,7 +51,6 @@ Gem::Specification.new do |gem|
   gem.add_development_dependency('guard-rspec', '~> 4.3')
   gem.add_development_dependency('guard-bundler', '~> 2.0')
   gem.add_development_dependency('growl', '~> 1.0')
-  gem.add_development_dependency('rb-readline', '~> 0.5')
   gem.add_development_dependency('pry')
   gem.add_development_dependency('pry-nav')
 
