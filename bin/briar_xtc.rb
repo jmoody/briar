@@ -20,6 +20,7 @@ def briar_xtc_submit(device_set, profile, opts={})
                   :series => ENV['XTC_SERIES'],
                   :user => ENV['XTC_USER'],
                   :dsym => ENV['XTC_DSYM'],
+                  :priority => ENV['XTC_HIGH_PRIORITY'] == '1',
                   :rebuild => true}
 
   opts = default_opts.merge(opts)
@@ -135,6 +136,11 @@ def briar_xtc_submit(device_set, profile, opts={})
     wait = '--no-async'
   end
 
+  priority = nil
+  if opts[:priority]
+    priority = '--priority'
+  end
+
   ipa = File.expand_path(expect_ipa(opts[:ipa]))
 
   args = [
@@ -144,8 +150,12 @@ def briar_xtc_submit(device_set, profile, opts={})
         '-d', device_set,
         '-c', 'cucumber.yml',
         '-p', profile,
-        wait
+        wait,
   ]
+
+  if priority
+    args << priority
+  end
 
   user = opts[:user]
   if user
