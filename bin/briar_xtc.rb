@@ -14,6 +14,8 @@ def briar_xtc_submit(device_set, profile, opts={})
                   :other_gems => ENV['XTC_OTHER_GEMS_FILE'],
                   :xtc_staging_dir => expect_xtc_staging_dir(),
                   :briar_dev => ENV['XTC_BRIAR_GEM_DEV'] == '1',
+                  :calabash_dev => ENV['XTC_CALABASH_GEM_DEV'] == '0',
+                  :run_loop_dev => ENV['XTC_RUN_LOOP_GEM_DEV'] == '0',
                   :async_submit => ENV['XTC_WAIT_FOR_RESULTS'] == '0',
                   :series => ENV['XTC_SERIES'],
                   :user => ENV['XTC_USER'],
@@ -54,6 +56,15 @@ def briar_xtc_submit(device_set, profile, opts={})
     system('gem uninstall -Vax --force --no-abort-on-dependent calabash-cucumber',
            :err => '/dev/null')
     Dir.chdir(File.expand_path(calabash_path)) do
+      system 'rake install'
+    end
+  end
+
+  if opts[:run_loop_dev]
+    run_loop_path = `bundle show run_loop`.strip
+    system('gem uninstall -Vax --force --no-abort-on-dependent run_loop',
+           :err => '/dev/null')
+    Dir.chdir(File.expand_path(run_loop_path)) do
       system 'rake install'
     end
   end
