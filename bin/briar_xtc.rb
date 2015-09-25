@@ -52,20 +52,34 @@ def briar_xtc_submit(device_set, profile, opts={})
   # end
 
   if opts[:calabash_dev]
-    calabash_path = `bundle show calabash-cucumber`.strip
-    system('gem uninstall -Vax --force --no-abort-on-dependent calabash-cucumber',
-           :err => '/dev/null')
+    cmd = 'bundle show calabash-cucumber'
+    puts Rainbow("EXEC: #{cmd}").cyan
+    calabash_path = `#{cmd}`.strip
+
+    cmd = 'gem uninstall -Vax --force --no-abort-on-dependent calabash-cucumber'
+    puts Rainbow("EXEC: #{cmd}").cyan
+    system(*cmd.split(' '),  :err => '/dev/null')
+    puts Rainbow("EXEC: cd #{calabash_path}").cyan
+
     Dir.chdir(File.expand_path(calabash_path)) do
-      system 'rake install'
+      puts Rainbow('EXEC: rake install').cyan
+      system('rake', 'install')
     end
   end
 
   if opts[:run_loop_dev]
-    run_loop_path = `bundle show run_loop`.strip
-    system('gem uninstall -Vax --force --no-abort-on-dependent run_loop',
-           :err => '/dev/null')
+    cmd = 'bundle show run_loop'
+    puts Rainbow("EXEC: #{cmd}").cyan
+    run_loop_path = `#{cmd}`.strip
+
+    cmd = 'gem uninstall -Vax --force --no-abort-on-dependent run_loop'
+    system(*cmd.split(' '), :err => '/dev/null')
+    puts Rainbow("EXEC: #{cmd}").cyan
+
+    puts Rainbow("EXEC: cd #{run_loop_path}").cyan
     Dir.chdir(File.expand_path(run_loop_path)) do
-      system 'rake install'
+      puts Rainbow('EXEC: rake install').cyan
+      system('rake', 'install')
     end
   end
 
