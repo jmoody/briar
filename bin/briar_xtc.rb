@@ -13,15 +13,18 @@ def briar_xtc_submit(device_set, profile, opts={})
                   :account => expect_xtc_account(),
                   :other_gems => ENV['XTC_OTHER_GEMS_FILE'],
                   :xtc_staging_dir => expect_xtc_staging_dir(),
-                  :briar_dev => ENV['XTC_BRIAR_GEM_DEV'] == '1',
-                  :calabash_dev => ENV['XTC_CALABASH_GEM_DEV'] == '1',
-                  :run_loop_dev => ENV['XTC_RUN_LOOP_GEM_DEV'] == '1',
+                  :calabash_dev => ENV['XTC_CALABASH_GEM_DEV'] == "1",
+                  :run_loop_dev => ENV['XTC_RUN_LOOP_GEM_DEV'] == "1",
+                  :test_cloud_gem_dev => ENV["XTC_TEST_CLOUD_GEM_DEV"] == "1",
                   :async_submit => ENV['XTC_WAIT_FOR_RESULTS'] == '0',
                   :series => ENV['XTC_SERIES'],
                   :user => ENV['XTC_USER'],
                   :dsym => ENV['XTC_DSYM'],
                   :priority => ENV['XTC_HIGH_PRIORITY'] == '1',
-                  :rebuild => true}
+                  :rebuild => true,
+                  # Unused.
+                  :briar_dev => ENV['XTC_BRIAR_GEM_DEV'] == '1'
+  }
 
   opts = default_opts.merge(opts)
 
@@ -39,18 +42,6 @@ def briar_xtc_submit(device_set, profile, opts={})
 
   account = opts[:account]
   api_key = read_api_token(account)
-
-  # ugh.  it works, then it doesn't
-  # i think the real solution is to pull the bin/tools out of the gem and into
-  # (yet) another gem.
-  # if opts[:briar_dev]
-  #   briar_path = `bundle show briar`.strip
-  #   # system('gem uninstall -Vax --force --no-abort-on-dependent briar',
-  #   #        :err => '/dev/null')
-  #   Dir.chdir(File.expand_path(briar_path)) do
-  #     system 'gem rake install'
-  #   end
-  # end
 
   if opts[:calabash_dev]
     cmd = 'bundle show calabash-cucumber'
@@ -81,6 +72,22 @@ def briar_xtc_submit(device_set, profile, opts={})
     Dir.chdir(File.expand_path(run_loop_path)) do
       puts Rainbow('EXEC: rake install').cyan
       system('rake', 'install')
+    end
+  end
+
+  if opts[:test_cloud_gem_dev]
+    cmd = "bundle show xamarin-test-cloud"
+    puts Rainbow("EXEC: #{cmd}").cyan
+    test_cloud_gem_path = `#{cmd}`.strip
+
+    cmd = "gem uninstall -Vax --force --no-abort-on-dependent xamarin-test-cloud"
+    system(*cmd.split(" "), :err => "/dev/null")
+    puts Rainbow("EXEC: #{cmd}").cyan
+
+    puts Rainbow("EXEC: cd #{test_cloud_gem_path}").cyan
+    Dir.chdir(File.expand_path(test_cloud_gem_path)) do
+      puts Rainbow("EXEC: rake install").cyan
+      system("rake", "install")
     end
   end
 
