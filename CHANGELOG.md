@@ -1,3 +1,12 @@
+### 2.0.1
+
+* CLI: allow xtc gem dev testing #67
+
+### 2.0.0
+
+* Relex gem dependencies
+* Require ruby >= 2.0
+
 ### 1.4.2
 
 * Allow priority option for xtc #63
