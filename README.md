@@ -5,52 +5,59 @@
 
 ## Briar
 
-Briar extends the [Calabash iOS](https://github.com/calabash/calabash-ios.git) API to help you write cucumber Scenarios that interact with complex UI elements like tables, pickers, and sliders.
+Briar extends the [Calabash iOS](https://github.com/calabash/calabash-ios.git)
+API to help you write cucumber Scenarios that interact with complex UI elements
+like tables, pickers, and sliders.
 
 ### Briar is not trying to provide steps that will work for every project.
 
-Every project should cultivate its own [vernacular](http://en.wikipedia.org/wiki/Vernacular) - 
-a shared language between developers, clients, and users.  The [steps that briar provides](features/step_definitions) are not meant to be dropped into into your projects (although they can be).  Briar provides a library of ruby methods to build application-specific steps from.  The steps in the features directory are meant to be examples of what briar can offer.
+Every project should cultivate its own [vernacular](http://en.wikipedia.org/wiki/Vernacular) -
+a shared language between developers, clients, and users.  The [steps that briar provides](features/step_definitions)
+are not meant to be dropped into into your projects.  Briar provides a library
+of ruby methods to build application-specific steps from.  The steps in the
+features directory are meant to be examples of what briar can offer.
 
 To see briar in action, take a look at https://github.com/jmoody/briar-ios-example
 
 ### Motivation
 
-DRY: I have many iOS projects that use Calabash and I found I was rewriting a lot of supporting code.
+DRY: I have many iOS projects that use Calabash and I found I was rewriting
+a lot of supporting code.
 
-## Installation 
+## Installation
 
-Requires ruby >= 1.9.3; ruby 2.1.2 is recommended.
+Requires ruby >= 2.0; the latest release of ruby is recommended.
 
 In your Gemfile:
 
 ```
-gem 'briar', '~> 1.1.2'
+gem "briar", "~> 2.0"
 
 # To use the briar XTC developer tools, include rake
-gem 'rake', '~> 10.3'
+gem "rake", "~> 10.3"
 ```
 
 In your `features/support/env.rb` file:
 
 ```
-require 'calabash-cucumber/cucumber'
-ENV['NO_BRIAR_PREDEFINED_STEPS'] = '1'
-require 'briar/cucumber'
+require "calabash-cucumber/cucumber"
+ENV["NO_BRIAR_PREDEFINED_STEPS"] = "1"
+require "briar/cucumber"
 
 # Optional
 I18n.enforce_available_locales = false
 ```
 
-To integrate briar and your calabash-ios console see: https://github.com/jmoody/briar/wiki/Integrating-Briar-Into-Your-Calabash-Console
+To integrate briar and your calabash-ios console see:
+https://github.com/jmoody/briar/wiki/Integrating-Briar-Into-Your-Calabash-Console
 
-**WARNING:** I will be dropping the automatic import of pre-defined steps in briar 1.2.0.  The predefined steps will be removed completely in briar 2.0.
 
 ## briar binary
 
 The briar binary provides useful commands to improve your calabash workflow.
 
-There is detailed help about how to use the .xamarin convention and dotenv to setup your environment.
+There is detailed help about how to use the .xamarin convention and dotenv to
+setup your environment.
 
 ```
 # help
@@ -66,7 +73,7 @@ $ briar console sim7 ipad_r_64  <== changes the default simulator
 $ briar console venus
 $ briar console neptune
 
-# install the calabash server from a local repo and remove all stale simulator targets in one command
+# install the calabash server from a local repo
 $ briar install calabash-server
 
 # do a clean install of your .ipa on named device
@@ -76,22 +83,12 @@ $ briar install earp
 # open a cucumber html report in your default browser
 $ briar report       <== last run against the simulator
 $ briar report venus <== last run against venus
-
-# remove all *-cal targets from the simulator (without resetting the device)
-$ briar rm sim-targets
-
-# resolve APP_BUNDLE_PATH auto-detection problems by removing spurious DerivedData directories
-$ briar rm dups 
-$ briar rm dups briar-ios-example 
-
-# change the simulator version (will be deprecated soon)
-$ briar sim ipad_r
-$ briar sim iphone_4in
 ```
 
 ## Xamarin Test Cloud
 
-Requires adopting the .xamarin convention and a .env file.  See the help for `.xamarin` and `xtc`.
+Requires adopting the .xamarin convention and a .env file.
+See the help for `.xamarin` and `xtc`.
 
 ```
 # list the currently cached device in ~/.xamarin/test-cloud/ios-sets.csv
