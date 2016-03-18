@@ -1,3 +1,7 @@
+### 2.0.2
+
+* Remove references to Calabash::Cucumber modules that have been removed
+
 ### 2.0.1
 
 * CLI: allow xtc gem dev testing #67
