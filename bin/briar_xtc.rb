@@ -21,6 +21,7 @@ def briar_xtc_submit(device_set, profile, opts={})
                   :user => ENV['XTC_USER'],
                   :dsym => ENV['XTC_DSYM'],
                   :priority => ENV['XTC_HIGH_PRIORITY'] == '1',
+                  :test_params => ENV["XTC_TEST_PARAMS"],
                   :rebuild => true,
                   # Unused.
                   :briar_dev => ENV['XTC_BRIAR_GEM_DEV'] == '1'
@@ -180,6 +181,12 @@ def briar_xtc_submit(device_set, profile, opts={})
     args << File.expand_path(opts[:dsym])
   end
 
+  test_params = opts[:test_params]
+  if test_params
+    args << "--test-parameters"
+    args << test_params
+  end
+
   print_args = args.dup
 
   obscured_key = "#{api_key[0,1]}***#{api_key[api_key.length-1,1]}"
@@ -195,10 +202,14 @@ def briar_xtc_submit(device_set, profile, opts={})
   puts Rainbow("EXEC: test-cloud #{print_args.join(' ')}").cyan
 
   Dir.chdir(staging_dir) do
+    File.open("xtc.sh", "w:UTF-8") do |file|
+      file.puts("#!/usr/bin/env bash")
+      file.puts("bundle exec test-cloud #{args.join(' ')}")
+    end
+    `chmod +x xtc.sh`
     exec('test-cloud', *args)
   end
 end
-
 
 def briar_xtc(args)
   arg_len = args.length
