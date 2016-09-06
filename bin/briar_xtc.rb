@@ -202,10 +202,14 @@ def briar_xtc_submit(device_set, profile, opts={})
   puts Rainbow("EXEC: test-cloud #{print_args.join(' ')}").cyan
 
   Dir.chdir(staging_dir) do
+    File.open("xtc.sh", "w:UTF-8") do |file|
+      file.puts("#!/usr/bin/env bash")
+      file.puts("bundle exec test-cloud #{args.join(' ')}")
+    end
+    `chmod +x xtc.sh`
     exec('test-cloud', *args)
   end
 end
-
 
 def briar_xtc(args)
   arg_len = args.length
