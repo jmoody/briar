@@ -1,3 +1,7 @@
+### 2.0.3
+
+* XTC submit supports test parameters #71
+
 ### 2.0.2
 
 * Remove references to Calabash::Cucumber modules that have been removed
