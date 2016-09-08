@@ -1,3 +1,7 @@
+### 2.0.4
+
+* XTC submit supports locale #73
+
 ### 2.0.3
 
 * XTC submit supports test parameters #71
