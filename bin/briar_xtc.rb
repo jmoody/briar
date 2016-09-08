@@ -20,6 +20,7 @@ def briar_xtc_submit(device_set, profile, opts={})
                   :series => ENV['XTC_SERIES'],
                   :user => ENV['XTC_USER'],
                   :dsym => ENV['XTC_DSYM'],
+                  :locale => ENV["XTC_LOCALE"],
                   :priority => ENV['XTC_HIGH_PRIORITY'] == '1',
                   :test_params => ENV["XTC_TEST_PARAMS"],
                   :rebuild => true,
@@ -174,6 +175,11 @@ def briar_xtc_submit(device_set, profile, opts={})
   if opts[:series]
     args << '--series'
     args << opts[:series]
+  end
+
+  if opts[:locale]
+    args << '--locale'
+    args << opts[:locale]
   end
 
   if opts[:dsym]
