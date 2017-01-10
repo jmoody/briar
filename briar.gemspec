@@ -41,7 +41,6 @@ Gem::Specification.new do |gem|
   gem.add_runtime_dependency 'xamarin-test-cloud'
   gem.add_runtime_dependency 'rake'
 
-  gem.add_development_dependency 'travis', '~> 1.7'
   gem.add_development_dependency 'yard', '~> 0.8'
 
   # Version 0.1.7 causes problems on the XTC.
