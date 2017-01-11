@@ -1,3 +1,7 @@
+### 2.0.5
+
+* pin rainbow dependency to 2.1.0
+
 ### 2.0.4
 
 * XTC submit supports locale #73
