@@ -35,13 +35,12 @@ Gem::Specification.new do |gem|
   gem.add_runtime_dependency 'calabash-cucumber', '>= 0.12', '< 1.0'
   gem.add_runtime_dependency 'dotenv'
   gem.add_runtime_dependency 'ansi', '~> 1.5'
-  gem.add_runtime_dependency 'rainbow', '~> 2.0'
+  gem.add_runtime_dependency "rainbow", "2.1.0 "
   gem.add_runtime_dependency 'retriable'
   gem.add_runtime_dependency 'bundler'
   gem.add_runtime_dependency 'xamarin-test-cloud'
   gem.add_runtime_dependency 'rake'
 
-  gem.add_development_dependency 'travis', '~> 1.7'
   gem.add_development_dependency 'yard', '~> 0.8'
 
   # Version 0.1.7 causes problems on the XTC.

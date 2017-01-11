@@ -26,7 +26,9 @@ a lot of supporting code.
 
 ## Installation
 
-Requires ruby >= 2.0; the latest release of ruby is recommended.
+* Requires ruby >= 2.2.5; the latest release of ruby is recommended.
+* Xcode >= 8.0
+
 
 In your Gemfile:
 
